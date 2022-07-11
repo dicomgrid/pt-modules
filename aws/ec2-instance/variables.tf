@@ -61,7 +61,7 @@ variable "instance_types" {
 }
 
 variable "key_name" {
-  default = "deployer"
+  default = "aws"
 }
 
 variable "name" {}
