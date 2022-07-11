@@ -3,9 +3,6 @@ resource "aws_instance" "main" {
     centos_7                              = data.aws_ami.centos_7.id
     windows_server_2019                   = data.aws_ami.windows_server_2019.id
     windows_server_2016_sql_2017          = data.aws_ami.windows_server_2016_sql_2017.id
-    windows_server_2019_gateway           = "ami-01421330376597e6a" # production account, us-east-2
-    windows_server_2019_gateway_us_east_1 = "ami-0099768acced74942"
-    windows_server_2019_gateway_us_west_2 = "ami-0ad97c55d85bdf297" # production, us-west-2
   }, var.ami, var.ami)
   iam_instance_profile   = var.iam_instance_profile
   instance_type          = lookup(var.instance_types, var.instance_type, var.instance_type)
