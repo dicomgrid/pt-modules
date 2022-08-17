@@ -1,8 +1,10 @@
 resource "aws_instance" "main" {
   ami = lookup({
-    centos_7                              = data.aws_ami.centos_7.id
-    windows_server_2019                   = data.aws_ami.windows_server_2019.id
-    windows_server_2016_sql_2017          = data.aws_ami.windows_server_2016_sql_2017.id
+    centos_7                     = data.aws_ami.centos_7.id
+    ubuntu_22_04                 = data.aws_ami.ubuntu_22_04.id
+    rhel_8                       = data.aws_ami.rhel_8.id
+    windows_server_2019          = data.aws_ami.windows_server_2019.id
+    windows_server_2016_sql_2017 = data.aws_ami.windows_server_2016_sql_2017.id
   }, var.ami, var.ami)
   iam_instance_profile   = var.iam_instance_profile
   instance_type          = lookup(var.instance_types, var.instance_type, var.instance_type)

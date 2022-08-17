@@ -1,3 +1,3 @@
 variable "ou-scp" {
-  type = list
+  type = list(any)
 }
