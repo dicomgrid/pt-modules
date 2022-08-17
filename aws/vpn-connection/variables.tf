@@ -24,7 +24,7 @@ variable "p1_encryption" {
 
 variable "p1_integrity_algorithms" {
   type    = list(string)
-  default = ["SHA2-256","SHA2-384","SHA2-512"]
+  default = ["SHA2-256", "SHA2-384", "SHA2-512"]
 }
 
 variable "dpd_timeout" {
@@ -39,7 +39,7 @@ variable "p2_encryption" {
 
 variable "p2_integrity_algorithms" {
   type    = list(string)
-  default = ["SHA2-256","SHA2-384","SHA2-512"]
+  default = ["SHA2-256", "SHA2-384", "SHA2-512"]
 }
 
 

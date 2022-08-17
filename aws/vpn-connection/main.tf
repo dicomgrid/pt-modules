@@ -31,7 +31,7 @@ resource "aws_vpn_connection" "main" {
 
   tunnel1_phase2_integrity_algorithms = var.p2_integrity_algorithms
   tunnel2_phase2_integrity_algorithms = var.p2_integrity_algorithms
-  
+
   tags = {
     Creator     = var.creator
     Environment = var.environment
