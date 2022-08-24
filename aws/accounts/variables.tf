@@ -1,3 +1,4 @@
+# Static Variables
 variable "access_billing" {
   default     = "ALLOW"
   type        = string
@@ -15,7 +16,7 @@ variable "enabled" {
   description = "Set to false to prevent the module from creating anything."
 }
 
-variable "parent_id" {
+variable "parent_id_map" {
   default = {
     ambra_health       = "ou-53vz-yludznnj"
     ambra_dev          = "ou-53vz-gwvk7qhd"
@@ -29,8 +30,10 @@ variable "parent_id" {
 }
 
 
-variable "tags" {
-  type    = map(any)
-  default = {}
-}
+# Input Variables
+variable "name" {}
+variable "email" {}
+variable "role" {}
+variable "parent_id" {}
+variable "tags" {}
 
