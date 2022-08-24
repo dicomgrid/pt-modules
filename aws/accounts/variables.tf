@@ -16,6 +16,7 @@ variable "enabled" {
 }
 
 variable "parent_id" {
+  type = map
   default = {
     ambra_health       = "ou-53vz-yludznnj"
     ambra_dev          = "ou-53vz-gwvk7qhd"
