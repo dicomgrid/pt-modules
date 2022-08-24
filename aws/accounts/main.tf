@@ -1,13 +1,12 @@
 resource "aws_organizations_account" "account" {
-  for_each                   = var.accounts
-  name                       = each.key
-  email                      = each.value.email
-  role_name                  = each.value.role
+  name                       = var.name
+  email                      = var.email
+  role_name                  = var.role
   iam_user_access_to_billing = var.access_billing
-  parent_id                  = var.parent_id[each.value.parent_id]
+  parent_id                  = var.parent_id_map[var.parent_id]
 
   dynamic "tags" {
-    for_each                   = each.value.tags
+    for_each                   = var.tags
     content {
       name                  = lookup(each.value, "name" , null)
       department            = lookup(each.value, "department" , null)
