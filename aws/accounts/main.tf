@@ -3,7 +3,7 @@ resource "aws_organizations_account" "account" {
   name                       = each.key
   email                      = each.value.email
   role_name                  = each.value.role
-  iam_user_access_to_billing = var.access-billing
+  iam_user_access_to_billing = var.access_billing
   parent_id                  = each.value.parent_id
 
   lifecycle {
