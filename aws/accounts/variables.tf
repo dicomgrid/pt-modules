@@ -1,4 +1,4 @@
-variable "access-billing" {
+variable "access_billing" {
   default     = "ALLOW"
   type        = string
   description = "If set to ALLOW, the new account enables IAM users to access account billing information."
@@ -15,7 +15,7 @@ variable "enabled" {
   description = "Set to false to prevent the module from creating anything."
 }
 
-variable "parent-id" {
+variable "parent_id" {
   default = {
     ambra_health       = "ou-53vz-yludznnj"
     ambra_dev          = "ou-53vz-gwvk7qhd"
