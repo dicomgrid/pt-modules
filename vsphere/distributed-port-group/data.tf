@@ -7,7 +7,7 @@ data "vsphere_datacenter" "dc" {
 
 # Extract data port vlan creation
 data "vsphere_distributed_virtual_switch" "dc" {
-  name          = var.dswitch
+  name          = var.vswitch
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
