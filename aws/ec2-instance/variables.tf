@@ -26,6 +26,8 @@ variable "ebs_block_device" {
       encrypted             = null
       volume_size           = null
       volume_type           = null
+      iops                  = null
+      throughput            = null
     }
   ]
 }
@@ -81,6 +83,8 @@ variable "root_block_device" {
       encrypted             = null
       volume_size           = null
       volume_type           = null
+      iops                  = null
+      throughput            = null
     }
   ]
 }
