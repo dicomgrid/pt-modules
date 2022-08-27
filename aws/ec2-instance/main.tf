@@ -33,8 +33,8 @@ resource "aws_instance" "main" {
       encrypted             = root_block_device.value["encrypted"]
       volume_size           = root_block_device.value["volume_size"]
       volume_type           = root_block_device.value["volume_type"]
-      iops                  = lookup(ebs_block_device.value, "iops" , null)
-      throughput            = lookup(ebs_block_device.value, "throughput" , null)
+      iops                  = lookup(root_block_device.value, "iops" , null)
+      throughput            = lookup(root_block_device.value, "throughput" , null)
     }
   }
 
