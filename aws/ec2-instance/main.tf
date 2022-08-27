@@ -10,6 +10,7 @@ resource "aws_instance" "main" {
   instance_type          = lookup(var.instance_types, var.instance_type, var.instance_type)
   key_name               = var.key_name
   private_ip             = var.private_ip
+  associate_public_ip_address = var.associate_public_ip_address
   subnet_id              = data.aws_subnet.main.id
   vpc_security_group_ids = data.aws_security_groups.main.ids
 
@@ -49,7 +50,7 @@ resource "aws_instance" "main" {
   }
 
   lifecycle {
-    ignore_changes = [ami]
+    ignore_changes = [ami, associate_public_ip_address]
   }
 
   user_data = var.user_data
