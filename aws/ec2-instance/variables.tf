@@ -6,6 +6,10 @@ variable "application" {
   default = ""
 }
 
+variable "associate_public_ip_address" {
+  default = "false"
+}
+
 variable "backups" {
   default = ""
 }
