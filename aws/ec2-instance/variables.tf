@@ -69,7 +69,7 @@ variable "key_name" {
 variable "name" {}
 
 variable "owner" {
-  default = "DevOps"
+  default = "Platform"
 }
 
 variable "private_ip" {
