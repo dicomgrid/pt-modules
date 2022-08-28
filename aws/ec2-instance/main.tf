@@ -47,6 +47,7 @@ resource "aws_instance" "main" {
     Environment = var.environment
     Name        = var.name
     Owner       = var.owner
+    Cluster     = var.cluster
   }
 
   lifecycle {
