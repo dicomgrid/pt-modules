@@ -76,6 +76,10 @@ variable "owner" {
   default = "Platform"
 }
 
+variable "cluster" {
+  default = null
+}
+
 variable "private_ip" {
   default = null
 }

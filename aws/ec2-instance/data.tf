@@ -23,6 +23,20 @@ data "aws_ami" "centos_7" {
   }
 }
 
+data "aws_ami" "amazon_linux_2" {
+  most_recent = true
+
+ filter {
+   name   = "owner-alias"
+   values = ["amazon"]
+ }
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm*"]
+  }
+}
+
 data "aws_ami" "ubuntu_22_04" {
   most_recent = true
   owners      = ["099720109477"]
