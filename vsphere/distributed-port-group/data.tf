@@ -1,13 +1,8 @@
-#### NETWORK Data Extraction from VSphere
-
-# Define priamry datacenter
-data "vsphere_datacenter" "dc" {
-  name = var.dc
+data "vsphere_datacenter" "datacenter" {
+  name = var.datacenter
 }
 
-# Extract data port vlan creation
-data "vsphere_distributed_virtual_switch" "dc" {
-  name          = var.vswitch
-  datacenter_id = data.vsphere_datacenter.dc.id
+data "vsphere_distributed_virtual_switch" "vds" {
+  name          = var.vds
+  datacenter_id = data.vsphere_datacenter.datacenter.id
 }
-
