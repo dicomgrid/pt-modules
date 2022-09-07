@@ -12,6 +12,20 @@ variable "enable_deletion_protection" {
   default = false
 }
 variable "environment" {}
+
+variable "health_check" {
+  default = []
+  type = map([{
+    healthy_threshold   = number
+    interval            = number
+    matcher             = string
+    path                = string
+    port                = number
+    timeout             = number
+    unhealthy_threshold = number
+  }])
+}
+/*
 variable "health_check" {
   default = []
   type = list(object({
@@ -24,6 +38,21 @@ variable "health_check" {
     unhealthy_threshold = number
   }))
 }
+
+variable "ebs_block_device" {
+  default = [
+    {
+      delete_on_termination = null
+      device_name           = null
+      encrypted             = null
+      volume_size           = null
+      volume_type           = null
+      iops                  = null
+      throughput            = null
+    }
+  ]
+}
+*/
 variable "internal" {}
 variable "listener_action_type" {}
 variable "listener_port" {}
