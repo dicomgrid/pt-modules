@@ -20,7 +20,7 @@ data "aws_subnets" "main" {
 }
 
 data "aws_security_groups" "main" {
-  count = var.var.load_balancer_type == "application" ? 1 : 0
+  count = var.load_balancer_type == "application" ? 1 : 0
   filter {
     name   = "tag:Name"
     values = var.security_groups
