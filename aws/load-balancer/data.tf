@@ -13,16 +13,14 @@ data "aws_vpc" "main" {
 }
 
 data "aws_subnets" "main" {
-  vpc_id = data.aws_vpc.main.id
-
   filter {
-    name   = "tag:Name"
-    values = var.subnets
+    name   = "vpc-id"
+    values = [data.aws_vpc.main.id]
   }
 }
 
 data "aws_security_groups" "main" {
-  count = var.type == "application" ? 1 : 0
+  count = var.var.load_balancer_type == "application" ? 1 : 0
   filter {
     name   = "tag:Name"
     values = var.security_groups
