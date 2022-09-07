@@ -1,4 +1,3 @@
-# Tags
 variable "application" {
   default = ""
 }
@@ -6,28 +5,13 @@ variable "billing" {}
 variable "creator" {
   default = "Terraform"
 }
-variable "environment" {}
-variable "name" {}
-variable "owner" {
-  default = "Platform"
-}
-
-# LB Variables
 variable "enable_cross_zone_load_balancing" {
   default = true
 }
 variable "enable_deletion_protection" {
   default = false
 }
-variable "internal" {}
-variable "security_groups" {
-  default = null
-}
-variable "subnets" {}
-variable "load_balancer_type" {}
-variable "vpc" {}
-
-# LB Target Group Variables
+variable "environment" {}
 variable "health_check" {
   default = []
   type = list(object({
@@ -40,5 +24,21 @@ variable "health_check" {
     unhealthy_threshold = number
   }))
 }
+variable "internal" {}
+variable "listener_action_type" {}
+variable "listener_port" {}
+variable "listener_protocol" {}
+variable "load_balancer_type" {}
+variable "name" {}
+variable "owner" {
+  default = "Platform"
+}
+
+variable "security_groups" {
+  default = null
+}
+variable "subnets" {}
+variable "target_instances" {}
 variable "target_port" {}
 variable "target_protocol" {}
+variable "vpc" {}
