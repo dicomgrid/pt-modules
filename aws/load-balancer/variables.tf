@@ -14,16 +14,17 @@ variable "enable_deletion_protection" {
 variable "environment" {}
 
 variable "health_check" {
-  default = []
-  type = map([{
-    healthy_threshold   = number
-    interval            = number
-    matcher             = string
-    path                = string
-    port                = number
-    timeout             = number
-    unhealthy_threshold = number
-  }])
+  default = [
+    {
+    healthy_threshold   = null
+    interval            = null
+    matcher             = null
+    path                = null
+    port                = null
+    timeout             = null
+    unhealthy_threshold = null
+    }
+  ]
 }
 /*
 variable "health_check" {
