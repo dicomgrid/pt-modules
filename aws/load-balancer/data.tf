@@ -12,7 +12,7 @@ data "aws_vpc" "main" {
   }
 }
 
-data "aws_subnet_ids" "main" {
+data "aws_subnets" "main" {
   vpc_id = data.aws_vpc.main.id
 
   filter {

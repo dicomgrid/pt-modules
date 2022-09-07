@@ -4,8 +4,8 @@ resource "aws_lb" "main" {
   internal                         = var.internal
   load_balancer_type               = var.load_balancer_type
   name                             = var.name
-  security_groups                  = var.type == "application" ? data.aws_security_groups.main[0].ids : null
-  subnets                          = data.aws_subnet_ids.main.ids
+  security_groups                  = var.load_balancer_type == "application" ? data.aws_security_groups.main[0].ids : null
+  subnets                          = data.aws_subnets.main.ids
 
   tags = {
     Application = var.application
@@ -19,8 +19,8 @@ resource "aws_lb" "main" {
 
 resource "aws_lb_target_group" "main" {
   name     = var.name
-  port     = var.port
-  protocol = var.protocol
+  port     = var.target_port
+  protocol = var.target_protocol
   vpc_id   = data.aws_vpc.main.id
 
   dynamic "health_check" {
