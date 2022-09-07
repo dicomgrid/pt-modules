@@ -19,7 +19,6 @@ variable "enable_cross_zone_load_balancing" {
 variable "enable_deletion_protection" {
   default = false
 }
-variable "environment" {}
 variable "internal" {}
 variable "security_groups" {
   default = null
