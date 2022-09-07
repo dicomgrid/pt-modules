@@ -5,7 +5,7 @@ resource "aws_lb" "main" {
   load_balancer_type               = var.load_balancer_type
   name                             = var.name
   security_groups                  = var.load_balancer_type == "application" ? data.aws_security_groups.main[0].ids : null
-  subnets                          = data.subnets.main.ids
+  subnets                          = data.aws_ubnets.main.ids
   tags = {
     Application = var.application
     Billing     = var.billing
