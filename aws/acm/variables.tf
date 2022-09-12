@@ -1,19 +1,18 @@
 variable "domain_name" {
   default = "pt.intelerad.com"
-  type        = string
+  type    = string
 }
 variable "subject_alternative_names" {
-  default     = []
-  type        = list(string)
+  default = []
+  type    = list(string)
 }
-variable "hosted_zone_id" {}
 variable "validation_record_ttl" {
-  default     = 60
-  type        = number
+  default = 60
+  type    = number
 }
 variable "allow_validation_record_overwrite" {
-  default     = true
+  default = true
 }
 variable "validation_method" {
-default = "DNS"
+  default = "DNS"
 }
