@@ -1,0 +1,1 @@
+Patches with baselines weighted against the MSRSC Severity Scale: https://docs.microsoft.com/en-us/previous-versions/windows/desktop/bb294979(v=vs.85)
