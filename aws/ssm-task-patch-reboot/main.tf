@@ -1,16 +1,16 @@
-resource "aws_ssm_maintenance_window_task" "task_patch_noreboot_hooks" {
-  name = var.patch_noreboot_name
-  window_id = var.patch_noreboot_window_id
+resource "aws_ssm_maintenance_window_task" "task_patch_reboot_hooks" {
+  name = var.patch_reboot_name
+  window_id = var.patch_reboot_window_id
   task_type        = var.task_type
   #cutoff_behavior = var.cutoff_behavior
   task_arn         = "AWS-RunPatchBaselineWithHooks"
-  priority         = var.patch_noreboot_priority
+  priority         = var.patch_reboot_priority
   service_role_arn = var.service_role_arn
   max_concurrency  = var.max_concurrency
   max_errors       = var.max_errors
   targets {
     key    = "WindowTargetIds"
-    values = [var.patch_noreboot_window_target_id]
+    values = [var.patch_reboot_window_target_id]
   }
   task_invocation_parameters {
     run_command_parameters {
