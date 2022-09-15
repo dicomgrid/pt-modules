@@ -27,19 +27,19 @@ variable "notification_events" {
   default = ["1"]
 }
 
-variable "patch_noreboot_window_id" {
+variable "patch_reboot_window_id" {
     type = string
     description = "Maintenance window ID to associate task with"
     default = ""
 }
 
-variable "patch_noreboot_window_target_id" {
+variable "patch_reboot_window_target_id" {
     type = string
     description = "Maintenance window ID to associate task with"
     default = ""
 }
 
-variable "patch_noreboot_name" {
+variable "patch_reboot_name" {
     type = string
     default = ""
 }
@@ -56,7 +56,7 @@ variable "cutoff_behavior" {
     default = "CANCEL_TASK"
 }
 
-variable "patch_noreboot_priority" {
+variable "patch_reboot_priority" {
     type = number
     description = "Priority of job to run. Lower number means higher priority"
 }
