@@ -21,7 +21,7 @@ resource "aws_ssm_maintenance_window_task" "task_patch_reboot_hooks" {
 
       parameter {
         name   = "RebootOption"
-        values = ["NoReboot"]
+        values = ["RebootIfNeeded"]
       }
       
       parameter {
