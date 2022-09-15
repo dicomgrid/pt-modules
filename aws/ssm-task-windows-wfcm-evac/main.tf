@@ -24,7 +24,7 @@ resource "aws_ssm_maintenance_window_task" "task-cluster-evac" {
       }
     parameter {
     name   = "commands"
-    values = ["${file("${path.module}/../ssm-task-scripts/cluster-evac.ps1")}"]
+    values = ["${file("${path.module}/../ssm-task-scripts/pt-windows-wfc-evac.ps1")}"]
     }
     }
   }
