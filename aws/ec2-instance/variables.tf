@@ -67,7 +67,7 @@ variable "instance_types" {
 }
 
 variable "key_name" {
-  default = "aws"
+  default = "jenkins-ed"
 }
 
 variable "name" {}
