@@ -1,0 +1,13 @@
+{%- for dc in jinja_var -%}
+module "vm-folder-{{ dc }}" {
+  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//vsphere/folder?ref=master"
+
+  providers = {
+    vsphere = vsphere.{{ dc }}
+  }
+
+  client_code = var.client_code
+  datacenter  = "{{ dc }}"
+}
+
+{% endfor %}

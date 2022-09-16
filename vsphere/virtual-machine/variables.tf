@@ -1,98 +1,124 @@
-# Basic configuration with our variables
+variable "guest_name" {}
 
-variable "client_code" {
-  default = "mso"
+variable "datacenter" {}
+
+variable "datastore" {
+  default = null
 }
-variable "linux_time_zone" {
-  default = ""
+
+variable "datastore_cluster" {
+  default = null
 }
-variable "win_time_zone" {
-  default = ""
-}
+
+variable "compute_cluster" {}
+
+variable "port_group" {}
 
 variable "os" {}
 
-variable "dc" {}           # For MSO Deploys use: "ATL2", "NAS6", "NAS1", or "LAB-DC"
+variable "role" {
+  default = ""
+}
 
-variable "dc_label" {
+variable "guest_template_codes" {
+  type = map(any)
+  default = {
+    "linux"   = "centos7-template"
+    "windows" = "winsrv2016-template"
+  }
+}
+
+variable "client_code" {}
+
+variable "parent_folder" {
+  default = "I000-Intelerad"
+}
+
+variable "guest_vcpu" {}
+
+variable "guest_memory" {}
+
+variable "adapter_type" {
+  default = "vmxnet3"
+}
+
+variable "guest_ipv4_ip" {}
+
+variable "guest_ipv4_netmask" {}
+
+variable "guest_ipv4_gateway" {}
+
+variable "guest_dns_servers" {
+  type = map(any)
+  default = {
+    "atl2" = ["10.255.0.11", "10.255.0.12", ]
+    "nas6" = ["10.0.0.10", "10.0.0.12", ]
+    "nas1" = ["10.0.8.2", "10.0.8.3", ]
+    "mna" = ["10.0.8.2", "10.0.8.3", ]
+  }
+}
+
+variable "guest_dns_suffix" {
   default = ""
 }
-variable "host_cluster" {
-  default = ""
+
+###
+variable "win_local_admin_pass" {
+  sensitive = true
 }
-variable "ds_cluster" {
-  default = ""
-}
-variable "port_group" {
-  default = ""            # This should be "be" for Backend or "fe" for Frontend
-}
-variable "template" {
-  default = ""
-}
-variable "is_windows_image" {
-  default = false
-}
-variable "win_local_adminpass" {
-  default = ""
-}
+
 variable "win_domain" {
-  default = ""
+  default = "radiustoday.com"
 }
-variable "domain_admin_user" {
-  default = ""
+
+variable "domain_admin_user" {}
+
+variable "domain_admin_pass" {
   sensitive = true
 }
-variable "domain_admin_pw" {
-  default = ""
-  sensitive = true
-}
+
 variable "run_once" {
   description = "List of Comamnd to run during first logon (Automatic login set to 1)."
-  type    = list
-  default = []
+  type        = list(any)
+  default     = []
 }
-variable "server_ip" {
-  default = ""
-}
-variable "server_netmask" {
-  default = ""
-}
-variable "server_gateway" {
-  default = ""
-}
-variable "server_dns" {
-  default = ""
-}
-variable "server_name" {    # mod, mdb, rig, clweb, etc.
-  default = ""  
-}
-variable "server_cpu" {
-  default = "2"
-}
-variable "server_memory" {
-  default = "2"
-}
-variable "server_disks" {
-  type = list 
+
+variable "guest_disks" {
+  type = list(any)
   default = [
-    {size      = 1  },   # boot
-    {size      = 8  },   # swap
-    {size      = 16 },   # /
-    {size      = 16 },   # /var
+    { size = 1 },  # boot
+    { size = 8 },  # swap
+    { size = 16 }, # /
+    { size = 16 }, # /var
   ]
 }
-variable "server_disks_additional_count" {
+
+variable "guest_disks_additional_count" {
   default = 0
 }
-variable "server_disks_additional_size" {
+
+variable "guest_disks_additional_size" {
   default = 1
 }
-#variable "dc_map" {
-#  type = map
-#  default = {
-#    "atl" = "ATL"
-#    "nas" = "NAS6"
-#    "nas1" = "NAS1"
-#    "lab"  = "LAB-DC"
-#  }
-#}
+
+variable "client_time_zone" {}
+
+variable "linux_time_zones" {
+  type = map(any)
+  default = {
+    "est" = "America/New_York"
+    "cst" = "America/Chicago"
+    "mst" = "America/Denver"
+    "pst" = "America/Los_Angeles"
+  }
+}
+variable "win_time_zones" {
+  type = map(any)
+  default = {
+    "est" = "035"
+    "cst" = "020"
+    "mst" = "010"
+    "pst" = "004"
+  }
+}
+
