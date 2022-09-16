@@ -1,35 +1,54 @@
-#### RETRIEVE DATA INFORMATION ON VCENTER ####
-
-data "vsphere_datacenter" "dc" {
-  name = var.dc
+data "vsphere_datacenter" "datacenter" {
+  name = var.datacenter
 }
-
-# If you haven't resource pool, put "Resources" after cluster name
-data "vsphere_resource_pool" "pool" {
-  name          = "${var.host_cluster}/Resources"
-  datacenter_id = data.vsphere_datacenter.dc.id
-}
-
-# Retrieve datastore cluster information on vsphere
-### COMMENTING OUT UNTIL DS-CLUSTER IMPLEMENTATION ###
-#data "vsphere_datastore_cluster" "datastore" {
-#  name          = var.ds_cluster
-#  datacenter_id = data.vsphere_datacenter.dc.id
-#}
 
 data "vsphere_datastore" "datastore" {
-  name          = var.ds_cluster
-  datacenter_id = data.vsphere_datacenter.dc.id
+  count = var.datastore != null ? 1 : 0
+  name          = var.datastore
+  datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
-# Retrieve network information on vsphere
-data "vsphere_network" "network" {
-  name          = var.port_group # End format should be "mso_be". This is dependent on existing port group matching this name.
-  datacenter_id = data.vsphere_datacenter.dc.id
+data "vsphere_datastore_cluster" "datastore_cluster" {
+  count = var.datastore_cluster != null ? 1 : 0
+  name          = var.datastore_cluster
+  datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
-# Retrieve template information on vsphere
-data "vsphere_virtual_machine" "template" {
-  name          = var.template
-  datacenter_id = data.vsphere_datacenter.dc.id
+
+data "vsphere_compute_cluster" "cluster" {
+  name          = var.compute_cluster
+  datacenter_id = data.vsphere_datacenter.datacenter.id
+}
+
+data "vsphere_network" "port_group" {
+  name          = var.port_group
+  datacenter_id = data.vsphere_datacenter.datacenter.id
+}
+
+data "vsphere_virtual_machine" "guest_template" {
+  name          = lookup(var.guest_template_codes, var.os)
+  datacenter_id = data.vsphere_datacenter.datacenter.id
+}
+
+data "vsphere_tag_category" "category_role" {
+  name = "Role"
+}
+
+data "vsphere_tag_category" "category_client_code" {
+  name = "Client_Code"
+}
+
+data "vsphere_tag" "tag_mod" {
+  name        = "MOD"
+  category_id = data.vsphere_tag_category.category_role.id
+}
+
+data "vsphere_tag" "tag_client_code" {
+  name        = var.client_code
+  category_id = data.vsphere_tag_category.category_client_code.id
+}
+
+data "vsphere_tag" "tag_mdb" {
+  name        = "MDB"
+  category_id = data.vsphere_tag_category.category_role.id
 }

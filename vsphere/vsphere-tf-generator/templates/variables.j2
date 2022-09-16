@@ -1,0 +1,43 @@
+variable "vsphere_user" {}
+
+variable "vsphere_password" {}
+
+variable "client_code" {
+  default = "{{ jinja_var['client_code'] }}"
+}
+
+variable "client_time_zone" {
+  default = "{{ jinja_var['client_time_zone'] }}"
+}
+
+variable "role" {
+  default = ""
+}
+
+variable "datastore" {
+  default = null
+}
+
+variable "datastore_cluster" {
+  default = null
+}
+
+variable "run_once" {
+  description = "List of Comamnd to run during first logon (Automatic login set to 1)."
+  type        = list(any)
+  default     = []
+}
+
+variable "win_local_admin_pass" {
+  sensitive = true
+}
+
+variable "win_domain" {
+  default = ""
+}
+
+variable "domain_admin_user" {}
+
+variable "domain_admin_pass" {
+  sensitive = true
+}

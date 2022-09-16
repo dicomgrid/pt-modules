@@ -1,0 +1,35 @@
+module "{{ guest_dict.name }}" {
+  depends_on = [module.vm-tag-{{ guest_dict.dc }}]
+
+  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//vsphere/virtual-machine?ref=master"
+
+  providers = {
+    vsphere = vsphere.{{ guest_dict.dc }}
+  }
+
+  guest_name   = "{{ guest_dict.name }}"
+  role         = "{{ guest_dict.role }}"
+  os           = "{{ guest_dict.os }}"
+  guest_vcpu   = "{{ guest_dict.cpu }}"
+  guest_memory = "{{ guest_dict.mem }}"
+  guest_disks = [
+        {%- for disk in guest_dict.disks %}
+        {size      = {{ disk }}},
+        {%- endfor %} 
+        ]
+  port_group           = "{{ guest_dict.port_group }}"
+  guest_ipv4_ip        = "{{ guest_dict.ip }}"
+  guest_ipv4_netmask   = "{{ guest_dict.netmask }}"
+  guest_ipv4_gateway   = "{{ guest_dict.gw }}"
+  datacenter           = "{{ guest_dict.dc }}"
+  compute_cluster      = "{{ guest_dict.host_cluster }}"
+  datastore            = var.datastore
+  datastore_cluster    = "{{ guest_dict.ds_cluster }}"
+  client_code          = var.client_code
+  client_time_zone     = var.client_time_zone
+  win_local_admin_pass = var.win_local_admin_pass
+  win_domain           = var.win_domain
+  domain_admin_user    = var.domain_admin_user
+  domain_admin_pass    = var.domain_admin_pass
+  run_once             = var.run_once
+}

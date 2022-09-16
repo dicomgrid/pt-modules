@@ -2,15 +2,31 @@ variable "name" {}
 
 variable "datacenter" {}
 
-variable "vds" {}
+variable "vds" {
+  default = ""
+}
+
+variable "vds_map" {
+  type = map(any)
+  default = {
+    "atl2" = "DSwitch-Atl"
+    "nas6" = "Cisco-NAS6"
+    "nas1" = "DSwitch-NAS1"
+    "mna"  = "mna-mgt-vds"
+  }
+}
 
 variable "vlan_id" {
   default = null
 }
 
-variable "active_uplinks" {}
+variable "active_uplinks" {
+  default = null
+}
 
-variable "standby_uplinks" {}
+variable "standby_uplinks" {
+  default = null
+}
 
 variable "type" {
   default = "earlyBinding"

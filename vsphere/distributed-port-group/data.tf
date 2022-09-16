@@ -3,6 +3,6 @@ data "vsphere_datacenter" "datacenter" {
 }
 
 data "vsphere_distributed_virtual_switch" "vds" {
-  name          = var.vds
+  name          = lookup(var.vds_map, var.datacenter)
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
