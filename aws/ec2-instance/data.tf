@@ -73,6 +73,30 @@ data "aws_ami" "rhel_8" {
   }
 }
 
+data "aws_ami" "amazon_linux" {
+most_recent = true
+owners = ["0da7236b7a69cf265"]
+  filter {
+    name   = "name"
+    values = ["*amazon-linux*"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["arm64"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
 data "aws_ami" "windows_server_2016" {
   most_recent = true
   owners      = ["801119661308"]
