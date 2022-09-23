@@ -1,12 +1,13 @@
 resource "vsphere_virtual_machine" "vm" {
-  name             = var.guest_name
-  resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
-  datastore_id     = var.datastore != null ? data.vsphere_datastore.datastore[0].id: null
-  datastore_cluster_id     = var.datastore != null ? data.vsphere_datastore_cluster.datastore_cluster[0].id: null
-  folder                = "${var.parent_folder}/${var.client_code}"
-  tags                  = [data.vsphere_tag.tag_mod.id, data.vsphere_tag.tag_client_code.id]
+  name                  = var.guest_name
+  resource_pool_id      = data.vsphere_compute_cluster.cluster.resource_pool_id
+  datastore_id          = var.datastore != null ? data.vsphere_datastore.datastore[0].id : null
+  datastore_cluster_id  = var.datastore != null ? data.vsphere_datastore_cluster.datastore_cluster[0].id : null
+  folder                = var.client_code == "inf" ? "A000 - Infrastructure" : "${var.parent_folder}/${var.client_code}"
+  tags                  = [data.vsphere_tag.tag_type.id, data.vsphere_tag.tag_client_code.id]
   num_cpus              = var.guest_vcpu
   memory                = var.guest_memory * 1024
+  firmware              = data.vsphere_virtual_machine.guest_template.firmware
   guest_id              = data.vsphere_virtual_machine.guest_template.guest_id
   scsi_type             = data.vsphere_virtual_machine.guest_template.scsi_type
   scsi_controller_count = 1
@@ -49,16 +50,16 @@ resource "vsphere_virtual_machine" "vm" {
       timeout = 60
 
       dynamic "linux_options" {
-        for_each = var.os == "linux" ? [1] : []
+        for_each = length(regexall("win", var.os)) > 0 ? [] : [1]
         content {
           host_name = var.guest_name
-          domain    = var.client_code
+          domain    = var.client_code == "inf" ? "radiustoday.com" : var.client_code
           time_zone = lookup(var.linux_time_zones, var.client_time_zone)
         }
       }
 
       dynamic "windows_options" {
-        for_each = var.os == "windows" ? [1] : []
+        for_each = length(regexall("win", var.os)) > 0 ? [1] : []
         content {
           computer_name         = var.guest_name
           admin_password        = var.win_local_admin_pass

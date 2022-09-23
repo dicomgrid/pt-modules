@@ -3,13 +3,13 @@ data "vsphere_datacenter" "datacenter" {
 }
 
 data "vsphere_datastore" "datastore" {
-  count = var.datastore != null ? 1 : 0
+  count         = var.datastore != null ? 1 : 0
   name          = var.datastore
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 data "vsphere_datastore_cluster" "datastore_cluster" {
-  count = var.datastore_cluster != null ? 1 : 0
+  count         = var.datastore_cluster != null ? 1 : 0
   name          = var.datastore_cluster
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
@@ -30,17 +30,12 @@ data "vsphere_virtual_machine" "guest_template" {
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
-data "vsphere_tag_category" "category_role" {
-  name = "Role"
-}
-
 data "vsphere_tag_category" "category_client_code" {
-  name = "Client_Code"
+  name = "client_code"
 }
 
-data "vsphere_tag" "tag_mod" {
-  name        = "MOD"
-  category_id = data.vsphere_tag_category.category_role.id
+data "vsphere_tag_category" "category_role" {
+  name = "role"
 }
 
 data "vsphere_tag" "tag_client_code" {
@@ -48,7 +43,7 @@ data "vsphere_tag" "tag_client_code" {
   category_id = data.vsphere_tag_category.category_client_code.id
 }
 
-data "vsphere_tag" "tag_mdb" {
-  name        = "MDB"
+data "vsphere_tag" "tag_type" {
+  name        = var.role
   category_id = data.vsphere_tag_category.category_role.id
 }
