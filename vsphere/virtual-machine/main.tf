@@ -83,4 +83,10 @@ resource "vsphere_virtual_machine" "vm" {
       #dns_suffix_list = [var.guest_dns_suffix]
     }
   }
+  lifecycle {
+    ignore_changes = [
+      clone.0.customize.0.windows_options.0.admin_password,
+      clone.0.customize.0.windows_options.0.domain_admin_password,
+    ]
+  }
 }
