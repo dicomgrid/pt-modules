@@ -5,6 +5,7 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 4.24.0"
+      configuration_aliases = [ aws.primary, aws.ambra_storage1_account ]
     }
   }
 }

@@ -1,0 +1,150 @@
+# S3 bucket for storing Ambra PHR ("Personal Health Record") data
+resource "aws_s3_bucket" "ambra_phr_bucket" {
+  provider = aws.ambra_storage1_account
+  bucket   = var.ambra_phr_bucket_name
+
+  tags = {
+    Name                     = var.ambra_phr_bucket_name
+    Customer                 = "Ambra PHR"
+    map-migrated             = "d-server-03bwvdqjri88ho"
+    aws-migration-project-id = "MPE36510"
+    Environment              = var.environment
+  }
+}
+
+# Encryption scheme for Ambra PHR bucket
+resource "aws_s3_bucket_server_side_encryption_configuration" "ambra_phr_bucket_encryption" {
+  provider = aws.ambra_storage1_account
+  bucket   = aws_s3_bucket.ambra_phr_bucket.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "aws:kms"
+    }
+    bucket_key_enabled = true
+  }
+}
+
+# S3 bucket for storing Orphaned PHR ("Personal Health Record") data
+resource "aws_s3_bucket" "ambra_orphan_bucket" {
+  provider = aws.ambra_storage1_account
+  bucket   = var.ambra_orphan_bucket_name
+
+  tags = {
+    Name                     = var.ambra_orphan_bucket_name
+    Customer                 = "Ambra Orphan"
+    map-migrated             = "d-server-03bwvdqjri88ho"
+    aws-migration-project-id = "MPE36510"
+    Environment              = var.environment
+  }
+}
+
+# Encryption scheme for Ambra Orphaned bucket
+resource "aws_s3_bucket_server_side_encryption_configuration" "ambra_orphan_bucket_encryption" {
+  provider = aws.ambra_storage1_account
+  bucket   = aws_s3_bucket.ambra_orphan_bucket.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "aws:kms"
+    }
+    bucket_key_enabled = true
+  }
+}
+
+# AWS Lambda for determining in which AWS account to create S3 bucket
+resource "aws_lambda_function" "s3_bucket_provisioning" {
+  provider      = aws.primary
+  function_name = "s3-bucket-provisioning"
+  filename      = "./s3-bucket-provisioning.jar"
+
+  handler     = "com.ambrahealth.aws.lambda.S3BucketProvisioningHandler"
+  role        = aws_iam_role.iam_for_s3_bucket_provisioning.arn
+  runtime     = "java11"
+  memory_size = 2048
+  timeout     = var.timeout
+  environment {
+    variables = {
+      AMBRA_ENVIRONMENT             = "${var.environment}"
+      AMBRA_MAX_BUCKETS_PER_ACCOUNT = "${var.max_buckets_per_account}"
+      AMBRA_REGION                  = "${var.aws_region}"
+      AMBRA_PHR_ACCOUNT             = "${var.ambra_storage1_account}"
+      AMBRA_PHR_BUCKET              = "${var.ambra_phr_bucket_name}"
+      AMBRA_ORPHAN_ACCOUNT          = "${var.ambra_storage1_account}"
+      AMBRA_ORPHAN_BUCKET           = "${var.ambra_orphan_bucket_name}"
+      AMBRA_STORAGE_ACCOUNTS        = "${join(",", [for s in var.ambra_storage_accounts : format("%q", s)])}"
+    }
+  }
+}
+
+# Create a function URL for the Lambda that avoids needing to setup a separate API Gateway
+resource "aws_lambda_function_url" "s3_bucket_provisioning_url" {
+  provider           = aws.primary
+  function_name      = aws_lambda_function.s3_bucket_provisioning.function_name
+  authorization_type = "NONE"
+}
+
+# Create the role that allows the Lambda to carry out its work
+resource "aws_iam_role" "iam_for_s3_bucket_provisioning" {
+  provider = aws.primary
+  name     = "iam-for-s3-bucket-provisioning-lambda"
+
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Action" : "sts:AssumeRole",
+        "Principal" : {
+          "Service" : "lambda.amazonaws.com"
+        },
+        "Effect" : "Allow",
+        "Sid" : ""
+      }
+    ]
+  })
+}
+
+# Give the lambda role the right to read AWS organizations in a read-only fashion
+#REMVOE BLOCK
+#resource "aws_iam_role_policy_attachment" "s3_bucket_provisioning_org_read_only" {
+#  provider = aws.primary
+#  role = aws_iam_role.iam_for_s3_bucket_provisioning.name
+#  policy_arn = data.aws_iam_policy.AWSOrganizationsReadOnlyAccess.arn
+#}
+
+# Give the lambda role the right to assume the S3BucketManager role in each Ambra storage account
+resource "aws_iam_role_policy_attachment" "s3_bucket_provisioning_assume_sub_account" {
+  provider   = aws.primary
+  for_each   = var.ambra_storage_accounts
+  role       = aws_iam_role.iam_for_s3_bucket_provisioning.name
+  policy_arn = aws_iam_policy.assume_s3_bucket_manager_in_sub_account[each.key].arn
+}
+
+
+
+
+# Create Assume S3 Bucket Manager policies, one per Ambra storage account
+resource "aws_iam_policy" "assume_s3_bucket_manager_in_sub_account" {
+  provider = aws.primary
+  for_each = var.ambra_storage_accounts
+
+  name        = "AssumeS3BucketManagerInSubAccount-${each.key}"
+  description = "Allow S3 Bucket provisioning service to assume the S3BucketManager role in other AWS 'ambra storage' accounts"
+
+  policy = data.aws_iam_policy_document.assume_s3_bucket_manager_in_sub_account_document[each.key].json
+}
+
+
+# Apply the Ambra PHR bucket policy to the Ambra PHR bucket
+resource "aws_s3_bucket_policy" "ambra_phr_bucket_policy" {
+  provider = aws.ambra_storage1_account
+  bucket   = aws_s3_bucket.ambra_phr_bucket.id
+  policy   = data.aws_iam_policy_document.ambra_phr_bucket_policy_document.json
+}
+
+# Apply the Ambra PHR bucket policy to the Ambra Orphaned bucket
+resource "aws_s3_bucket_policy" "ambra_orphan_bucket_policy" {
+  provider = aws.ambra_storage1_account
+  bucket   = aws_s3_bucket.ambra_orphan_bucket.id
+  policy   = data.aws_iam_policy_document.ambra_orphan_bucket_policy_document.json
+}
