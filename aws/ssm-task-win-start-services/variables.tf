@@ -10,22 +10,22 @@ variable "max_errors" {
     default = "2"
 }
 
-variable "window_start_services_priority" {
+variable "win_start_services_priority" {
     type = number
     description = "Priority of job to run. Lower number means higher priority"
 }
 
-variable "window_start_services_window_id" {
+variable "win_start_services_window_id" {
     type = string
     description = "Maintenance window of job"
 }
 
-variable "window_start_services_window_target_id" {
+variable "win_start_services_window_target_id" {
     type = string
     description = "Maintenance window of job"
 }
 
-variable "window_start_services_name" {
+variable "win_start_services_name" {
     type = string
 }
 

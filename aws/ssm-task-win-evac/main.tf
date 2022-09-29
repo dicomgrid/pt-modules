@@ -1,15 +1,15 @@
 resource "aws_ssm_maintenance_window_task" "task-cluster-evac" {
-  name = var.wfcm_evac_name
-  window_id = var.wfcm_evac_window_id
+  name = var.win_evac_name
+  window_id = var.win_evac_window_id
   task_type       = var.task_type
   task_arn        = "AWS-RunPowerShellScript"
-  priority        = var.wfcm_evac_priority
+  priority        = var.win_evac_priority
   service_role_arn = var.service_role_arn
   max_concurrency = var.max_concurrency
   max_errors      = var.max_errors
   targets {
     key    = "WindowTargetIds"
-    values = [var.wfcm_evac_window_target_id]
+    values = [var.win_evac_window_target_id]
   }
   task_invocation_parameters {
     run_command_parameters {
