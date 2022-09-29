@@ -1,15 +1,15 @@
-resource "aws_ssm_maintenance_window_task" "task-cluster-evac" {
-  name = var.cluster_evac_name
-  window_id = var.cluster_evac_window_id
+resource "aws_ssm_maintenance_window_task" "task-win-start-services" {
+  name = var.win_start_services_name
+  window_id = var.win_start_services_window_id
   task_type       = var.task_type
   task_arn        = "AWS-RunPowerShellScript"
-  priority        = var.cluster_evac_priority
+  priority        = var.win_start_services_priority
   service_role_arn = var.service_role_arn
   max_concurrency = var.max_concurrency
   max_errors      = var.max_errors
   targets {
     key    = "WindowTargetIds"
-    values = [var.cluster_evac_window_target_id]
+    values = [var.win_start_services_window_target_id]
   }
   task_invocation_parameters {
     run_command_parameters {
@@ -24,7 +24,7 @@ resource "aws_ssm_maintenance_window_task" "task-cluster-evac" {
       }
     parameter {
     name   = "commands"
-    values = ["${file("${path.module}/../Scripts/pt-windows-stop-services.ps1")}"]
+    values = ["${file("${path.module}/../ssm-tools/scripts/pt-windows-start-services.ps1")}"]
     }
     }
   }
