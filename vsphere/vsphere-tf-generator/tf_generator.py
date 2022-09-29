@@ -19,6 +19,7 @@ import jinja2
 import os
 import datetime
 from ipaddress import IPv4Address
+import shutil
 
 ### File References ###
 
@@ -531,6 +532,30 @@ for server in (input_vars['custom_vms']):
 
 print("VMs dictonary has been created")
 
+def create_vsphere_comp_tf(source_prefix, source_dir, jinja_tpl, jinja_var_in):
+    jinja_file = os.path.join(__location__, 'templates', jinja_tpl)
+    output_tf_file = os.path.join(__location__, '..//', source_dir, source_prefix + '.tf')
+    with open(jinja_file) as f:
+        tf_template = f.read()
+    tf_template = jinja2.Template(tf_template)
+    tf_out = tf_template.render(jinja_var=jinja_var_in)
+    with open(output_tf_file, "w") as f:    
+        f.write(tf_out)
+    print(source_prefix + " module files have been updated")
+
+if not os.path.exists('../vsphere-distributed-port-group'):
+    os.mkdir('../vsphere-distributed-port-group')
+    create_vsphere_comp_tf('providers', 'vsphere-distributed-port-group', 'providers-pg.j2', dict_out)
+    shutil.copyfile('./templates/variables-pg.tf', '../vsphere-distributed-port-group/variables.tf')
+if not os.path.exists('../vsphere-virtual-machine'):
+    os.mkdir('../vsphere-virtual-machine')
+    create_vsphere_comp_tf('providers', 'vsphere-virtual-machine', 'providers-vm.j2', dict_out)
+
+create_vsphere_comp_tf('vsphere-folder', 'vsphere-virtual-machine', 'vsphere-folder.j2', dcs)
+create_vsphere_comp_tf('vsphere-tag', 'vsphere-virtual-machine', 'vsphere-tag.j2', dcs)
+create_vsphere_comp_tf('variables', 'vsphere-virtual-machine', 'variables.j2', dict_out)
+create_vsphere_comp_tf('vsphere-distributed-port-group', 'vsphere-distributed-port-group', 'vsphere-distributed-port-group.j2', dict_out)
+
 def create_vm_tf(dc_dict):
     for guest, guest_dict in (dc_dict.items()):
         jinja_file = os.path.join(__location__, 'templates', 'virtual-machines.j2')
@@ -546,22 +571,5 @@ def create_vm_tf(dc_dict):
 create_vm_tf(dict_out['dc1'])
 create_vm_tf(dict_out['dc2'])
 
-def create_vsphere_comp_tf(source_prefix, source_dir, jinja_tpl, jinja_var_in):
-    jinja_file = os.path.join(__location__, 'templates', jinja_tpl)
-    output_tf_file = os.path.join(__location__, '..//', source_dir, source_prefix + '.tf')
-    with open(jinja_file) as f:
-        tf_template = f.read()
-    tf_template = jinja2.Template(tf_template)
-    tf_out = tf_template.render(jinja_var=jinja_var_in)
-    with open(output_tf_file, "w") as f:    
-        f.write(tf_out)
-    print(source_prefix + " module files have been updated")
-
-create_vsphere_comp_tf('vsphere-folder', 'vsphere-virtual-machine', 'vsphere-folder.j2', dcs)
-create_vsphere_comp_tf('vsphere-tag', 'vsphere-virtual-machine', 'vsphere-tag.j2', dcs)
-create_vsphere_comp_tf('variables', 'vsphere-virtual-machine', 'variables.j2', dict_out)
-create_vsphere_comp_tf('vsphere-distributed-port-group', 'vsphere-distributed-port-group', 'vsphere-distributed-port-group.j2', dict_out)
-
-
-dict_p = yaml.dump(dict_out, width=50, indent=4)
-print(dict_p)
+#dict_p = yaml.dump(dict_out, width=50, indent=4)
+#print(dict_p)
