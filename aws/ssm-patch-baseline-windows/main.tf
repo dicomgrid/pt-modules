@@ -5,7 +5,7 @@ resource "aws_ssm_patch_baseline" "windows_pb" {
   approved_patches = var.windows_approved_patches
   rejected_patches = var.windows_rejected_patches
 
-#Default rule and classifications, tuned towards critical and security updates
+  #Default rule and classifications, tuned towards critical and security updates
   global_filter {
     key    = "PRODUCT"
     values = var.windows_patch_product
@@ -21,7 +21,7 @@ resource "aws_ssm_patch_baseline" "windows_pb" {
     values = ["Critical", "Important", "Moderate", "Low", "Unspecified"]
   }
 
-#Medium Compliance Patch Filter
+  #Medium Compliance Patch Filter
   approval_rule {
     approve_after_days = 7
     compliance_level   = "CRITICAL"
@@ -62,10 +62,10 @@ resource "aws_ssm_patch_baseline" "windows_pb" {
     }
   }
 
-#Low Compliance Patch Filter
+  #Low Compliance Patch Filter
   approval_rule {
     approve_after_days = 7
-    compliance_level = "LOW"
+    compliance_level   = "LOW"
 
     patch_filter {
       key    = "PRODUCT"

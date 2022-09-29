@@ -2,7 +2,6 @@ resource "aws_ssm_maintenance_window_task" "task_patch_scan" {
   name = var.patch_scan_name
   window_id        = var.patch_scan_window_id
   task_type        = var.task_type
-  #cutoff_behavior = var.cutoff_behavior
   task_arn         = "AWS-RunPatchBaseline"
   priority         = var.patch_scan_priority
   service_role_arn = var.service_role_arn

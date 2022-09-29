@@ -1,16 +1,16 @@
 variable "name" {
-    type = string
-    description = "name of patch baseline"
-    default = ""
+  type        = string
+  description = "name of patch baseline"
+  default     = ""
 }
 
 variable "description" {
-    type = string
-    description = "Description of patch baseline"
-    default = ""
+  type        = string
+  description = "Description of patch baseline"
+  default     = ""
 }
 
 variable "rejected_patches" {
-    type = list(string) #Example syntax: ["systemd", "corosync"]
-    default = []
+  type    = list(string) #Example syntax: ["systemd", "corosync"]
+  default = []
 }
