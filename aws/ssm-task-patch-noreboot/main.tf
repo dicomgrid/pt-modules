@@ -1,8 +1,7 @@
 resource "aws_ssm_maintenance_window_task" "task_patch_noreboot" {
-  name = var.patch_noreboot_name
+  name      = var.patch_noreboot_name
   window_id = var.patch_noreboot_window_id
-  task_type        = var.task_type
-  #cutoff_behavior = var.cutoff_behavior
+  task_type = var.task_type
   task_arn         = "AWS-RunPatchBaselineWithHooks"
   priority         = var.patch_noreboot_priority
   service_role_arn = var.service_role_arn
@@ -15,15 +14,15 @@ resource "aws_ssm_maintenance_window_task" "task_patch_noreboot" {
   task_invocation_parameters {
     run_command_parameters {
       parameter {
-      name   = "Operation"
-      values = ["Install"]
+        name   = "Operation"
+        values = ["Install"]
       }
 
       parameter {
         name   = "RebootOption"
         values = ["NoReboot"]
       }
-      
+
       parameter {
         name   = "PreInstallHookDocName"
         values = ["AWS-Noop"]
