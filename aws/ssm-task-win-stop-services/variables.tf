@@ -10,22 +10,22 @@ variable "max_errors" {
     default = "2"
 }
 
-variable "cluster_evac_priority" {
+variable "win_stop_services_priority" {
     type = number
     description = "Priority of job to run. Lower number means higher priority"
 }
 
-variable "cluster_evac_window_id" {
+variable "win_stop_services_window_id" {
     type = string
     description = "Maintenance window of job"
 }
 
-variable "cluster_evac_window_target_id" {
+variable "win_stop_services_window_target_id" {
     type = string
     description = "Maintenance window of job"
 }
 
-variable "cluster_evac_name" {
+variable "win_stop_services_name" {
     type = string
 }
 
