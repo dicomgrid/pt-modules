@@ -1,26 +1,26 @@
 ### CLIENT INFORMATION ###
-client_code: "miked"             # Enter Intelerad Client ID in lowercase. ie. evhc, sgra, rpeg, cra
-client_type: "sdc1"             # Must be "sdc1" "sdc2" or "mdc"
-client_size: "small"           # Must be "small", "medium" or "large". Used for server specs. server_code will trump this setting if inputted.
-client_time_zone: "cst"         # Must be "est", "cst", "mst", or "pst". 
-primary_dc: "mna"               # Must be "atl2", "nas6", or "mna". This will be appended to server hostnames.
+client_code: ""             # Enter Intelerad Client ID in lowercase. ie. evhc, sgra, rpeg, cra
+client_type: ""             # Must be "sdc1" "sdc2" or "mdc"
+client_size: ""           # Must be "small", "medium" or "large". Used for server specs. server_code will trump this setting if inputted.
+client_time_zone: ""         # Must be "est", "cst", "mst", or "pst". 
+primary_dc: ""               # Must be "atl2", "nas6", or "mna". This will be appended to server hostnames.
 
 ### COMPUTE ###
-dc1_linux_host_cluster: "management"
+dc1_linux_host_cluster: ""
 dc2_linux_host_cluster: ""
 dc1_windows_host_cluster: ""
 dc2_windows_host_cluster: ""
 
 ### STORAGE ###
-dc1_linux_ds_cluster: "maangement-b-cluster-dsc"
+dc1_linux_ds_cluster: ""
 dc2_linux_ds_cluster: ""
 dc1_windows_ds_cluster: ""
 dc2_windows_ds_cluster: ""
 
 ### NETWORK INFORMATION ###
-vlan_be: "502"                       # Back-end VLAN ID
-vlan_fe: "503"                       # Front-end VLAN ID
-network_base_address: "169.254.0."    # Must be in xxx.xxx.xxx. format.
+vlan_be: ""                       # Back-end VLAN ID
+vlan_fe: ""                       # Front-end VLAN ID
+network_base_address: ""    # Must be in xxx.xxx.xxx. format.
 
 ### SERVER INFORMATION ###
 
@@ -28,7 +28,7 @@ network_base_address: "169.254.0."    # Must be in xxx.xxx.xxx. format.
 
 vms:
   mdb:
-    dc1_count: 1
+    dc1_count: 0
     dc2_count: 0
     server_code: "1PV-FM-GVD-KVB-OWK-IWL-DWM-KTO"
   rig:
