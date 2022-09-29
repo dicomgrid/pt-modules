@@ -81,7 +81,7 @@ resource "aws_lambda_function" "s3_bucket_provisioning" {
 resource "aws_lambda_function_url" "s3_bucket_provisioning_url" {
   provider           = aws.primary
   function_name      = aws_lambda_function.s3_bucket_provisioning.function_name
-  authorization_type = "NONE"
+  authorization_type = "AWS_IAM"
 }
 
 # Create the role that allows the Lambda to carry out its work
