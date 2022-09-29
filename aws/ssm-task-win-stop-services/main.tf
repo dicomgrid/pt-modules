@@ -1,4 +1,4 @@
-resource "aws_ssm_maintenance_window_task" "task-cluster-evac" {
+resource "aws_ssm_maintenance_window_task" "task-win-stop-services" {
   name = var.win_stop_services_name
   window_id = var.win_stop_services_window_id
   task_type       = var.task_type
