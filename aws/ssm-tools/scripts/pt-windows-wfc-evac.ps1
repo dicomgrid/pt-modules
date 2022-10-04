@@ -1,4 +1,5 @@
 try {
+    
     Write-Host "Detecting Failover Cluster Roles..."
     $Clussvc = $null
     $Clussvc = get-service -name 'Clussvc*' | select -expandproperty status | ?{$_ -ne "Stopped"}
@@ -12,7 +13,8 @@ try {
     
         Invoke-Command -ScriptBlock {$MoveClusterCommand} 
     
-        Write-Host "DONE"
+        Write-Host "Failover attempt completed."
+
         #Fetch Availability Groups
         Write-Host "Detecting SQL Roles..."
         [reflection.assembly]::LoadWithPartialName("Microsoft.SqlServer.Smo") | out-null
@@ -21,10 +23,10 @@ try {
         
         #Move Availability Groups to this node
         foreach ($AvailabilityGroup in $svr.AvailabilityGroups){
-            Write-Host "SQL Availability Group detected >>> $($AvailabilityGroup.Name):"
+            Write-Host "AG detected >>> $($AvailabilityGroup.Name):"
             $currenthost = $null
             $currenthost = $($AvailabilityGroup.PrimaryReplicaServerName)
-            Write-Host "The current owner node is: $currenthost..."
+            Write-Host "$currenthost is the current owner node"
             $SwitchAG = $null
             if ($currenthost -ne $env:computername){
                 Write-Host "Initiating failover attempt to this host..."
@@ -35,22 +37,21 @@ try {
                 Write-Host "Failover attempt complete. The owner node is now: $newhost"
             }
         }
-        
        
-        Write-Host "DONE"
+        Write-Host "Failover complete."
     
         }
     
     else {
-        Write-Host "No Failover Cluster Roles detected. So sad... Exiting..."
+        Write-Host "No Failover Cluster Roles detected. Exiting..."
         exit
     } 
-    }
+}
     
-    catch {
-            $_
-    }
-    
-    finally {
-        Write-Host "ALL DONE! THANK YOU FOR PLAYING!"
-    }
+catch {
+        $_
+}
+
+finally {
+    Write-Host "Ending execution"
+}
