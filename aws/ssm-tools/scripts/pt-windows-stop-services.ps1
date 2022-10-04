@@ -16,6 +16,7 @@ try {
             if ($CLSVCVer -like "3.*"){ 
             get-service -displayname "zvision*" | stop-service
             get-service -displayname "zvision*" | set-service -startuptype manual
+            Write-Host "Finished attempting to stop Clario services"
         }
     }
 
@@ -44,7 +45,7 @@ try {
         }
     }
 
-    function Stop-Mckession {
+    function Stop-Mckesson {
         ### Stop Mckesson Services if present (K251)
         if ($env:computername -like "K251AAIO*"){cmd /c stopweb}
     }
@@ -56,6 +57,7 @@ try {
     Stop-CorePoint
     Stop-MModal
     Stop-Mckesson
+    Write-Host "End of Execution."
 }
 
 catch {

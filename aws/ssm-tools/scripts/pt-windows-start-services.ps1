@@ -62,6 +62,7 @@ try {
     Start-CorePoint
     Start-MModal
     Start-Mckesson
+    Write-Host "End of Execution."
 }
     
 catch {
