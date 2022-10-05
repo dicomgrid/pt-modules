@@ -11,7 +11,7 @@ resource "aws_iam_role" "s3_bucket_manager_main" {
       {
         "Action" : "sts:AssumeRole",
         "Principal" : {
-          "AWS": "arn:aws:iam::${var.primary_account}:role/iam-for-s3-bucket-provisioning-lambda"
+          "AWS": "arn:aws:iam::${var.primary_account}:role/s3-bucket-provisioning-lambda-execution-role"
         },
         "Effect" : "Allow",
         "Sid" : ""
