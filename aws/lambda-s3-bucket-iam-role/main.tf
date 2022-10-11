@@ -70,7 +70,8 @@ resource "aws_iam_policy" "s3_bucket_management_main" {
           "s3:PutBucketPolicy",
           "s3:PutBucketObjectLockConfiguration",
           "s3:PutEncryptionConfiguration",
-          "s3:GetBucketLocation"
+          "s3:GetBucketLocation",
+          "s3:PutLifecycleConfiguration"
         ],
         "Resource" : "*"
       }
