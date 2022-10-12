@@ -96,8 +96,8 @@ data "aws_iam_policy_document" "ambra_phr_bucket_policy_document" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.ambra_phr_bucket_name}",
-      "arn:aws:s3:::${var.ambra_phr_bucket_name}/*"
+      "arn:aws:s3:::ambra-${var.environment}-${var.aws_region}-phr",
+      "arn:aws:s3:::ambra-${var.environment}-${var.aws_region}-phr/*"
     ]
   }
 }
@@ -166,8 +166,8 @@ data "aws_iam_policy_document" "ambra_orphan_bucket_policy_document" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.ambra_orphan_bucket_name}",
-      "arn:aws:s3:::${var.ambra_orphan_bucket_name}/*"
+      "arn:aws:s3:::ambra-${var.environment}-${var.aws_region}-orphan",
+      "arn:aws:s3:::ambra-${var.environment}-${var.aws_region}-orphan/*"
     ]
   }
 }
