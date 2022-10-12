@@ -69,9 +69,9 @@ resource "aws_lambda_function" "s3_bucket_provisioning" {
       AMBRA_MAX_BUCKETS_PER_ACCOUNT = "${var.max_buckets_per_account}"
       AMBRA_REGION                  = "${var.aws_region}"
       AMBRA_PHR_ACCOUNT             = "${var.ambra_storage1_account}"
-      AMBRA_PHR_BUCKET              = "${var.ambra_phr_bucket_name}"
+      AMBRA_PHR_BUCKET              = "ambra-${var.environment}-${var.aws_region}-phr"
       AMBRA_ORPHAN_ACCOUNT          = "${var.ambra_storage1_account}"
-      AMBRA_ORPHAN_BUCKET           = "${var.ambra_orphan_bucket_name}"
+      AMBRA_ORPHAN_BUCKET           = "ambra-${var.environment}-${var.aws_region}-orphan"
       AMBRA_STORAGE_ACCOUNTS        = "${join(",", [for s in var.ambra_storage_accounts : format("%q", s)])}"
     }
   }
