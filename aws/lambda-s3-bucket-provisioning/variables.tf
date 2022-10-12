@@ -14,17 +14,17 @@ variable "ambra_storage1_account" {
   default     = "" ##first storage account in environment
 }
 
-variable "ambra_phr_bucket_name" {
-  description = "AWS S3 Bucket name for PHR storage"
-  type        = string
-  default     = ""
-}
+#variable "ambra_phr_bucket_name" {
+#  description = "AWS S3 Bucket name for PHR storage"
+#  type        = string
+#  default     = ""
+#}
 
-variable "ambra_orphan_bucket_name" {
-  description = "AWS S3 Bucket name for Orpaned storage"
-  type        = string
-  default     = ""
-}
+#variable "ambra_orphan_bucket_name" {
+#  description = "AWS S3 Bucket name for Orpaned storage"
+#  type        = string
+#  default     = ""
+#}
 
 variable "aws_region" {
   description = "AWS region"

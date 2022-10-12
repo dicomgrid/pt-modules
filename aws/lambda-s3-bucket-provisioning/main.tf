@@ -1,10 +1,10 @@
 # S3 bucket for storing Ambra PHR ("Personal Health Record") data
 resource "aws_s3_bucket" "ambra_phr_bucket" {
   provider = aws.ambra_storage1_account
-  bucket   = var.ambra_phr_bucket_name
+  bucket   = "ambra-${var.environment}-${var.aws_region}-phr"
 
   tags = {
-    Name                     = var.ambra_phr_bucket_name
+    Name                     = "ambra-${var.environment}-${var.aws_region}-phr"
     Customer                 = "Ambra PHR"
     map-migrated             = "d-server-03bwvdqjri88ho"
     aws-migration-project-id = "MPE36510"
@@ -28,10 +28,10 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "ambra_phr_bucket_
 # S3 bucket for storing Orphaned PHR ("Personal Health Record") data
 resource "aws_s3_bucket" "ambra_orphan_bucket" {
   provider = aws.ambra_storage1_account
-  bucket   = var.ambra_orphan_bucket_name
+  bucket   = "ambra-${var.environment}-${var.aws_region}-orphan"
 
   tags = {
-    Name                     = var.ambra_orphan_bucket_name
+    Name                     = "ambra-${var.environment}-${var.aws_region}-orphan"
     Customer                 = "Ambra Orphan"
     map-migrated             = "d-server-03bwvdqjri88ho"
     aws-migration-project-id = "MPE36510"
