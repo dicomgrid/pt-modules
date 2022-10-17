@@ -75,6 +75,10 @@ resource "aws_lambda_function" "s3_bucket_provisioning" {
       AMBRA_STORAGE_ACCOUNTS        = "${join(",", [for s in var.ambra_storage_accounts : format("%q", s)])}"
     }
   }
+  tags = {
+    map-migrated             = "d-server-03bwvdqjri88ho"
+    aws-migration-project-id = "MPE36510"
+  }
 }
 
 # Create a function URL for the Lambda that avoids needing to setup a separate API Gateway
