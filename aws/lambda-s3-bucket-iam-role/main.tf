@@ -25,7 +25,7 @@ resource "aws_iam_role" "s3_bucket_manager_main" {
 }
 
 # Create the S3 Object Manager role that can carry out the S3 Object Management policy
-resource "aws_iam_role" "s3_bucket_manager_main" {
+resource "aws_iam_role" "s3_object_manager_main" {
   depends_on = [
     aws_iam_policy.s3_object_management_main
   ]
