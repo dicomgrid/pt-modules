@@ -23,7 +23,7 @@ resource "aws_ssm_patch_baseline" "windows_pb" {
 
   #Medium Compliance Patch Filter
   approval_rule {
-    approve_after_days = 7
+    approve_after_days = var.approval_day_count
     compliance_level   = "CRITICAL"
 
     patch_filter {
@@ -43,7 +43,7 @@ resource "aws_ssm_patch_baseline" "windows_pb" {
   }
 
   approval_rule {
-    approve_after_days = 7
+    approve_after_days = var.approval_day_count
     compliance_level   = "MEDIUM"
 
     patch_filter {
@@ -64,7 +64,7 @@ resource "aws_ssm_patch_baseline" "windows_pb" {
 
   #Low Compliance Patch Filter
   approval_rule {
-    approve_after_days = 7
+    approve_after_days = var.approval_day_count
     compliance_level   = "LOW"
 
     patch_filter {

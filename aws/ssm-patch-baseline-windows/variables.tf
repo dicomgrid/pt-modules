@@ -20,6 +20,10 @@ variable "windows_patch_classification" {
   default = ["CriticalUpdates", "DefinitionUpdates", "Drivers", "FeaturePacks", "SecurityUpdates", "ServicePacks", "Tools", "UpdateRollups", "Updates", "Upgrades"]
 }
 
+variable "approval_day_count" {
+  default = 7
+}
+
 variable "windows_approved_patches" {
   type    = list(string)
   default = ["KB123456"]
