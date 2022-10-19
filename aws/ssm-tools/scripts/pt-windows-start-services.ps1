@@ -5,6 +5,7 @@ try {
         $mirth = get-service -name "mirth*" | select -expandproperty starttype | get-unique
         if ($mirth -ne $null) {
             get-service -name $mirth | start-service
+            get-service -name $mirth | set-service -startuptype automatic
             Write-Host "Finished attempting to start Mirth services"
         }
     }

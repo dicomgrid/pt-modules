@@ -4,7 +4,8 @@ try {
         ### Stop Mirth Service if present
         $mirth = get-service -name "mirth*" | select -expandproperty starttype | get-unique
         if ($mirth -ne $null) {
-            get-service "mirth*" | stop-service 
+            get-service -name $mirth | stop-service
+            get-service -name $mirth | set-service -startuptype manual
             Write-Host "Finished attempting to stop Mirth services"
         }
     }
