@@ -177,7 +177,7 @@ data "aws_iam_policy_document" "s3-bucket-provisioning-instance-profile" {
   provider = aws.primary
   statement {
     actions   = ["lambda:InvokeFunction"]
-    resources = ["arn:aws:lambda:${var.region}:${var.primary_account}:function:s3-bucket-provisioning"]
+    resources = ["arn:aws:lambda:${var.aws_region}:${var.primary_account}:function:s3-bucket-provisioning"]
   }
 
   statement {
@@ -191,7 +191,7 @@ data "aws_iam_policy_document" "s3-bucket-provisioning-instance-profile" {
     condition {
       test     = "ArnEquals"
       variable = "lambda:FunctionArn"
-      values   = ["arn:aws:lambda:${var.region}:${var.primary_account}:function:s3-bucket-provisioning"]
+      values   = ["arn:aws:lambda:${var.aws_region}:${var.primary_account}:function:s3-bucket-provisioning"]
     }
   }
   statement {
