@@ -156,6 +156,7 @@ resource "aws_s3_bucket_policy" "ambra_orphan_bucket_policy" {
 
 ### INSTANCE Profile for servie nodes to use to invoke lambda
 resource "aws_iam_role" "main" {
+  provider = aws.primary
   name               = "s3-bucket-provisioning-instance-profile"
   assume_role_policy = <<EOF
 {
@@ -174,11 +175,13 @@ resource "aws_iam_role" "main" {
 EOF
 }
 resource "aws_iam_instance_profile" "main" {
+  provider = aws.primary
   name = aws_iam_role.main.name
   role = aws_iam_role.main.id
 }
 
 resource "aws_iam_role_policy" "main" {
+  provider = aws.primary
   name   = aws_iam_role.main.name
   role   = aws_iam_role.main.id
   policy = data.aws_iam_policy_document.s3-bucket-provisioning-instance-profile.json
