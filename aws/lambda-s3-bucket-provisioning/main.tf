@@ -152,3 +152,34 @@ resource "aws_s3_bucket_policy" "ambra_orphan_bucket_policy" {
   bucket   = aws_s3_bucket.ambra_orphan_bucket.id
   policy   = data.aws_iam_policy_document.ambra_orphan_bucket_policy_document.json
 }
+
+
+### INSTANCE Profile for servie nodes to use to invoke lambda
+resource "aws_iam_role" "main" {
+  name               = "s3-bucket-provisioning-instance-profile"
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "sts:AssumeRole",
+            "Principal": {
+               "Service": "ec2.amazonaws.com"
+            },
+            "Effect": "Allow",
+            "Sid": ""
+        }
+    ]
+}
+EOF
+}
+resource "aws_iam_instance_profile" "main" {
+  name = aws_iam_role.main.name
+  role = aws_iam_role.main.id
+}
+
+resource "aws_iam_role_policy" "main" {
+  name   = aws_iam_role.main.name
+  role   = aws_iam_role.main.id
+  policy = data.aws_iam_policy_document.s3-bucket-provisioning-instance-profile.json
+}

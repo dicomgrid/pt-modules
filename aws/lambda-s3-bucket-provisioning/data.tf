@@ -171,3 +171,64 @@ data "aws_iam_policy_document" "ambra_orphan_bucket_policy_document" {
     ]
   }
 }
+
+##instance profile policy doc
+data "aws_iam_policy_document" "s3-bucket-provisioning-instance-profile" {
+  provider = aws.primary
+  statement {
+    actions   = ["lambda:InvokeFunction"]
+    resources = ["arn:aws:lambda:${var.region}:${var.primary_account}:function:s3-bucket-provisioning"]
+  }
+
+  statement {
+    actions   = ["lambda:InvokeFunctionUrl"]
+    resources = ["*"]
+    condition {
+      test     = "StringEquals"
+      variable = "lambda:FunctionUrlAuthType"
+      values   = ["AWS_IAM"]
+    }
+    condition {
+      test     = "ArnEquals"
+      variable = "lambda:FunctionArn"
+      values   = ["arn:aws:lambda:${var.region}:${var.primary_account}:function:s3-bucket-provisioning"]
+    }
+  }
+  statement {
+    actions   = [ 
+      "cloudformation:DescribeStacks",
+      "cloudformation:ListStackResources",
+      "cloudwatch:GetMetricData",
+      "cloudwatch:ListMetrics",
+      "ec2:DescribeSecurityGroups",
+      "ec2:DescribeSubnets",
+      "ec2:DescribeVpcs",
+      "kms:ListAliases",
+      "iam:GetPolicy",
+      "iam:GetPolicyVersion",
+      "iam:GetRole",
+      "iam:GetRolePolicy",
+      "iam:ListAttachedRolePolicies",
+      "iam:ListRolePolicies",
+      "iam:ListRoles",
+      "logs:DescribeLogGroups",
+      "lambda:Get*",
+      "lambda:List*",
+      "states:DescribeStateMachine",
+      "states:ListStateMachines",
+      "tag:GetResources",
+      "xray:GetTraceSummaries",
+      "xray:BatchGetTraces"
+      ]
+    resources = ["*"]
+  }
+  statement {
+    actions   = [
+      "logs:DescribeLogStreams",
+      "logs:GetLogEvents",
+      "logs:FilterLogEvents"
+      ]
+    resources = ["arn:aws:logs:*:*:log-group:/aws/lambda/*"]
+  } 
+  
+}
