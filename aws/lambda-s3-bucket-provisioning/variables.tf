@@ -53,3 +53,7 @@ variable "ambra_storage_accounts" {
 variable "timeout" {
   default     = "60"
 }
+
+variable "primary_account" {
+  default     = ""
+}
