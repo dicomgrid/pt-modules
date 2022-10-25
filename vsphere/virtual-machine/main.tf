@@ -4,7 +4,7 @@ resource "vsphere_virtual_machine" "vm" {
   datastore_id          = var.datastore != null ? data.vsphere_datastore.datastore[0].id : null
   datastore_cluster_id  = var.datastore != null ? data.vsphere_datastore_cluster.datastore_cluster[0].id : null
   folder                = var.client_code == "inf" ? "A000 - Infrastructure" : "${var.parent_folder}/${var.client_code}"
-  tags                  = [data.vsphere_tag.tag_type.id, data.vsphere_tag.tag_client_code.id]
+  tags                  = [data.vsphere_tag.tag_type.id, data.vsphere_tag.tag_client_code.id, data.vsphere_tag.tag_creator.id]
   num_cpus              = var.guest_vcpu
   memory                = var.guest_memory * 1024
   firmware              = data.vsphere_virtual_machine.guest_template.firmware
@@ -85,6 +85,13 @@ resource "vsphere_virtual_machine" "vm" {
   }
   lifecycle {
     ignore_changes = [
+      resource_pool_id,
+      datastore_id,
+      datastore_cluster_id,
+      network_interface.0.network_id,
+      clone.0.customize.0.network_interface.0.ipv4_address,
+      clone.0.customize.0.network_interface.0.ipv4_netmask,
+      clone.0.customize.0.ipv4_gateway,
       clone.0.customize.0.windows_options.0.admin_password,
       clone.0.customize.0.windows_options.0.domain_admin_password,
     ]
