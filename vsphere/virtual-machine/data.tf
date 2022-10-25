@@ -38,6 +38,10 @@ data "vsphere_tag_category" "category_role" {
   name = "role"
 }
 
+data "vsphere_tag_category" "category_creator" {
+  name = "creator"
+}
+
 data "vsphere_tag" "tag_client_code" {
   name        = var.client_code
   category_id = data.vsphere_tag_category.category_client_code.id
@@ -46,4 +50,9 @@ data "vsphere_tag" "tag_client_code" {
 data "vsphere_tag" "tag_type" {
   name        = var.role
   category_id = data.vsphere_tag_category.category_role.id
+}
+
+data "vsphere_tag" "tag_creator" {
+  name        = "terraform"
+  category_id = data.vsphere_tag_category.category_creator.id
 }
