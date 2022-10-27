@@ -73,17 +73,41 @@ data "aws_ami" "rhel_8" {
   }
 }
 
-data "aws_ami" "amazon_linux" {
+data "aws_ami" "amazon_linux_2" {
 most_recent = true
-owners = ["0da7236b7a69cf265"]
+owners = ["137112412989"]
   filter {
     name   = "name"
-    values = ["*amazon-linux*"]
+    values = ["amzn2-ami*"]
   }
 
   filter {
     name   = "architecture"
-    values = ["arm64"]
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+data "aws_ami" "rocky_8" {
+most_recent = true
+owners = ["679593333241"]
+  filter {
+    name   = "name"
+    values = ["Rocky-8-ec2-*"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
   }
 
   filter {
