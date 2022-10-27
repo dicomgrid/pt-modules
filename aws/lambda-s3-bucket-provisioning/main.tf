@@ -56,7 +56,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "ambra_orphan_buck
 resource "aws_lambda_function" "s3_bucket_provisioning" {
   provider      = aws.primary
   function_name = "s3-bucket-provisioning"
-  filename      = "./s3-bucket-provisioning-1.0.jar"
+  filename      = "${path.module}/s3-bucket-provisioning-1.0.jar"
 
   handler     = "com.ambrahealth.aws.lambda.S3BucketProvisioningHandler"
   role        = aws_iam_role.iam_for_s3_bucket_provisioning.arn
@@ -196,7 +196,7 @@ resource "aws_iam_policy" "s3objectmanager" {
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
-  policy = templatefile("policy.json.tftpl", {
+  policy = templatefile("${path.module}/policy.json.tftpl", {
     storage_accounts = tolist(var.ambra_storage_accounts)
   })
 }
