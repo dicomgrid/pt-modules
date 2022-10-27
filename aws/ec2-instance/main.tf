@@ -4,6 +4,7 @@ resource "aws_instance" "main" {
     amazon_linux_2               = data.aws_ami.amazon_linux_2.id
     ubuntu_22_04                 = data.aws_ami.ubuntu_22_04.id
     rhel_8                       = data.aws_ami.rhel_8.id
+    rocky_8                       = data.aws_ami.rocky_8.id
     windows_server_2019          = data.aws_ami.windows_server_2019.id
     windows_server_2016_sql_2017 = data.aws_ami.windows_server_2016_sql_2017.id
   }, var.ami, var.ami)
