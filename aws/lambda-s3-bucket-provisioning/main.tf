@@ -156,7 +156,7 @@ resource "aws_s3_bucket_policy" "ambra_orphan_bucket_policy" {
 
 ### INSTANCE Profile for servie nodes to use to invoke lambda
 resource "aws_iam_role" "main" {
-  provider = aws.primary
+  provider           = aws.primary
   name               = "s3-bucket-provisioning-instance-profile"
   assume_role_policy = <<EOF
 {
@@ -176,13 +176,33 @@ EOF
 }
 resource "aws_iam_instance_profile" "main" {
   provider = aws.primary
-  name = aws_iam_role.main.name
-  role = aws_iam_role.main.id
+  name     = aws_iam_role.main.name
+  role     = aws_iam_role.main.id
 }
 
 resource "aws_iam_role_policy" "main" {
   provider = aws.primary
-  name   = aws_iam_role.main.name
-  role   = aws_iam_role.main.id
-  policy = data.aws_iam_policy_document.s3-bucket-provisioning-instance-profile.json
+  name     = aws_iam_role.main.name
+  role     = aws_iam_role.main.id
+  policy   = data.aws_iam_policy_document.s3-bucket-provisioning-instance-profile.json
+}
+
+
+##creating policy for storage ec2 roles to be allowed to assume s3ObjectManager role
+resource "aws_iam_policy" "s3objectmanager" {
+  provider    = aws.primary
+  name        = "s3ObjectManager"
+  description = "Allows ec2 to assume ss3objectmanager role on storage accounts"
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  policy = templatefile("policy.json.tftpl", {
+    storage_accounts = tolist(var.ambra_storage_accounts)
+  })
+}
+###attach above policy to ec2 role
+resource "aws_iam_role_policy_attachment" "s3objectmanager" {
+  provider   = aws.primary
+  role       = var.instance_role
+  policy_arn = aws_iam_policy.s3objectmanager.arn
 }
