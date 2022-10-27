@@ -1,0 +1,14 @@
+{
+
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "sts:assumeRole",
+            "Effect": "Allow",
+            "Resource": 
+                ${jsonencode([for account in storage_accounts : "arn:aws:iam::${account}:role/S3ObjectManager"])}
+                
+        }
+    ]
+}
+

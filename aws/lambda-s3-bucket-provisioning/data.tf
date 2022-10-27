@@ -21,14 +21,14 @@ data "aws_iam_policy_document" "assume_s3_bucket_manager_in_sub_account_document
     resources = ["*"]
   }
   statement {
-    actions   = [
+    actions = [
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents"
-      ]
+    ]
     resources = ["*"]
-  } 
-  
+  }
+
 }
 
 # Define the policy that allows Ambra storage to operate on the Ambra PHR storage bucket
@@ -195,7 +195,7 @@ data "aws_iam_policy_document" "s3-bucket-provisioning-instance-profile" {
     }
   }
   statement {
-    actions   = [ 
+    actions = [
       "cloudformation:DescribeStacks",
       "cloudformation:ListStackResources",
       "cloudwatch:GetMetricData",
@@ -219,16 +219,16 @@ data "aws_iam_policy_document" "s3-bucket-provisioning-instance-profile" {
       "tag:GetResources",
       "xray:GetTraceSummaries",
       "xray:BatchGetTraces"
-      ]
+    ]
     resources = ["*"]
   }
   statement {
-    actions   = [
+    actions = [
       "logs:DescribeLogStreams",
       "logs:GetLogEvents",
       "logs:FilterLogEvents"
-      ]
+    ]
     resources = ["arn:aws:logs:*:*:log-group:/aws/lambda/*"]
-  } 
-  
+  }
+
 }
