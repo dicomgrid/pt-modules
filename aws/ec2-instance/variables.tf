@@ -67,7 +67,7 @@ variable "instance_types" {
 }
 
 variable "key_name" {
-  default = "jenkins-ed"
+  default = "ims-deployer-rsa"
 }
 
 variable "name" {}
