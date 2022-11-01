@@ -1,3 +1,9 @@
+locals {
+  sso_instance_arn    = tolist(data.aws_ssoadmin_instances.permission_set.arns)[0]
+}
+
+data "aws_ssoadmin_instances" "permission_set" {}
+
 resource "aws_ssoadmin_permission_set" "permission_set" {
   name             = var.name
   description      = var.description
@@ -11,13 +17,4 @@ resource "aws_ssoadmin_permission_set_inline_policy" "permission_set" {
   permission_set_arn = aws_ssoadmin_permission_set.permission_set.arn
 }
 
-resource "aws_ssoadmin_account_assignment" "assignment" {
-  for_each = var.account_list
-  instance_arn       = data.aws_ssoadmin_permission_set.permset.instance_arn
-  permission_set_arn = data.aws_ssoadmin_permission_set.permset.arn
-  principal_id = data.aws_identitystore_group.group.group_id
-  principal_type = "GROUP"
-  target_type = "AWS_ACCOUNT"
-  target_id   = each.key
-}
 
