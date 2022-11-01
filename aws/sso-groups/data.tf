@@ -1,4 +1,6 @@
-data "aws_ssoadmin_instances" "permission_set" {}
+#data "aws_ssoadmin_instances" "permission_set" {}
+
+data "aws_ssoadmin_instances" "instance" {}
 
 data "aws_ssoadmin_permission_set" "permset" {
   instance_arn = tolist(data.aws_ssoadmin_instances.instance.arns)[0]

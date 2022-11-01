@@ -1,5 +1,5 @@
 locals {
-  sso_instance_arn    = tolist(data.aws_ssoadmin_instances.permission_set.arns)[0]
+  sso_instance_arn    = tolist(data.aws_ssoadmin_instances.instance.arns)[0]
 }
 
 variable "name" {}
