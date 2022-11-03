@@ -3,12 +3,12 @@ resource "aws_iam_user" "main" {
   path = var.path
   force_destroy = var.service_account
   tags = {
-    Compliance  = lookup(var.tags.value, "compliance", "NONE")
+    Compliance  = lookup(var.tags, "compliance", "NONE")
     Email       = var.email
-    Environment = lookup(var.tags.value, "environment", "Master")
+    Environment = lookup(var.tags, "environment", "Master")
     Name        = "iam_user:${var.name}"
-    Owner       = lookup(var.tags.value, "owner", "Platform")
-    Product     = lookup(var.tags.value, "product", "Platform Infrastructure")
+    Owner       = lookup(var.tags, "owner", "Platform")
+    Product     = lookup(var.tags, "product", "Platform Infrastructure")
     User_Name   = "${var.first_name} ${var.last_name}"
     User_Type   = var.user_type
   }
