@@ -13,6 +13,7 @@ variable "service_account_map" {
     }
 }
 variable "tags" {
-    default = []
+    type = map(string)
+    default = {}
 }
 variable "user_type" {}
