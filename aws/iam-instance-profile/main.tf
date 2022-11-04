@@ -1,4 +1,4 @@
-resource "aws_iam_role" "main" {
+resource "aws_iam_role" "main" { 
   name               = var.name
   assume_role_policy = var.assume_role_policy
 }
@@ -8,6 +8,7 @@ resource "aws_iam_instance_profile" "main" {
 }
 
 resource "aws_iam_role_policy" "main" {
+  for_each = lookup(var.policy) != null ? var.policy : []
   name   = var.name
   role   = aws_iam_role.main.id
   policy = var.policy
