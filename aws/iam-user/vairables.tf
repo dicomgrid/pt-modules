@@ -12,5 +12,7 @@ variable "service_account_map" {
         false = true
     }
 }
-variable "tags" {}
+variable "tags" {
+    default = []
+}
 variable "user_type" {}
