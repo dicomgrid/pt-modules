@@ -8,7 +8,7 @@ resource "aws_iam_instance_profile" "main" {
 }
 
 resource "aws_iam_role_policy" "main" {
-  for_each = var.policy == null ? [0] : [1]
+  for_each = var.policy == null ? [] : [1]
   name   = var.name
   role   = aws_iam_role.main.id
   policy = var.policy
