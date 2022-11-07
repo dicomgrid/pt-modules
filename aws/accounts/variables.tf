@@ -45,7 +45,7 @@ variable "parent_id_map" {
 variable "name" {}
 variable "email" {}
 variable "role" {
-  default = ""
+  default = "cross_account_admin"
 }
 variable "ou_name" {}
 variable "tags" {
