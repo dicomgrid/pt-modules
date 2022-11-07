@@ -1,8 +1,7 @@
 resource "aws_organizations_account" "account" {
   name                       = var.name
-  email                      = var.email
+  email                      = "devops+${ var.name }@intelerad.com"
   role_name                  = var.role
-  iam_user_access_to_billing = var.access_billing
   parent_id                  = local.ou_map[var.ou_name]
   #tags                       = var.tags
 
