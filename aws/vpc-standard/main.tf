@@ -9,8 +9,7 @@ resource "aws_vpc" "vpc" {
   }
 }
 
-# Subnets
-# Internet Gateway for Public Subnet
+
 resource "aws_internet_gateway" "ig" {
   vpc_id = aws_vpc.vpc.id
   tags = {
@@ -38,7 +37,7 @@ resource "aws_nat_gateway" "nat" {
   }
 }*/
 
-# Public subnet
+
 resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.vpc.id
   count                   = length(var.public_subnets_cidr)
@@ -53,7 +52,6 @@ resource "aws_subnet" "public_subnet" {
 }
 
 
-# Private Subnet
 resource "aws_subnet" "private_subnet" {
   vpc_id                  = aws_vpc.vpc.id
   count                   = length(var.private_subnets_cidr)
@@ -68,7 +66,7 @@ resource "aws_subnet" "private_subnet" {
 }
 
 
-# Routing tables to route traffic for Private Subnet
+
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
 
@@ -78,7 +76,7 @@ resource "aws_route_table" "private" {
   }
 }
 
-# Routing tables to route traffic for Public Subnet
+
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
 
@@ -88,14 +86,13 @@ resource "aws_route_table" "public" {
   }
 }
 
-# Route for Internet Gateway
+
 resource "aws_route" "public_internet_gateway" {
   route_table_id         = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.ig.id
 }
 
-# Route for NAT 
 /*
 resource "aws_route" "private_nat_gateway" {
   route_table_id         = aws_route_table.private.id
@@ -116,7 +113,7 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private.id
 }
 
-# Default Security Group of VPC
+
 resource "aws_security_group" "default" {
   name        = "${var.environment}-default-sg"
   description = "Default SG to alllow traffic from the VPC"
