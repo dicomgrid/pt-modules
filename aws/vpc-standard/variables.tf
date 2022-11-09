@@ -1,32 +1,25 @@
-variable "Environment" { 
-	default = "Production"
-	type = string 
+variable "region" {
+  default = "us-west-1"
 }
-variable "Owner"  {
-	default = "Platform"
-	type = string 
+
+variable "environment" {
+  description = "Deployment Environment"
+  default ="development"
 }
-variable "Creator" {
-	default = "Terraform"
-	type = string 
+
+variable "vpc_cidr" {
+  description = "CIDR block of the vpc"
+  default     = "10.138.0.0/23"
 }
-variable "Billing" {
-    default = ""
-	type = string 
+
+variable "public_subnets_cidr" {
+  type        = list(any)
+  description = "CIDR block for Public Subnet"
+  default     = ["10.138.1.0/26"]
 }
-variable "tenancy" {
-	default = "default"
-	type = string 
-}
-variable "public_ip_on_launch" {
-    type=bool
-    default = true 
-}
-variable "dns_hostnames" {
-	default = true
-	type=bool 
-}
-variable "dns_support" {
-	default = true
-	type = bool 
+
+variable "private_subnets_cidr" {
+  type        = list(any)
+  description = "CIDR block for Private Subnet"
+  default     = ["10.138.0.0/26"]
 }
