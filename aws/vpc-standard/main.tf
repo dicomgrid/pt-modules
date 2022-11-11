@@ -1,7 +1,7 @@
 resource "aws_vpc" "main" {
   cidr_block       = var.vpc_range
   instance_tenancy = var.tenancy
-  map_ip_on_public=var.map_public_on_standup
+
   enable_dns_hostnames = var.dns_hostnames
   enable_dns_support = var.dns_support
   tags = {
@@ -20,7 +20,7 @@ resource "aws_subnet" "public_subnets" {
   count = length(data.aws_availability_zones.availability_zones.names) < 3 ? length(data.aws_availability_zones.availability_zones.names) : 2
   cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 2, count.index)}"
   availability_zone = "${local.availability_zone_names[count.index]}"
-  map_public_ip_on_launch = var.public_ip_on_launch
+  map_public_ip_on_launch = true
   tags = {
     Name = "public.${local.availability_zone_names[count.index]}"
     Environment = var.Environment
