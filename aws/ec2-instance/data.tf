@@ -4,7 +4,7 @@ data "aws_ami" "centos_7" {
 
   filter {
     name   = "name"
-    values = ["CentOS 7*"]
+    values = ["CentOS-7*"]
   }
 
   filter {
