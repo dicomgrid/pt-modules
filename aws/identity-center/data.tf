@@ -13,3 +13,13 @@ data "aws_identitystore_group" "group" {
     attribute_value = var.group
   }
 }
+
+data "aws_iam_policy" "customer" {
+  for_each = var.policies
+  name = each.value
+}
+
+data "aws_iam_policy" "aws" {
+  for_each = var.aws_policies
+  name = each.value
+}
