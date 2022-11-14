@@ -1,6 +1,6 @@
 locals {
-  aws_policies = toset([data.aws_iam_policy.aws])
-  policies = toset([data.aws_iam_policy.customer])
+  #aws_policies = data.aws_iam_policy.aws
+  #policies = data.aws_iam_policy.customer
   sso_instance_arn    = tolist(data.aws_ssoadmin_instances.instance.arns)[0]
 }
 

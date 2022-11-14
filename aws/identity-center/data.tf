@@ -15,11 +15,11 @@ data "aws_identitystore_group" "group" {
 }
 
 data "aws_iam_policy" "customer" {
-  for_each = var.policies
+  for_each = toset(var.policies)
   name = each.value
 }
 
 data "aws_iam_policy" "aws" {
-  for_each = var.aws_policies
+  for_each = toset(var.aws_policies)
   name = each.value
 }
