@@ -4,14 +4,14 @@ resource "aws_iam_role" "s3_bucket_manager_main" {
     aws_iam_policy.s3_bucket_management_main
   ]
   #provider = aws.storage_account
-  name     = "S3BucketManager"
+  name = "S3BucketManager"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
         "Action" : "sts:AssumeRole",
         "Principal" : {
-          "AWS": "arn:aws:iam::${var.primary_account}:role/s3-bucket-provisioning-lambda-execution-role"
+          "AWS" : "arn:aws:iam::${var.primary_account}:role/s3-bucket-provisioning-lambda-execution-role"
         },
         "Effect" : "Allow",
         "Sid" : ""
@@ -29,14 +29,14 @@ resource "aws_iam_role" "s3_object_manager_main" {
   depends_on = [
     aws_iam_policy.s3_object_management_main
   ]
-  name     = "S3ObjectManager"
+  name = "S3ObjectManager"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
         "Action" : "sts:AssumeRole",
         "Principal" : {
-          "AWS": "arn:aws:iam::${var.primary_account}:role/${var.instance_role}"
+          "AWS" : "arn:aws:iam::${var.primary_account}:role/${var.instance_role}"
         },
         "Effect" : "Allow",
         "Sid" : ""
@@ -51,7 +51,7 @@ resource "aws_iam_role" "s3_object_manager_main" {
 
 # Create the S3 Bucket Management policy that allows the lambda to create buckets once it assumes the S3BucketManager role needs to be on each storage node
 resource "aws_iam_policy" "s3_bucket_management_main" {
-#  provider    = aws.storage-460460681175
+  #  provider    = aws.storage-460460681175
   name        = "S3BucketManagement"
   description = "Allow S3 Bucket provisioning service to create buckets"
 

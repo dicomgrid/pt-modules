@@ -1,6 +1,6 @@
 resource "aws_iam_user" "main" {
-  name = var.name
-  path = var.path
+  name          = var.name
+  path          = var.path
   force_destroy = var.service_account
   tags = {
     Compliance  = lookup(var.tags, "compliance", "NONE")
@@ -15,6 +15,6 @@ resource "aws_iam_user" "main" {
 }
 
 resource "aws_iam_user_group_membership" "main" {
-  user     = aws_iam_user.main.name
-  groups   = var.groups
+  user   = aws_iam_user.main.name
+  groups = var.groups
 }

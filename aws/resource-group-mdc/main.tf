@@ -1,9 +1,9 @@
 resource "aws_resourcegroups_group" "resource_group" {
-    tags = var.tags
-    name = var.name
-    description = var.description
-    resource_query {
-        query = <<JSON
+  tags        = var.tags
+  name        = var.name
+  description = var.description
+  resource_query {
+    query = <<JSON
 {
     "ResourceTypeFilters": ["AWS::SSM::ManagedInstance"],
     "TagFilters": [
@@ -18,5 +18,5 @@ resource "aws_resourcegroups_group" "resource_group" {
     ]
 }
 JSON
-    }
+  }
 }

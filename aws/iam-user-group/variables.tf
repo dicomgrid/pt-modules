@@ -1,5 +1,5 @@
 variable "name" {}
 variable "path" {
-    default = "/"
+  default = "/"
 }
 variable "policy" {}

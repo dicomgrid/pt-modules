@@ -13,7 +13,7 @@ data "aws_vpc" "main" {
 }
 
 data "aws_subnets" "main" {
-    filter {
+  filter {
     name   = "tag:Name"
     values = var.subnets
   }

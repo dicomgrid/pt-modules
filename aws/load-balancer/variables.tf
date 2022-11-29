@@ -16,13 +16,13 @@ variable "environment" {}
 variable "health_check" {
   default = [
     {
-    healthy_threshold   = null
-    interval            = null
-    matcher             = null
-    path                = null
-    port                = null
-    timeout             = null
-    unhealthy_threshold = null
+      healthy_threshold   = null
+      interval            = null
+      matcher             = null
+      path                = null
+      port                = null
+      timeout             = null
+      unhealthy_threshold = null
     }
   ]
 }

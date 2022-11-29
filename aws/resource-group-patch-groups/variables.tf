@@ -1,21 +1,21 @@
 variable "name" {
-    type = string
-    description = "Resource Group Name"
-    default = ""
+  type        = string
+  description = "Resource Group Name"
+  default     = ""
 }
 
 variable "description" {
-    type = string
-    description = "Description of resource group"
-    default = ""
+  type        = string
+  description = "Description of resource group"
+  default     = ""
 
 }
 
 variable "tags" {
-    type = map(string)
-    description = "Resource Group Tags"
-    default = {
-        "Customer" = "",
-        "Group" = ""
-    }
+  type        = map(string)
+  description = "Resource Group Tags"
+  default = {
+    "Customer" = "",
+    "Group"    = ""
+  }
 }

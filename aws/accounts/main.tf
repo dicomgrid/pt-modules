@@ -1,8 +1,8 @@
 resource "aws_organizations_account" "account" {
-  name                       = var.name
-  email                      = "devops+${ var.name }@intelerad.com"
-  role_name                  = var.role
-  parent_id                  = local.ou_map[var.ou_name]
+  name      = var.name
+  email     = "devops+${var.name}@intelerad.com"
+  role_name = var.role
+  parent_id = local.ou_map[var.ou_name]
   #tags                       = var.tags
 
   lifecycle {
