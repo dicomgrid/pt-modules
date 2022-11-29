@@ -7,8 +7,8 @@ resource "vsphere_virtual_machine" "vm" {
   tags                    = [data.vsphere_tag.tag_type.id, data.vsphere_tag.tag_client_code.id, data.vsphere_tag.tag_creator.id]
   num_cpus                = var.guest_vcpu
   memory                  = var.guest_memory * 1024
-  firmware                = "efi" #pending fix
-  efi_secure_boot_enabled = true  #pending fix
+  firmware                = var.os == "windows2022" || var.os == "linux" ? "efi" : data.vsphere_virtual_machine.guest_template.firmware #pending vsphere provider fix
+  efi_secure_boot_enabled = var.os == "windows2022" ? true : null                                                                       #pending vsphere provider fix
   guest_id                = data.vsphere_virtual_machine.guest_template.guest_id
   scsi_type               = data.vsphere_virtual_machine.guest_template.scsi_type
   scsi_controller_count   = 1
