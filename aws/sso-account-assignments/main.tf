@@ -15,12 +15,12 @@ data "aws_identitystore_group" "group" {
 }
 
 resource "aws_ssoadmin_account_assignment" "assignment" {
-  for_each = var.account_list
+  for_each           = var.account_list
   instance_arn       = data.aws_ssoadmin_permission_set.permset.instance_arn
   permission_set_arn = data.aws_ssoadmin_permission_set.permset.arn
-  principal_id = data.aws_identitystore_group.group.group_id
-  principal_type = "GROUP"
-  target_type = "AWS_ACCOUNT"
-  target_id   = each.key
+  principal_id       = data.aws_identitystore_group.group.group_id
+  principal_type     = "GROUP"
+  target_type        = "AWS_ACCOUNT"
+  target_id          = each.key
 }
 

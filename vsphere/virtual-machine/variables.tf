@@ -23,9 +23,11 @@ variable "role" {
 variable "guest_template_codes" {
   type = map(any)
   default = {
-    "linux"       = "centos7-template"
+    "linux"       = "rocky8-template"
     "rocky8"      = "rocky8-template"
+    "centos7"     = "centos7-template"
     "windows"     = "windows2016-template"
+    "windows2016" = "windows2022-template"
     "windows2022" = "windows2022-template"
   }
 }
@@ -53,8 +55,8 @@ variable "guest_ipv4_gateway" {}
 variable "guest_dns_servers" {
   type = map(any)
   default = {
-    "atl2" = ["10.255.0.11", "10.255.0.12", ]
-    "nas6" = ["10.0.0.12", "10.0.0.10", ]
+    "atl2" = ["10.255.0.22", "10.255.0.21", ]
+    "nas6" = ["10.0.0.22", "10.0.0.21", ]
     "nas1" = ["10.0.8.2", "10.0.8.3", ]
     "mna"  = ["10.0.8.2", "10.0.8.3", ]
   }

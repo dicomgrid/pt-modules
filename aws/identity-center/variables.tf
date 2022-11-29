@@ -1,7 +1,7 @@
 locals {
   #aws_policies = data.aws_iam_policy.aws
   #policies = data.aws_iam_policy.customer
-  sso_instance_arn    = tolist(data.aws_ssoadmin_instances.instance.arns)[0]
+  sso_instance_arn = tolist(data.aws_ssoadmin_instances.instance.arns)[0]
 }
 
 variable "account_list" {

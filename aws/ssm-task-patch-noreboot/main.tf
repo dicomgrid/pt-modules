@@ -1,7 +1,7 @@
 resource "aws_ssm_maintenance_window_task" "task_patch_noreboot" {
-  name      = var.patch_noreboot_name
-  window_id = var.patch_noreboot_window_id
-  task_type = var.task_type
+  name             = var.patch_noreboot_name
+  window_id        = var.patch_noreboot_window_id
+  task_type        = var.task_type
   task_arn         = "AWS-RunPatchBaselineWithHooks"
   priority         = var.patch_noreboot_priority
   service_role_arn = var.service_role_arn

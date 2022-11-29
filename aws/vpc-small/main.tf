@@ -122,7 +122,7 @@ resource "aws_security_group" "default" {
     aws_vpc.vpc
   ]
 
-    ingress {
+  ingress {
     from_port = "0"
     to_port   = "0"
     protocol  = "-1"

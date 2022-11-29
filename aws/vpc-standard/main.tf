@@ -1,55 +1,55 @@
 resource "aws_vpc" "main" {
-  cidr_block=   var.cidr
-  instance_tenancy = var.tenancy
+  cidr_block           = var.cidr
+  instance_tenancy     = var.tenancy
   enable_dns_hostnames = var.dns_hostnames
-  enable_dns_support = var.dns_support
+  enable_dns_support   = var.dns_support
   tags = {
-    Owner = var.Owner
+    Owner       = var.Owner
     Environment = var.Environment
-    Creator = var.Creator
-  
+    Creator     = var.Creator
+
   }
 }
 
 
-locals {availability_zone_names = "${data.aws_availability_zones.availability_zones.names}"}
+locals { availability_zone_names = data.aws_availability_zones.availability_zones.names }
 resource "aws_subnet" "public_subnets" {
-  vpc_id = "${aws_vpc.main.id}"
-  count = length(data.aws_availability_zones.availability_zones.names) < 3 ? length(data.aws_availability_zones.availability_zones.names) : 2
-  cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 3, count.index+1)}"
-  availability_zone = "${local.availability_zone_names[count.index]}"
+  vpc_id                  = aws_vpc.main.id
+  count                   = length(data.aws_availability_zones.availability_zones.names) < 3 ? length(data.aws_availability_zones.availability_zones.names) : 2
+  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 3, count.index + 1)
+  availability_zone       = local.availability_zone_names[count.index]
   map_public_ip_on_launch = true
   tags = {
-    Name = "public.${local.availability_zone_names[count.index]}"
+    Name        = "public.${local.availability_zone_names[count.index]}"
     Environment = var.Environment
-    Owner = var.Owner
-    Creator = var.Creator
+    Owner       = var.Owner
+    Creator     = var.Creator
   }
 }
 
 resource "aws_subnet" "private_subnets" {
-  vpc_id = "${aws_vpc.main.id}"
-  count = length(data.aws_availability_zones.availability_zones.names) < 3 ? length(data.aws_availability_zones.availability_zones.names) : 2
-  cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 3, count.index)}"
-  availability_zone = "${local.availability_zone_names[count.index]}"
+  vpc_id            = aws_vpc.main.id
+  count             = length(data.aws_availability_zones.availability_zones.names) < 3 ? length(data.aws_availability_zones.availability_zones.names) : 2
+  cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 3, count.index)
+  availability_zone = local.availability_zone_names[count.index]
 
   map_public_ip_on_launch = false
-    tags = {
-    Name = "private.${local.availability_zone_names[count.index]}"
+  tags = {
+    Name        = "private.${local.availability_zone_names[count.index]}"
     Environment = var.Environment
-    Owner = var.Owner
-    Creator = var.Creator
+    Owner       = var.Owner
+    Creator     = var.Creator
   }
-  }
+}
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
   tags = {
-    Name = ""
-    Environment = "Development" 
-    Owner = "Platform" 
-    Creator = "Terraform"
-}
+    Name        = ""
+    Environment = "Development"
+    Owner       = "Platform"
+    Creator     = "Terraform"
+  }
 }
 resource "aws_route_table" "igw_rt" {
   vpc_id = aws_vpc.main.id
@@ -58,15 +58,15 @@ resource "aws_route_table" "igw_rt" {
     gateway_id = aws_internet_gateway.igw.id
   }
   tags = {
-    Name = "$(Owner)_rt"
+    Name        = "$(Owner)_rt"
     Environment = var.Environment
-    Owner = var.Owner
-    Creator = var.Creator
+    Owner       = var.Owner
+    Creator     = var.Creator
   }
 }
 resource "aws_route_table_association" "a" {
-  count = length(aws_subnet.public_subnets)
-  subnet_id      = element(aws_subnet.public_subnets[*].id,count.index)
+  count          = length(aws_subnet.public_subnets)
+  subnet_id      = element(aws_subnet.public_subnets[*].id, count.index)
   route_table_id = aws_route_table.igw_rt.id
 }
 

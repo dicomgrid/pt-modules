@@ -74,8 +74,8 @@ data "aws_ami" "rhel_8" {
 }
 
 data "aws_ami" "amazon_linux_2" {
-most_recent = true
-owners = ["137112412989"]
+  most_recent = true
+  owners      = ["137112412989"]
   filter {
     name   = "name"
     values = ["amzn2-ami*"]
@@ -98,8 +98,8 @@ owners = ["137112412989"]
 }
 
 data "aws_ami" "rocky_8" {
-most_recent = true
-owners = ["679593333241"]
+  most_recent = true
+  owners      = ["679593333241"]
   filter {
     name   = "name"
     values = ["Rocky-8-ec2-*"]

@@ -1,5 +1,5 @@
 resource "aws_ssm_maintenance_window_task" "task_patch_scan" {
-  name = var.patch_scan_name
+  name             = var.patch_scan_name
   window_id        = var.patch_scan_window_id
   task_type        = var.task_type
   task_arn         = "AWS-RunPatchBaseline"
@@ -7,18 +7,18 @@ resource "aws_ssm_maintenance_window_task" "task_patch_scan" {
   service_role_arn = var.service_role_arn
   max_concurrency  = var.max_concurrency
   max_errors       = var.max_errors
-    targets {
+  targets {
     key    = "WindowTargetIds"
     values = [var.patch_scan_window_target_id]
   }
   task_invocation_parameters {
     run_command_parameters {
       parameter {
-      name   = "Operation"
-      values = ["Scan"]
+        name   = "Operation"
+        values = ["Scan"]
       }
       output_s3_bucket     = var.output_s3_bucket
-      output_s3_key_prefix     = var.output_s3_prefix_key
+      output_s3_key_prefix = var.output_s3_prefix_key
       service_role_arn     = var.service_role_arn
       timeout_seconds      = "600"
       notification_config {
