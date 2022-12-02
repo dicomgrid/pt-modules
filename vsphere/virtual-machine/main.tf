@@ -110,6 +110,7 @@ resource "vsphere_virtual_machine" "vm" {
       clone.0.customize.0.network_interface.0.ipv4_netmask,
       clone.0.customize.0.ipv4_gateway,
       clone.0.customize.0.windows_options.0.admin_password,
+      clone.0.customize.0.windows_options.0.domain_admin_user,
       clone.0.customize.0.windows_options.0.domain_admin_password,
     ]
   }
