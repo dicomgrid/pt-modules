@@ -10,6 +10,10 @@ variable "datastore_cluster" {
   default = null
 }
 
+variable "server_code" {
+  default = null
+}
+
 variable "compute_cluster" {}
 
 variable "port_group" {}

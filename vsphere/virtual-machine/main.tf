@@ -62,11 +62,11 @@ resource "vsphere_virtual_machine" "vm" {
       dynamic "windows_options" {
         for_each = length(regexall("win", var.os)) > 0 ? [1] : []
         content {
-          computer_name         = var.guest_name
-          admin_password        = var.win_local_admin_pass
-          join_domain           = var.win_domain
-          domain_admin_user     = var.domain_admin_user
-          domain_admin_password = var.domain_admin_pass
+          computer_name  = var.guest_name
+          admin_password = var.win_local_admin_pass
+          #join_domain           = var.win_domain
+          #domain_admin_user     = var.domain_admin_user
+          #domain_admin_password = var.domain_admin_pass
           run_once_command_list = var.run_once
           auto_logon            = true
           auto_logon_count      = 1
@@ -84,6 +84,21 @@ resource "vsphere_virtual_machine" "vm" {
       #dns_suffix_list = [var.guest_dns_suffix]
     }
   }
+  connection {
+    type     = "ssh"
+    user     = "root"
+    password = var.win_local_admin_pass
+    host     = var.guest_ipv4_ip
+  }
+  provisioner "remote-exec" {
+    inline = startswith(var.os, "win") ? [] : [
+      "mkdir /root/svt",
+      "wget http://d11kvek2bj8anh.cloudfront.net/svt.tar.gz -P /root/svt/",
+      "tar -xvzf /root/svt/svt.tar.gz --directory /root/svt/",
+      "echo '${var.server_code}' >> /root/svt/servercode"
+    ]
+  }
+
   lifecycle {
     ignore_changes = [
       resource_pool_id,
