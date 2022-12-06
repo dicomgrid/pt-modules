@@ -6,6 +6,7 @@ resource "aws_s3_bucket" "main" {
     enabled = var.versioning
   }
 
+# TODO: Added features for encryption, replication, etc.
   tags = {
     Application = var.application
     Billing     = var.billing
