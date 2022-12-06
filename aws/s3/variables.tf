@@ -16,6 +16,10 @@ variable "creator" {
   default = ""
 }
 
+variable "owner" {
+  default = ""
+}
+
 variable "environment" {
   default = ""
 }
