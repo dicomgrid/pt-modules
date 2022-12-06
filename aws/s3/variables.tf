@@ -8,6 +8,10 @@ variable "billing" {
   default = ""
 }
 
+variable "application" {
+  default = ""
+}
+
 variable "creator" {
   default = ""
 }
