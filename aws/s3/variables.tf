@@ -1,3 +1,5 @@
+variable "name" {}
+
 variable "acl" {
   default = "private"
 }
@@ -6,8 +8,14 @@ variable "billing" {
   default = ""
 }
 
-variable "bucket" {}
-variable "environment" {}
+variable "creator" {
+  default = ""
+}
+
+variable "environment" {
+  default = ""
+}
+
 variable "versioning" {
   default = true
 }
