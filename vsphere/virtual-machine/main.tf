@@ -85,13 +85,13 @@ resource "vsphere_virtual_machine" "vm" {
     }
   }
   connection {
-    type     = "ssh"
-    user     = "root"
+    type     = startswith(var.os, "win") ? "winrm" : "ssh"
+    user     = startswith(var.os, "win") ? "administrator" : "root"
     password = var.win_local_admin_pass
     host     = var.guest_ipv4_ip
   }
   provisioner "remote-exec" {
-    inline = startswith(var.os, "win") ? [] : [
+    inline = startswith(var.os, "win") ? ["echo ${var.server_code} > servercode.txt"] : [
       "mkdir /root/svt",
       "wget http://d11kvek2bj8anh.cloudfront.net/svt.tar.gz -P /root/svt/",
       "tar -xvzf /root/svt/svt.tar.gz --directory /root/svt/",

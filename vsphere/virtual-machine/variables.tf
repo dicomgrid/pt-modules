@@ -11,7 +11,7 @@ variable "datastore_cluster" {
 }
 
 variable "server_code" {
-  default = null
+  default = ""
 }
 
 variable "compute_cluster" {}
@@ -31,7 +31,8 @@ variable "guest_template_codes" {
     "rocky8"      = "rocky8-template"
     "centos7"     = "centos7-template"
     "windows"     = "windows2016-template"
-    "windows2016" = "windows2022-template"
+    "windows2016" = "windows2016-template"
+    "windows2019" = "windows2019-template"
     "windows2022" = "windows2022-template"
   }
 }
@@ -129,4 +130,3 @@ variable "win_time_zones" {
     "pst" = "004"
   }
 }
-
