@@ -39,6 +39,8 @@ variable "guest_template_codes" {
 
 variable "client_code" {}
 
+variable "client_architecture" {}
+
 variable "parent_folder" {
   default = "I000-Intelerad"
 }

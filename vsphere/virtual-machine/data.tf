@@ -34,6 +34,10 @@ data "vsphere_tag_category" "category_client_code" {
   name = "client_code"
 }
 
+data "vsphere_tag_category" "category_client_architecture" {
+  name = "client_architecture"
+}
+
 data "vsphere_tag_category" "category_role" {
   name = "role"
 }
@@ -45,6 +49,11 @@ data "vsphere_tag_category" "category_creator" {
 data "vsphere_tag" "tag_client_code" {
   name        = var.client_code
   category_id = data.vsphere_tag_category.category_client_code.id
+}
+
+data "vsphere_tag" "tag_client_architecture" {
+  name        = var.client_architecture
+  category_id = data.vsphere_tag_category.category_client_architecture.id
 }
 
 data "vsphere_tag" "tag_type" {
