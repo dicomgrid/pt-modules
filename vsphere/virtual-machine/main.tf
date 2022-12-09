@@ -4,10 +4,10 @@ resource "vsphere_virtual_machine" "vm" {
   datastore_id            = var.datastore != null ? data.vsphere_datastore.datastore[0].id : null
   datastore_cluster_id    = var.datastore_cluster != null ? data.vsphere_datastore_cluster.datastore_cluster[0].id : null
   folder                  = var.client_code == "inf" ? "A000 - Infrastructure" : "${var.parent_folder}/${var.client_code}"
-  tags                    = [data.vsphere_tag.tag_type.id, data.vsphere_tag.tag_client_code.id, data.vsphere_tag.tag_creator.id]
+  tags                    = [data.vsphere_tag.tag_type.id, data.vsphere_tag.tag_client_code.id, data.vsphere_tag.tag_creator.id, data.vsphere_tag.tag_client_architecture.id]
   num_cpus                = var.guest_vcpu
   memory                  = var.guest_memory * 1024
-  firmware                = var.os == "windows2022" || var.os == "linux" ? "efi" : data.vsphere_virtual_machine.guest_template.firmware #pending vsphere provider fix
+  firmware                = var.os == "windows2022" || var.os == "rocky8" ? "efi" : data.vsphere_virtual_machine.guest_template.firmware #pending vsphere provider fix
   efi_secure_boot_enabled = var.os == "windows2022" ? true : null                                                                       #pending vsphere provider fix
   guest_id                = data.vsphere_virtual_machine.guest_template.guest_id
   scsi_type               = data.vsphere_virtual_machine.guest_template.scsi_type
