@@ -88,6 +88,7 @@ resource "aws_lambda_function" "s3_bucket_provisioning" {
 
 ###Creating alias for lambda function for function url call
 resource "aws_lambda_alias" "lambda_alias" {
+  provider         = aws.primary
   name             = "v${aws_lambda_function.s3_bucket_provisioning.version}"
   function_name    = aws_lambda_function.s3_bucket_provisioning.arn
   function_version = aws_lambda_function.s3_bucket_provisioning.version
