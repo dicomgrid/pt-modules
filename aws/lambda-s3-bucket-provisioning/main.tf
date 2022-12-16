@@ -66,7 +66,7 @@ resource "aws_lambda_function" "s3_bucket_provisioning" {
   publish     = true
 
   snap_start {
-    apply_on = PublishedVersions
+    apply_on = "PublishedVersions"
   }
   environment {
     variables = {
