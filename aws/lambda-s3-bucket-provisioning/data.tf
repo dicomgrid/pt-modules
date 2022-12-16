@@ -177,7 +177,10 @@ data "aws_iam_policy_document" "s3-bucket-provisioning-instance-profile" {
   provider = aws.primary
   statement {
     actions   = ["lambda:InvokeFunction"]
-    resources = ["arn:aws:lambda:${var.aws_region}:${var.primary_account}:function:${aws_lambda_function.s3_bucket_provisioning.function_name}"]
+    resources = [
+      "arn:aws:lambda:${var.aws_region}:${var.primary_account}:function:${aws_lambda_function.s3_bucket_provisioning.function_name}",
+      "arn:aws:lambda:${var.aws_region}:${var.primary_account}:function:${aws_lambda_function.s3_bucket_provisioning.function_name}:*"
+      ]
   }
 
   statement {
