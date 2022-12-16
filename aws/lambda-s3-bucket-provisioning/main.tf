@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "ambra_phr_bucket" {
 
   tags = {
     Name                     = "ambra-${var.environment}-${var.aws_region}-phr"
-    Customer                 = "Ambra PHR"
+    Billing                  = "Ambra PHR"
     map-migrated             = "d-server-03bwvdqjri88ho"
     aws-migration-project-id = "MPE36510"
     Environment              = var.environment
@@ -32,7 +32,7 @@ resource "aws_s3_bucket" "ambra_orphan_bucket" {
 
   tags = {
     Name                     = "ambra-${var.environment}-${var.aws_region}-orphan"
-    Customer                 = "Ambra Orphan"
+    Billing                  = "Ambra Orphan"
     map-migrated             = "d-server-03bwvdqjri88ho"
     aws-migration-project-id = "MPE36510"
     Environment              = var.environment
@@ -63,6 +63,11 @@ resource "aws_lambda_function" "s3_bucket_provisioning" {
   runtime     = "java11"
   memory_size = 2048
   timeout     = var.timeout
+  publish     = true
+
+  snap_start {
+    apply_on = PublishedVersions
+  }
   environment {
     variables = {
       AMBRA_ENVIRONMENT             = "${var.environment}"
@@ -81,11 +86,26 @@ resource "aws_lambda_function" "s3_bucket_provisioning" {
   }
 }
 
+###Creating alias for lambda function for function url call
+resource "aws_lambda_alias" "lambda_alias" {
+  name             = "v${aws_lambda_function.s3_bucket_provisioning.version}"
+  function_name    = aws_lambda_function.s3_bucket_provisioning.arn
+  function_version = aws_lambda_function.s3_bucket_provisioning.version
+}
+
 # Create a function URL for the Lambda that avoids needing to setup a separate API Gateway
 resource "aws_lambda_function_url" "s3_bucket_provisioning_url" {
   provider           = aws.primary
   function_name      = aws_lambda_function.s3_bucket_provisioning.function_name
   authorization_type = "AWS_IAM"
+}
+
+# Create a second function URL for the Lambda that uses alias name to leverage snap_start
+resource "aws_lambda_function_url" "s3_bucket_provisioning_alias_url" {
+  provider           = aws.primary
+  function_name      = aws_lambda_function.s3_bucket_provisioning.function_name
+  authorization_type = "AWS_IAM"
+  qualifier          = aws_lambda_alias.lambda_alias.name
 }
 
 # Create the role that allows the Lambda to carry out its work
