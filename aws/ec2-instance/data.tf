@@ -1,10 +1,9 @@
-data "aws_ami" "centos_7" {
+data "aws_ami" "centos7" {
   most_recent = true
-  owners      = ["125523088429"]
 
   filter {
     name   = "name"
-    values = ["CentOS-7*"]
+    values = ["centos7*"]
   }
 
   filter {

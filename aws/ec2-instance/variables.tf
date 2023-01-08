@@ -1,5 +1,5 @@
 variable "ami" {
-  default = "centos_7"
+  default = "centos7"
 }
 
 variable "application" {
