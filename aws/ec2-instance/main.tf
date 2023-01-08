@@ -53,7 +53,7 @@ resource "aws_instance" "main" {
   }
 
   lifecycle {
-    ignore_changes = [ami, associate_public_ip_address]
+    ignore_changes = [ami, associate_public_ip_address, key_name, user_data,vpc_security_group_ids]
   }
 
   user_data = var.user_data
