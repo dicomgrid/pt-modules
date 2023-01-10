@@ -6,26 +6,52 @@ resource "aws_ssm_patch_baseline" "pb-linux" {
 
   global_filter {
     key = "CLASSIFICATION"
-    values = [
-      "Security",
-      "Bugfix",
-      "Recommended"
-    ]
+    values = var.centos_patch_classifications
   }
 
   approval_rule {
-    approve_after_days = 7
+    approve_after_days = var.approval_day_count
+    enable_non_security = true
     compliance_level = "CRITICAL"
+
     patch_filter {
       key = "CLASSIFICATION"
       values = var.centos_patch_classifications
     }
     patch_filter {
       key = "SEVERITY"
-      values = ["Critical"]
+      values = ["Critical", "Important"]
     }
-    #TODO: Add Medium Severity Level
-    #TODO: Add Low Severity Level
+  }
+
+  approval_rule {
+    approve_after_days = var.approval_day_count
+    enable_non_security = true
+    compliance_level = "MEDIUM"
+
+    patch_filter {
+      key = "CLASSIFICATION"
+      values = var.centos_patch_classifications
+    }
+    patch_filter {
+      key = "SEVERITY"
+      values = ["Moderate"]
+    }
+  }
+
+  approval_rule {
+    approve_after_days = var.approval_day_count
+    enable_non_security = true
+    compliance_level = "LOW"
+
+    patch_filter {
+      key = "CLASSIFICATION"
+      values = var.centos_patch_classifications
+    }
+    patch_filter {
+      key = "SEVERITY"
+      values = ["Low"]
+    }
   }
 
 }
