@@ -14,3 +14,13 @@ variable "rejected_patches" {
   type    = list(string) #Example syntax: ["systemd", "corosync"]
   default = []
 }
+
+variable "centos_patch_classifications" {
+  type = list(string)
+  default = ["Security", "Bugfix", "Recommended"]
+}
+
+variable "approval_day_count" {
+  type = string
+  default = 7
+}
