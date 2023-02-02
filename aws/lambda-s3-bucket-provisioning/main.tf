@@ -56,7 +56,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "ambra_orphan_buck
 resource "aws_lambda_function" "s3_bucket_provisioning" {
   provider      = aws.primary
   function_name = "s3-bucket-provisioning"
-  filename      = "${path.module}/s3-bucket-provisioning-1.0-SNAPSHOT.jar"
+  filename      = "${path.module}/s3-bucket-provisioning-2.0.jar"
 
   handler     = "com.ambrahealth.aws.lambda.S3BucketProvisioningHandler"
   role        = aws_iam_role.iam_for_s3_bucket_provisioning.arn
