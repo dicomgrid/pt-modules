@@ -16,8 +16,8 @@ resource "aws_resourcegroups_group" "resource_group" {
             "Values": ["${var.tags["Group"]}"]
         },
         {
-            "Key": "OS",
-            "Values": ["${var.tags["OS"]}"]
+            "Key": "Product",
+            "Values": ["${var.tags["Product"]}"]
         }
     ]
 }
