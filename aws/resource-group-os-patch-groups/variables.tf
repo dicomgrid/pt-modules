@@ -17,6 +17,6 @@ variable "tags" {
   default = {
     "Customer" = "",
     "Group"    = "",
-    "OS"       = ""
+    "Product"       = ""
   }
 }
