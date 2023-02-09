@@ -10,5 +10,6 @@ resource "vsphere_distributed_virtual_switch" "vds" {
     ignore_changes = [
       host
     ]
+    prevent_destroy = true
   }
 }

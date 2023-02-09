@@ -20,4 +20,8 @@ resource "vsphere_distributed_port_group" "pg" {
       max_vlan = var.max_vlan
     }
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
