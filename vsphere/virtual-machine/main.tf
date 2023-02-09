@@ -7,8 +7,7 @@ resource "vsphere_virtual_machine" "vm" {
   tags                    = [data.vsphere_tag.tag_type.id, data.vsphere_tag.tag_client_code.id, data.vsphere_tag.tag_creator.id, data.vsphere_tag.tag_client_architecture.id]
   num_cpus                = var.guest_vcpu
   memory                  = var.guest_memory * 1024
-  firmware                = var.os == "windows2022" || var.os == "rocky8" ? "efi" : data.vsphere_virtual_machine.guest_template.firmware #pending vsphere provider fix
-  efi_secure_boot_enabled = var.os == "windows2022" ? true : null                                                                       #pending vsphere provider fix
+  firmware                = data.vsphere_virtual_machine.guest_template.firmware
   guest_id                = data.vsphere_virtual_machine.guest_template.guest_id
   scsi_type               = data.vsphere_virtual_machine.guest_template.scsi_type
   scsi_controller_count   = 1
@@ -62,11 +61,8 @@ resource "vsphere_virtual_machine" "vm" {
       dynamic "windows_options" {
         for_each = length(regexall("win", var.os)) > 0 ? [1] : []
         content {
-          computer_name  = var.guest_name
-          admin_password = var.win_local_admin_pass
-          #join_domain           = var.win_domain
-          #domain_admin_user     = var.domain_admin_user
-          #domain_admin_password = var.domain_admin_pass
+          computer_name         = var.guest_name
+          admin_password        = var.local_password
           run_once_command_list = var.run_once
           auto_logon            = true
           auto_logon_count      = 1
@@ -81,13 +77,12 @@ resource "vsphere_virtual_machine" "vm" {
 
       ipv4_gateway    = var.guest_ipv4_gateway
       dns_server_list = lookup(var.guest_dns_servers, var.datacenter)
-      #dns_suffix_list = [var.guest_dns_suffix]
     }
   }
   connection {
     type     = startswith(var.os, "win") ? "winrm" : "ssh"
     user     = startswith(var.os, "win") ? "administrator" : "root"
-    password = var.win_local_admin_pass
+    password = var.local_password
     host     = var.guest_ipv4_ip
   }
   provisioner "remote-exec" {
@@ -101,17 +96,17 @@ resource "vsphere_virtual_machine" "vm" {
 
   lifecycle {
     ignore_changes = [
-      resource_pool_id,
-      datastore_id,
-      datastore_cluster_id,
+      #resource_pool_id,
+      #datastore_id,
+      #datastore_cluster_id,
+      host_system_id,
       clone.0.template_uuid,
       network_interface.0.network_id,
       clone.0.customize.0.network_interface.0.ipv4_address,
       clone.0.customize.0.network_interface.0.ipv4_netmask,
       clone.0.customize.0.ipv4_gateway,
       clone.0.customize.0.windows_options.0.admin_password,
-      clone.0.customize.0.windows_options.0.domain_admin_user,
-      clone.0.customize.0.windows_options.0.domain_admin_password,
     ]
+    prevent_destroy = true
   }
 }

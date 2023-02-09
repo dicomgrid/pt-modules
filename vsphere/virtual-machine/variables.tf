@@ -74,17 +74,7 @@ variable "guest_dns_suffix" {
 }
 
 ###
-variable "win_local_admin_pass" {
-  sensitive = true
-}
-
-variable "win_domain" {
-  default = "radiustoday.com"
-}
-
-variable "domain_admin_user" {}
-
-variable "domain_admin_pass" {
+variable "local_password" {
   sensitive = true
 }
 
