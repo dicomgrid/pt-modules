@@ -15,3 +15,7 @@ variable "netflow_sampling_rate" {
 variable "ignore_other_pvlan_mappings" {
   default = "false"
 }
+
+variable "max_mtu" {
+  default = "1500"
+}
