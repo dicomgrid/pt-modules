@@ -6,7 +6,7 @@ resource "aws_organizations_account" "account" {
   #tags                       = var.tags
 
   lifecycle {
-    ignore_changes = [role_name, iam_user_access_to_billing]
+    ignore_changes = [role_name, iam_user_access_to_billing, parent_id]
   }
 }
 
