@@ -33,12 +33,16 @@ resource "aws_s3_bucket_lifecycle_configuration" "ambra_phr_bucket" {
   bucket = aws_s3_bucket.ambra_phr_bucket.id
 
   rule {
-    id = "config"
-    abort_incomplete_multipart_upload {
-      days_after_initiation = 2
-    }
+    id = "ExpireNonCurrentVersion"
     noncurrent_version_expiration {
       noncurrent_days = 3
+    }
+    status = "Enabled"
+  }
+  rule {
+    id = "AbortIncompleteMultipartUploads"
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 2
     }
     status = "Enabled"
   }
@@ -93,12 +97,16 @@ resource "aws_s3_bucket_lifecycle_configuration" "ambra_orphan_bucket" {
   bucket = aws_s3_bucket.ambra_orphan_bucket.id
 
   rule {
-    id = "config"
-    abort_incomplete_multipart_upload {
-      days_after_initiation = 2
-    }
+    id = "ExpireNonCurrentVersion"
     noncurrent_version_expiration {
       noncurrent_days = 3
+    }
+    status = "Enabled"
+  }
+  rule {
+    id = "AbortIncompleteMultipartUploads"
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 2
     }
     status = "Enabled"
   }
