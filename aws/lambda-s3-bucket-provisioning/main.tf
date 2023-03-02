@@ -5,13 +5,23 @@ resource "aws_s3_bucket" "ambra_phr_bucket" {
 
   tags = {
     Name                     = "ambra-${var.environment}-${var.aws_region}-phr"
-    Billing                  = "Ambra PHR"
+    Billing                  = "ambra phr"
     map-migrated             = "d-server-03bwvdqjri88ho"
     aws-migration-project-id = "MPE36510"
     Environment              = var.environment
+    Owner                    = "platform"
+    CodeManaged              = "true"
+    Compliance               = "phi"
+    Product                  = "ambra"
+    OneTime                  = "null"
+    Application              = "storage-lt"
   }
 }
 
+#enabling bucket versioning for Ambra PHR Account
+resource "aws_s3_bucket" "ambra_phr_bucket" {
+  bucket = aws_s3_bucket.ambra_phr_bucket.bucket
+}
 # Encryption scheme for Ambra PHR bucket
 resource "aws_s3_bucket_server_side_encryption_configuration" "ambra_phr_bucket_encryption" {
   provider = aws.ambra_storage1_account
@@ -36,6 +46,12 @@ resource "aws_s3_bucket" "ambra_orphan_bucket" {
     map-migrated             = "d-server-03bwvdqjri88ho"
     aws-migration-project-id = "MPE36510"
     Environment              = var.environment
+    Owner                    = "platform"
+    CodeManaged              = "true"
+    Compliance               = "phi"
+    Product                  = "ambra"
+    OneTime                  = "null"
+    Application              = "storage-lt"
   }
 }
 
