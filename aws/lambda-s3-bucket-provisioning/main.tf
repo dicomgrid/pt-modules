@@ -18,9 +18,12 @@ resource "aws_s3_bucket" "ambra_phr_bucket" {
   }
 }
 
-#enabling bucket versioning for Ambra PHR Account
-resource "aws_s3_bucket" "ambra_phr_bucket" {
-  bucket = aws_s3_bucket.ambra_phr_bucket.bucket
+#enabling bucket versioning for Ambra PHR Account bucket
+resource "aws_s3_bucket_versioning" "ambra_phr_bucket" {
+  bucket = aws_s3_bucket.ambra_phr_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
 # Encryption scheme for Ambra PHR bucket
 resource "aws_s3_bucket_server_side_encryption_configuration" "ambra_phr_bucket_encryption" {
@@ -55,6 +58,13 @@ resource "aws_s3_bucket" "ambra_orphan_bucket" {
   }
 }
 
+#enabling bucket versioning for Orphaned PHR ("Personal Health Record") bucket
+resource "aws_s3_bucket_versioning" "ambra_orphan_bucket" {
+  bucket = aws_s3_bucket.ambra_orphan_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
 # Encryption scheme for Ambra Orphaned bucket
 resource "aws_s3_bucket_server_side_encryption_configuration" "ambra_orphan_bucket_encryption" {
   provider = aws.ambra_storage1_account
