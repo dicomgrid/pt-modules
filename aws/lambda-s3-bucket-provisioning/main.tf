@@ -25,6 +25,25 @@ resource "aws_s3_bucket_versioning" "ambra_phr_bucket" {
     status = "Enabled"
   }
 }
+# Lifecycle rules for ambra PHR bucket
+resource "aws_s3_bucket_lifecycle_configuration" "ambra_phr_bucket" {
+  # Must have bucket versioning enabled first
+  depends_on = [aws_s3_bucket_versioning.ambra_phr_bucket]
+
+  bucket = aws_s3_bucket.ambra_phr_bucket.id
+
+  rule {
+    id = "config"
+    abort_incomplete_multipart_upload {
+      days = 2
+    }
+    noncurrent_version_expiration {
+      noncurrent_days = 3
+    }
+    status = "Enabled"
+  }
+}
+
 # Encryption scheme for Ambra PHR bucket
 resource "aws_s3_bucket_server_side_encryption_configuration" "ambra_phr_bucket_encryption" {
   provider = aws.ambra_storage1_account
@@ -45,7 +64,7 @@ resource "aws_s3_bucket" "ambra_orphan_bucket" {
 
   tags = {
     Name                     = "ambra-${var.environment}-${var.aws_region}-orphan"
-    Billing                  = "Ambra Orphan"
+    Billing                  = "ambra orphan"
     map-migrated             = "d-server-03bwvdqjri88ho"
     aws-migration-project-id = "MPE36510"
     Environment              = var.environment
@@ -65,6 +84,26 @@ resource "aws_s3_bucket_versioning" "ambra_orphan_bucket" {
     status = "Enabled"
   }
 }
+
+# Lifecycle rules for Orphaned PHR bucket
+resource "aws_s3_bucket_lifecycle_configuration" "ambra_orphan_bucket" {
+  # Must have bucket versioning enabled first
+  depends_on = [aws_s3_bucket_versioning.ambra_orphan_bucket]
+
+  bucket = aws_s3_bucket.ambra_orphan_bucket.id
+
+  rule {
+    id = "config"
+    abort_incomplete_multipart_upload {
+      days = 2
+    }
+    noncurrent_version_expiration {
+      noncurrent_days = 3
+    }
+    status = "Enabled"
+  }
+}
+
 # Encryption scheme for Ambra Orphaned bucket
 resource "aws_s3_bucket_server_side_encryption_configuration" "ambra_orphan_bucket_encryption" {
   provider = aws.ambra_storage1_account
