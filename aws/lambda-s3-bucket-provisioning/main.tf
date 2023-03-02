@@ -20,6 +20,7 @@ resource "aws_s3_bucket" "ambra_phr_bucket" {
 
 #enabling bucket versioning for Ambra PHR Account bucket
 resource "aws_s3_bucket_versioning" "ambra_phr_bucket" {
+  provider = aws.ambra_storage1_account
   bucket = aws_s3_bucket.ambra_phr_bucket.id
   versioning_configuration {
     status = "Enabled"
@@ -29,7 +30,7 @@ resource "aws_s3_bucket_versioning" "ambra_phr_bucket" {
 resource "aws_s3_bucket_lifecycle_configuration" "ambra_phr_bucket" {
   # Must have bucket versioning enabled first
   depends_on = [aws_s3_bucket_versioning.ambra_phr_bucket]
-
+  provider = aws.ambra_storage1_account
   bucket = aws_s3_bucket.ambra_phr_bucket.id
 
   rule {
@@ -83,6 +84,7 @@ resource "aws_s3_bucket" "ambra_orphan_bucket" {
 
 #enabling bucket versioning for Orphaned PHR ("Personal Health Record") bucket
 resource "aws_s3_bucket_versioning" "ambra_orphan_bucket" {
+  provider = aws.ambra_storage1_account
   bucket = aws_s3_bucket.ambra_orphan_bucket.id
   versioning_configuration {
     status = "Enabled"
@@ -93,7 +95,7 @@ resource "aws_s3_bucket_versioning" "ambra_orphan_bucket" {
 resource "aws_s3_bucket_lifecycle_configuration" "ambra_orphan_bucket" {
   # Must have bucket versioning enabled first
   depends_on = [aws_s3_bucket_versioning.ambra_orphan_bucket]
-
+  provider = aws.ambra_storage1_account
   bucket = aws_s3_bucket.ambra_orphan_bucket.id
 
   rule {
