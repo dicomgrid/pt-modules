@@ -5,10 +5,46 @@ resource "aws_s3_bucket" "ambra_phr_bucket" {
 
   tags = {
     Name                     = "ambra-${var.environment}-${var.aws_region}-phr"
-    Billing                  = "Ambra PHR"
+    Billing                  = "ambra phr"
     map-migrated             = "d-server-03bwvdqjri88ho"
     aws-migration-project-id = "MPE36510"
     Environment              = var.environment
+    Owner                    = "platform"
+    CodeManaged              = "true"
+    Compliance               = "phi"
+    Product                  = "ambra"
+    OneTime                  = "null"
+    Application              = "storage-lt"
+  }
+}
+
+#enabling bucket versioning for Ambra PHR Account bucket
+resource "aws_s3_bucket_versioning" "ambra_phr_bucket" {
+  bucket = aws_s3_bucket.ambra_phr_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+# Lifecycle rules for ambra PHR bucket
+resource "aws_s3_bucket_lifecycle_configuration" "ambra_phr_bucket" {
+  # Must have bucket versioning enabled first
+  depends_on = [aws_s3_bucket_versioning.ambra_phr_bucket]
+
+  bucket = aws_s3_bucket.ambra_phr_bucket.id
+
+  rule {
+    id = "ExpireNonCurrentVersion"
+    noncurrent_version_expiration {
+      noncurrent_days = 3
+    }
+    status = "Enabled"
+  }
+  rule {
+    id = "AbortIncompleteMultipartUploads"
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 2
+    }
+    status = "Enabled"
   }
 }
 
@@ -32,10 +68,47 @@ resource "aws_s3_bucket" "ambra_orphan_bucket" {
 
   tags = {
     Name                     = "ambra-${var.environment}-${var.aws_region}-orphan"
-    Billing                  = "Ambra Orphan"
+    Billing                  = "ambra orphan"
     map-migrated             = "d-server-03bwvdqjri88ho"
     aws-migration-project-id = "MPE36510"
     Environment              = var.environment
+    Owner                    = "platform"
+    CodeManaged              = "true"
+    Compliance               = "phi"
+    Product                  = "ambra"
+    OneTime                  = "null"
+    Application              = "storage-lt"
+  }
+}
+
+#enabling bucket versioning for Orphaned PHR ("Personal Health Record") bucket
+resource "aws_s3_bucket_versioning" "ambra_orphan_bucket" {
+  bucket = aws_s3_bucket.ambra_orphan_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+# Lifecycle rules for Orphaned PHR bucket
+resource "aws_s3_bucket_lifecycle_configuration" "ambra_orphan_bucket" {
+  # Must have bucket versioning enabled first
+  depends_on = [aws_s3_bucket_versioning.ambra_orphan_bucket]
+
+  bucket = aws_s3_bucket.ambra_orphan_bucket.id
+
+  rule {
+    id = "ExpireNonCurrentVersion"
+    noncurrent_version_expiration {
+      noncurrent_days = 3
+    }
+    status = "Enabled"
+  }
+  rule {
+    id = "AbortIncompleteMultipartUploads"
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 2
+    }
+    status = "Enabled"
   }
 }
 
