@@ -35,7 +35,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "ambra_phr_bucket" {
   rule {
     id = "config"
     abort_incomplete_multipart_upload {
-      days = 2
+      days_after_initiation = 2
     }
     noncurrent_version_expiration {
       noncurrent_days = 3
@@ -95,7 +95,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "ambra_orphan_bucket" {
   rule {
     id = "config"
     abort_incomplete_multipart_upload {
-      days = 2
+      days_after_initiation = 2
     }
     noncurrent_version_expiration {
       noncurrent_days = 3
