@@ -39,7 +39,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "ambra_phr_bucket" {
       noncurrent_days = 3
     }
     expiration {
-      expired_object_delete_marker = true
+      expired_object_delete_marker = false
     }
     status = "Enabled"
   }
@@ -107,7 +107,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "ambra_orphan_bucket" {
       noncurrent_days = 3
     }
     expiration {
-      expired_object_delete_marker = true
+      expired_object_delete_marker = false
     }
     status = "Enabled"
   }
