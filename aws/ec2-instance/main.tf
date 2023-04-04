@@ -41,16 +41,7 @@ resource "aws_instance" "main" {
     }
   }
 
-  tags = {
-    Application = var.application
-    Backups     = var.backups
-    Billing     = var.billing
-    Creator     = var.creator
-    Environment = var.environment
-    Name        = var.name
-    Owner       = var.owner
-    Cluster     = var.cluster
-  }
+  tags = local.tags
 
   lifecycle {
     ignore_changes = [ami, associate_public_ip_address, key_name, user_data,vpc_security_group_ids]
