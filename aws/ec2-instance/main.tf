@@ -44,7 +44,7 @@ resource "aws_instance" "main" {
   tags = local.tags
 
   lifecycle {
-    ignore_changes = [ami, associate_public_ip_address, key_name, user_data,vpc_security_group_ids]
+    ignore_changes = [ami, associate_public_ip_address, key_name, user_data]
   }
 
   user_data = var.user_data
