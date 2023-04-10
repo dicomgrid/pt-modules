@@ -14,7 +14,6 @@ variable "vds_map" {
     "nas1" = "DSwitch-NAS1"
     "mna"  = "mna-mgt-vds"
     "dfw"  = "dfw-vds"
-    "dfw-mgt"  = "dfw-mgt-vds"
   }
 }
 

@@ -1,16 +1,16 @@
 resource "vsphere_virtual_machine" "vm" {
-  name                    = var.guest_name
-  resource_pool_id        = data.vsphere_compute_cluster.cluster.resource_pool_id
-  datastore_id            = var.datastore != null ? data.vsphere_datastore.datastore[0].id : null
-  datastore_cluster_id    = var.datastore_cluster != null ? data.vsphere_datastore_cluster.datastore_cluster[0].id : null
-  folder                  = var.client_code == "inf" ? "A000 - Infrastructure" : "${var.parent_folder}/${var.client_code}"
-  tags                    = [data.vsphere_tag.tag_type.id, data.vsphere_tag.tag_client_code.id, data.vsphere_tag.tag_creator.id, data.vsphere_tag.tag_client_architecture.id]
-  num_cpus                = var.guest_vcpu
-  memory                  = var.guest_memory * 1024
-  firmware                = data.vsphere_virtual_machine.guest_template.firmware
-  guest_id                = data.vsphere_virtual_machine.guest_template.guest_id
-  scsi_type               = data.vsphere_virtual_machine.guest_template.scsi_type
-  scsi_controller_count   = 1
+  name                  = var.guest_name
+  resource_pool_id      = data.vsphere_compute_cluster.cluster.resource_pool_id
+  datastore_id          = var.datastore != null ? data.vsphere_datastore.datastore[0].id : null
+  datastore_cluster_id  = var.datastore_cluster != null ? data.vsphere_datastore_cluster.datastore_cluster[0].id : null
+  folder                = var.client_code == "inf" ? "A000 - Infrastructure" : "${var.parent_folder}/${var.client_code}"
+  tags                  = [data.vsphere_tag.tag_type.id, data.vsphere_tag.tag_client_code.id, data.vsphere_tag.tag_creator.id, data.vsphere_tag.tag_client_architecture.id]
+  num_cpus              = var.guest_vcpu
+  memory                = var.guest_memory * 1024
+  firmware              = data.vsphere_virtual_machine.guest_template.firmware
+  guest_id              = data.vsphere_virtual_machine.guest_template.guest_id
+  scsi_type             = data.vsphere_virtual_machine.guest_template.scsi_type
+  scsi_controller_count = 1
 
   network_interface {
     network_id   = data.vsphere_network.port_group.id
