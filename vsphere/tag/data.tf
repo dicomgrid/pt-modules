@@ -3,5 +3,5 @@ data "vsphere_datacenter" "datacenter" {
 }
 
 data "vsphere_tag_category" "category_client_code" {
-  name = "client_code"
+  name = var.tag_category
 }
