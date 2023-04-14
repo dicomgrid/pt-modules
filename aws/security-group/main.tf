@@ -2,12 +2,15 @@ resource "aws_security_group" "main" {
   name        = var.name
   description = var.description
   vpc_id      = data.aws_vpc.main.id
-
   tags = {
     Application = lookup(var.tags, "application", "")
-    Creator     = lookup(var.tags, "creator", "Terraform")
+    CodeManaged     = lookup(var.tags, "code-managed", "true")
+    Creator     = lookup(var.tags, "creator", "terraform")
+    Environment = lookup(var.tags, "environment", "")
     Name        = var.name
-    Owner       = lookup(var.tags, "owner", "Platform")
+    Product     = lookup(var.tags, "application", "")
+    Owner       = lookup(var.tags, "owner", "platform")
+    OneTime       = lookup(var.tags, "owner", "null")
   }
 
   lifecycle {
@@ -17,8 +20,7 @@ resource "aws_security_group" "main" {
 }
 
 resource "aws_security_group_rule" "main" {
-
-  for_each = local.ruleset
+  for_each = local.rulesets
 
   type        = var.direction
   description = each.value.description
@@ -28,5 +30,4 @@ resource "aws_security_group_rule" "main" {
   cidr_blocks = var.subnets
   #ipv6_cidr_blocks = lookup(var.ingress.value, "subnets-v6", [])
   security_group_id = aws_security_group.main.id
-
 }

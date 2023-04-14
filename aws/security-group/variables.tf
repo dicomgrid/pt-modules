@@ -1,5 +1,5 @@
 locals {
-  ruleset = { for service in var.services : format("${service.protocol}%s-%s", service.from_port, service.from_port) => service }
+  rulesets = { for service in var.services : format("${service.protocol}%s-%s", service.from_port, service.from_port) => service }
 }
 
 variable "description" {}
@@ -15,4 +15,4 @@ variable "tags" {
   type    = map(string)
   default = {}
 }
-variable "vpc_names" {}
+variable "vpc_name" {}
