@@ -4,7 +4,7 @@ resource "aws_security_group" "main" {
   vpc_id      = data.aws_vpc.main.id
   tags = {
     Application = lookup(var.tags, "application", "")
-    CodeManaged     = lookup(var.tags, "code-managed", "true")
+    CodeManaged     = lookup(var.tags, "code_managed", "true")
     Creator     = lookup(var.tags, "creator", "terraform")
     Environment = lookup(var.tags, "environment", "")
     Name        = var.name
