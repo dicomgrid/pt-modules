@@ -10,18 +10,6 @@ locals {
   tags = merge(local.tags_base, var.tags_extra)
 }
 
-variable "application" {
-  default = ""
-}
-
-variable "billing" {
-  default = ""
-}
-
-variable "creator" {
-  default = "Terraform"
-}
-
 variable "cross_account_access" {
   default = false
 }
@@ -30,22 +18,21 @@ variable "encryption_type" {
   default = "AES256"
 }
 
-variable "environment" {
-  default = "production"
-}
-
 variable "image_tag_mutability" {
   default = "MUTABLE"
 }
 
-variable "name" {}
-
-variable "owner" {
-  default = "DevOps"
-}
+variable "lifecycle_policy" { default = null }
 
 variable "scan_on_push" {
   default = true
 }
 
+# Tags
+variable "billing" {}
+variable "code_managed" {}
+variable "creator" {}
+variable "environment" {}
+variable "name" {}
+variable "owner" {}
 variable "tags_extra" { default = {} }
