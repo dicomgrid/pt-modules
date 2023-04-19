@@ -1,5 +1,5 @@
 resource "aws_acm_certificate" "certificate" {
-  domain_name               = var.domain_name
+  domain_name               = var.wildcard == true ? "*.${domain_name}" : "${domain_name}"
   subject_alternative_names = var.subject_alternative_names
   validation_method         = var.validation_method
   tags = local.tags

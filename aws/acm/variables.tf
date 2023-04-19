@@ -26,6 +26,10 @@ variable "validation_method" {
   default = "DNS"
 }
 
+variable "wildcard" {
+  default = false
+}
+
 # Tags
 variable "billing" {}
 variable "code_managed" {}
