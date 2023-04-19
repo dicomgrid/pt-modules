@@ -1,3 +1,15 @@
+locals {
+  tags_base = {
+    Billing     = var.billing
+    CodeManaged = var.code_managed
+    Creator     = var.creator
+    Environment = var.environment
+    Name        = var.name
+    Owner       = var.owner
+  }
+  tags = merge(local.tags_base, var.tags_extra)
+}
+
 variable "application" {
   default = ""
 }
@@ -8,6 +20,10 @@ variable "billing" {
 
 variable "creator" {
   default = "Terraform"
+}
+
+variable "cross_account_access" {
+  default = false
 }
 
 variable "encryption_type" {
@@ -32,6 +48,4 @@ variable "scan_on_push" {
   default = true
 }
 
-variable "cross_account_access" {
-  default = false
-}
+variable "tags_extra" { default = {} }

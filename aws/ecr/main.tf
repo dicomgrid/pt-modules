@@ -10,12 +10,11 @@ resource "aws_ecr_repository" "main" {
     scan_on_push = var.scan_on_push
   }
 
-  tags = {
-    Application = var.application
-    Billing     = var.billing
-    Creator     = var.creator
-    Environment = var.environment
-    Name        = var.name
-    Owner       = var.owner
-  }
+  tags = local.tags
+}
+
+resource "aws_ecr_lifecycle_policy" "main" {
+  count = var.lifecycle_policy == null ? 0 : 1
+  repository = var.name
+  policy = var.policy
 }
