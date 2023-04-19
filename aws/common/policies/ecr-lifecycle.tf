@@ -1,5 +1,5 @@
 output "ecr_lifecycle" {
-  value = data.aws_iam_policy_document.ecr_lifecycle.json
+  value = var.ecr_lifecycle
 }
 
 variable "ecr_lifecycle" {
