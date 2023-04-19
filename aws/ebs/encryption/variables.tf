@@ -10,16 +10,5 @@ locals {
   tags = merge(local.tags_base, var.tags_extra)
 }
 
-variable "zone" {}
-
-# Tags
-variable "billing" {}
-variable "code_managed" {}
-variable "creator" {}
-variable "environment" {}
-variable "name" {}
-variable "owner" {}
-variable "tags_extra" {
-  description = "Addtional tags to merge with standard tags"
-  default = {}
-}
+variable "enabled" { default = true }
+variable "tags_extra" { default = {} }
