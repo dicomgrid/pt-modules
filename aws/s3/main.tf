@@ -6,13 +6,15 @@ resource "aws_s3_bucket" "s3" {
     enabled = var.versioning
   }
 
-# TODO: Added features for encryption, replication, etc.
-  tags = {
-    Application = var.application
-    Billing     = var.billing
-    Creator     = var.creator
-    Environment = var.environment
-    Name        = var.name
-    Owner       = var.owner
+  dynamic "server_side_encryption_configuration" {
+    count = var.server_side_encryption_enabled ? 1 : 0
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = aws_kms_key.bucket_key.arn
+        sse_algorithm     = var.sse_algorithm
+      }
+    }
   }
-}
+
+# TODO: Added features for encryption, replication, etc.
+  tags = local.tags

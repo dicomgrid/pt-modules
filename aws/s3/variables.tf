@@ -23,6 +23,9 @@ variable "owner" {
 variable "environment" {
   default = ""
 }
+variable "kms_key_alias" { default = null }
+variable "server_side_encryption_enabled" { default = false }
+variable "sse_algorithm" { default = "aws:kms" }
 
 variable "versioning" {
   default = true
