@@ -1,7 +1,7 @@
 resource "aws_kms_key" "main" {
   description             = var.description
   deletion_window_in_days = var.deletion_window_in_days
-
+  policy = var.kms_policy_enabled ? local.kms_policy : null
   tags = local.tags
 }
 

@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "kms_policy" {
+data "aws_iam_policy_document" "shared_cluster" {
   statement {
     sid    = "Enable IAM User Permissions"
     effect = "Allow"
