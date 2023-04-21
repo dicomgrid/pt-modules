@@ -1,5 +1,5 @@
 variable "cloudinfra_lifecycle" {
-  default =  <<EOF
+  default = <<EOF
 {
   "rules": [
     {
