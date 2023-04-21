@@ -9,7 +9,7 @@ locals {
   )
   permissions_create = length(local.permissions_read_write) > 0 || length(local.permissions_read_only) > 0 ? true : false
 
-  lifecycle_policy = var.lifecycle_policy == "default" ? var.cloudinfra_lifecycle : var.lifecycle_policy
+  lifecycle_policy = var.lifecycle_policy == "default" ? var.lifecycle_policy_default : var.lifecycle_policy
   tags_base = {
     Billing     = var.billing
     CodeManaged = var.code_managed

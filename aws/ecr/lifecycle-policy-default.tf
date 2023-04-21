@@ -1,4 +1,4 @@
-variable "cloudinfra_lifecycle" {
+variable "lifecycle_policy_default" {
   default = <<EOF
 {
   "rules": [
