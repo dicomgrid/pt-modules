@@ -1,6 +1,6 @@
 locals {
     kms_policies = {
-        shared_cluster = data.aws_iam_policy_document.shared_cluster
+        shared_cluster = data.aws_iam_policy_document.shared_cluster.json
     }
     kms_policy = local.kms_policies[var.kms_policy]
 }
