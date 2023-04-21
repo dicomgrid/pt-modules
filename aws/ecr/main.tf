@@ -18,8 +18,12 @@ resource "aws_ecr_lifecycle_policy" "main" {
   policy = local.lifecycle_policy
 }
 
+output "permissions" {
+  value = data.aws_iam_policy_document.permissions
+}
+
 resource "aws_ecr_repository_policy" "main" {
   count      = local.permissions_create ? 1 : 0
   repository = aws_ecr_repository.main.name
-  policy     = element(concat(data.aws_iam_policy_document.permissions[*].json, [""]), 0)
+  policy     = data.aws_iam_policy_document.permissions.json
 }
