@@ -25,5 +25,5 @@ output "permissions" {
 resource "aws_ecr_repository_policy" "main" {
   count      = local.permissions_create ? 1 : 0
   repository = aws_ecr_repository.main.name
-  policy     = data.aws_iam_policy_document.permissions.json
+  policy     = element(data.aws_iam_policy_document.permissions[*].json, 0)
 }
