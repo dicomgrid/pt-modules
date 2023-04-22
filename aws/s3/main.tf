@@ -18,3 +18,4 @@ resource "aws_s3_bucket" "s3" {
 
 # TODO: Added features for encryption, replication, etc.
   tags = local.tags
+}
