@@ -1,6 +1,6 @@
 variable "acl" { default = "private" }
 variable "kms_key_alias" { default = null }
-varaible "logging_acl" { default = "log-delivery-write" }
+variable "logging_acl" { default = "log-delivery-write" }
 variable "logging_enabled" { default = false }
 variable "logging_expiration" { default = 90 }
 variable "sse_enabled" { default = false }
