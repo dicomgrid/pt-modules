@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "s3" {
   }
 
   dynamic "server_side_encryption_configuration" {
-    count = var.server_side_encryption_enabled ? 1 : 0
+    for_each = var.sse_enabled ? [var.sse_algorithm] : []
     rule {
       apply_server_side_encryption_by_default {
         kms_master_key_id = aws_kms_key.bucket_key.arn
