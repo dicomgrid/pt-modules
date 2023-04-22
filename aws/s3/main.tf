@@ -23,36 +23,26 @@ resource "aws_s3_bucket_versioning" "main" {
     status = var.versioning_status
   }
 }
-/* Need to determine default lifecycle rules
-resource "aws_s3_bucket_lifecycle_configuration" "main" {
+# /* Need to determine default lifecycle rules
+resource "aws_s3_bucket_lifecycle_configuration" "tfstate" {
   # Must have bucket versioning enabled first
   bucket = aws_s3_bucket_versioning.main.id
 
   rule {
-    id = "config"
+    id = "bucket"
 
-    filter {
-      prefix = "config/"
+    noncurrent_version_transition {
+      noncurrent_days = 30
+      storage_class   = "GLACIER"
     }
 
     noncurrent_version_expiration {
       noncurrent_days = 90
     }
-
-    noncurrent_version_transition {
-      noncurrent_days = 30
-      storage_class   = "STANDARD_IA"
-    }
-
-    noncurrent_version_transition {
-      noncurrent_days = 60
-      storage_class   = "GLACIER"
-    }
-
-    status = "Enabled"
+    status = var.tfstate_lifecycle_status
   }
 }
-*/
+# */
 
 # Encryption
 resource "aws_s3_bucket_server_side_encryption_configuration" "main" {

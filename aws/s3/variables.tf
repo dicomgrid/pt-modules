@@ -6,6 +6,7 @@ variable "logging_expiration" { default = 90 }
 variable "object_ownership" { default = "BucketOwnerPreferred" }
 variable "sse_enabled" { default = false }
 variable "sse_algorithm" { default = "aws:kms" }
+variable "tfstate_lifecycle_status" { default = "Disabled" }
 variable "versioning_status" { default = "Disabled" }
 
 # Tags
