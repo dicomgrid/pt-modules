@@ -32,11 +32,13 @@ resource "aws_s3_bucket_lifecycle_configuration" "tfstate" {
     id = "bucket"
 
     noncurrent_version_transition {
+      newer_noncurrent_versions = 5
       noncurrent_days = 30
       storage_class   = "GLACIER"
     }
 
     noncurrent_version_expiration {
+      newer_noncurrent_versions = 5
       noncurrent_days = 90
     }
     status = var.tfstate_lifecycle_status
