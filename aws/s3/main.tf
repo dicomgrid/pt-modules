@@ -67,13 +67,13 @@ resource "aws_s3_bucket" "log_bucket" {
 
 resource "aws_s3_bucket_acl" "log_bucket_acl" {
   count = var.logging_enabled ? 1 : 0
-  bucket = aws_s3_bucket.log_bucket.id
+  bucket = aws_s3_bucket.log_bucket[0].id
   acl    = var.logging_acl
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "log_bucket" {
   count = var.logging_enabled ? 1 : 0
-  bucket = aws_s3_bucket.log_bucket.id
+  bucket = aws_s3_bucket.log_bucket[0].id
 
   rule {
     id = "log"
@@ -96,6 +96,6 @@ resource "aws_s3_bucket_logging" "main" {
   count = var.logging_enabled ? 1 : 0
   bucket = aws_s3_bucket.main.id
 
-  target_bucket = aws_s3_bucket.log_bucket.id
+  target_bucket = aws_s3_bucket.log_bucket[0].id
   target_prefix = "log/"
 }
