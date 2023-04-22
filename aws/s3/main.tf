@@ -13,7 +13,7 @@ resource "aws_s3_bucket_acl" "main" {
 resource "aws_s3_bucket_versioning" "main" {
   bucket = aws_s3_bucket.main.id
   versioning_configuration {
-    status = var.versioning
+    status = var.versioning_status
   }
 }
 /* Need to determine default lifecycle rules

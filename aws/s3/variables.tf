@@ -5,8 +5,7 @@ variable "logging_enabled" { default = false }
 variable "logging_expiration" { default = 90 }
 variable "sse_enabled" { default = false }
 variable "sse_algorithm" { default = "aws:kms" }
-variable "versioning" { default = true }
-
+variable "versioning_status" { default = "Disabled" }
 
 # Tags
 variable "billing" {}
