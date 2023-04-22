@@ -19,6 +19,7 @@ variable "environment" {}
 variable "name" {}
 variable "owner" {}
 variable "tags_extra" { default = {} }
+
 locals {
   tags_base = {
     Billing     = var.billing
