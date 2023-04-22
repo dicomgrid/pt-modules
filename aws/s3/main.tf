@@ -1,4 +1,4 @@
-resource "aws_s3_bucket" "s3" {
+resource "aws_s3_bucket" "main" {
   bucket = var.name
   acl    = var.acl
 
@@ -6,16 +6,17 @@ resource "aws_s3_bucket" "s3" {
     enabled = var.versioning
   }
 
-  dynamic "server_side_encryption_configuration" {
-    for_each = var.sse_enabled ? [var.sse_algorithm] : []
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.bucket_key.arn
-        sse_algorithm     = var.sse_algorithm
-      }
-    }
-  }
-
 # TODO: Added features for encryption, replication, etc.
   tags = local.tags
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
+  count = var.sse_enabled ? 1 : 0
+  bucket = aws_s3_bucket.main.id
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.by_alias.arn
+      sse_algorithm     = var.sse_algorithm
+    }
+  }
 }
