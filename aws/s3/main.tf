@@ -16,6 +16,13 @@ resource "aws_s3_bucket_acl" "main" {
   acl    = var.acl
 }
 
+# Objects (Directories)
+resource "aws_s3_object" "main" {
+  for_each = var.directories
+  bucket = aws_s3_bucket.main.id
+  key    = each.key
+}
+
 # Versioning
 resource "aws_s3_bucket_versioning" "main" {
   bucket = aws_s3_bucket.main.id

@@ -1,4 +1,5 @@
 variable "acl" { default = "private" }
+variable "directories" { default = {} }
 variable "kms_key_alias" { default = null }
 variable "logging_acl" { default = "log-delivery-write" }
 variable "logging_enabled" { default = false }
