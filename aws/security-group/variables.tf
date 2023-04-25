@@ -8,11 +8,7 @@ variable "egress" {
   type    = map(any)
   default = {}
 }
-variable "name" {}
 variable "services" {}
 variable "subnets" {}
-variable "tags" {
-  type    = map(string)
-  default = {}
-}
+variable "tags" {}
 variable "vpc_name" {}

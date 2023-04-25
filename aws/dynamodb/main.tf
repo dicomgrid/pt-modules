@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "main" {
-  name           = var.name
+  name           = var.tags.name
   billing_mode   = var.billing_mode
   hash_key       = var.hash_key
   range_key      = var.range_key
@@ -13,5 +13,5 @@ resource "aws_dynamodb_table" "main" {
       type = attribute.value.type
     }
   }
-  tags = local.common_tags
+  tags = var.tags
 }

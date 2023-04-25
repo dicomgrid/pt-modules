@@ -1,17 +1,8 @@
 resource "aws_security_group" "main" {
-  name        = var.name
+  name        = var.tags.name
   description = var.description
   vpc_id      = data.aws_vpc.main.id
-  tags = {
-    Application = lookup(var.tags, "application", "")
-    CodeManaged     = lookup(var.tags, "code_managed", "true")
-    Creator     = lookup(var.tags, "creator", "terraform")
-    Environment = lookup(var.tags, "environment", "")
-    Name        = var.name
-    Product     = lookup(var.tags, "application", "")
-    Owner       = lookup(var.tags, "owner", "platform")
-    OneTime       = lookup(var.tags, "owner", "null")
-  }
+  tags = var.tags
 
   lifecycle {
     # Necessary if changing 'name' or 'name_prefix' properties.

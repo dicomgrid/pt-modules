@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "main" {
-  name                 = var.name
+  name                 = var.tags.name
   image_tag_mutability = var.image_tag_mutability
 
   encryption_configuration {
@@ -9,7 +9,7 @@ resource "aws_ecr_repository" "main" {
   image_scanning_configuration {
     scan_on_push = var.scan_on_push
   }
-  tags = local.tags
+  tags = var.tags
 }
 
 resource "aws_ecr_lifecycle_policy" "main" {

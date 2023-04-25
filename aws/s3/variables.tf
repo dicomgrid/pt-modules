@@ -12,5 +12,4 @@ variable "object_ownership" { default = "BucketOwnerPreferred" }
 variable "sse_enabled" { default = false }
 variable "sse_algorithm" { default = "aws:kms" }
 variable "tags" {}
-# variable "tfstate_lifecycle_status" { default = "Disabled" }
 variable "versioning_status" { default = "Disabled" }
