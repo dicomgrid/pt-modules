@@ -1,7 +1,7 @@
 # TODO: Added features for replication and lifecycle rules etc.
 resource "aws_s3_bucket" "main" {
-  bucket = var.name
-  tags = local.tags
+  bucket = var.tags.Name
+  tags = var.tags
 }
 
 resource "aws_s3_bucket_ownership_controls" "main" {
@@ -30,28 +30,62 @@ resource "aws_s3_bucket_versioning" "main" {
     status = var.versioning_status
   }
 }
-# /* Need to determine default lifecycle rules
-resource "aws_s3_bucket_lifecycle_configuration" "tfstate" {
-  # Must have bucket versioning enabled first
-  bucket = aws_s3_bucket_versioning.main.id
 
-  rule {
-    id = "bucket"
+resource "aws_s3_bucket_lifecycle_configuration" "main" {
+  count = length(var.lifecycle_rules) > 0 ? 1 : 0
+  
+  bucket = aws_s3_bucket.main.id
 
-    noncurrent_version_transition {
-      newer_noncurrent_versions = 5
-      noncurrent_days = 30
-      storage_class   = "GLACIER"
+  dynamic "rule" {
+
+    for_each = var.lifecycle_rules
+
+    content {
+      id = rule.value.id
+      status = rule.value.status
+      
+      filter {
+        object_size_greater_than = lookup(rule.value.filter, "object_size_greater_than", null)
+        object_size_less_than = lookup(rule.value.filter, "object_size_less_than", null)
+        prefix = lookup(rule.value.filter, "prefix", "")
+      }
+
+      dynamic "expiration" {
+        for_each = lookup(rule.value, "expiration", [])
+        content {
+          days = lookup(expiration.value, "days", null)
+          date = lookup(expiration.value, "date", null)
+        }
+      }
+
+      dynamic "transition" {
+        for_each = lookup(rule.value, "transitions", [])
+        content {
+          days = transition.value.days
+          storage_class   = transition.value.storage_class
+        }
+      }
+
+      dynamic "noncurrent_version_expiration" {
+        for_each = lookup(rule.value, "noncurrent_version_expiration", [])
+        content {
+          newer_noncurrent_versions = noncurrent_version_expiration.value.newer_noncurrent_versions
+          noncurrent_days = noncurrent_version_expiration.value.noncurrent_days
+        }
+      }
+      
+      dynamic "noncurrent_version_transition" {
+        for_each = lookup(rule.value, "noncurrent_version_transitions", [])
+        content {
+          newer_noncurrent_versions = noncurrent_version_transition.value.newer_noncurrent_versions
+          noncurrent_days = noncurrent_version_transition.value.noncurrent_days
+          storage_class   = noncurrent_version_transition.value.storage_class
+        }
+      }
+
     }
-
-    noncurrent_version_expiration {
-      newer_noncurrent_versions = 5
-      noncurrent_days = 90
-    }
-    status = var.tfstate_lifecycle_status
   }
 }
-# */
 
 # Encryption
 resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
@@ -68,7 +102,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
 # Logging
 resource "aws_s3_bucket" "log_bucket" {
   count = var.logging_enabled ? 1 : 0
-  bucket = "${var.name}-log-bucket"
+  bucket = "${var.tags.Name}-log-bucket"
 }
 
 resource "aws_s3_bucket_acl" "log_bucket_acl" {
