@@ -1,5 +1,5 @@
 resource "aws_security_group" "main" {
-  name        = var.tags.name
+  name        = var.tags.Name
   description = var.description
   vpc_id      = data.aws_vpc.main.id
   tags = var.tags
