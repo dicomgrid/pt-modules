@@ -1,8 +1,10 @@
 variable "attributes" {
-    default = {
-      name  = "LockID"
-      value = "S"
+  default = [
+    {
+      name = "LockID"
+      type = "S"
     }
+  ]
 }
 variable "billing_mode" { default = "PAY_PER_REQUEST" }
 variable "hash_key" { default = "LockID" }
