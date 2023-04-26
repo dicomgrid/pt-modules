@@ -1,1 +1,1 @@
-variable "policies" {}
+variable "statements" {}

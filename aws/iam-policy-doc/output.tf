@@ -1,3 +1,3 @@
-output "output" {
-    value = data.aws_iam_policy_document.main[*].json
+output "json" {
+    value = data.aws_iam_policy_document.main.json
 }

@@ -1,7 +1,6 @@
 data "aws_iam_policy_document" "main" {
-  for_each = var.policies
   dynamic "statement" {
-    for_each = each.value.statements
+    for_each = var.statements
     content {
       sid = statement.value.sid
       effect = lookup(statement.value, "effect", "Allow")
