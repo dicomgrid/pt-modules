@@ -1,5 +1,5 @@
 data "aws_iam_policy_document" "main" {
-  for_each = local.policies
+  for_each = var.policies
   dynamic "statement" {
     for_each = each.value.statements
     content {
