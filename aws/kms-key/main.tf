@@ -5,7 +5,7 @@ resource "aws_kms_key" "main" {
 }
 
 resource "aws_kms_alias" "main" {
-  name          = var.kms_alias == null ? "alias/${var.name}" : var.kms_alias
+  name          = var.kms_alias == null ? "alias/${var.tags.Name}" : var.kms_alias
   target_key_id = aws_kms_key.main.key_id
 }
 
