@@ -5,7 +5,7 @@ data "aws_iam_policy_document" "shared_cluster" {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.account_id}:root"]
+      identifiers = ["arn:aws:iam::${local.account_id}:root"]
     }
 
     actions   = ["kms:*"]

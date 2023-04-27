@@ -10,7 +10,7 @@ resource "aws_kms_alias" "main" {
 }
 
 resource "aws_kms_key_policy" "main" {
-  count = var.kms_policy_enabled ? 1 : 0
+  count = var.kms_policy == null ? 0 : 1
   key_id = aws_kms_key.main.id
   policy = local.kms_policy
 }
