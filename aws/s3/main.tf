@@ -1,7 +1,7 @@
 # TODO: Added features for replication and lifecycle rules etc.
 resource "aws_s3_bucket" "main" {
-  bucket = var.tags.Name
-  tags = var.tags
+  bucket = local.tags.Name
+  tags = local.tags
 }
 
 resource "aws_s3_bucket_ownership_controls" "main" {
@@ -102,7 +102,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
 # Logging
 resource "aws_s3_bucket" "log_bucket" {
   count = var.logging_enabled ? 1 : 0
-  bucket = "${var.tags.Name}-log-bucket"
+  bucket = "${local.tags.Name}-log-bucket"
 }
 
 resource "aws_s3_bucket_acl" "log_bucket_acl" {

@@ -1,5 +1,5 @@
 resource "aws_route53_zone" "zone" {
-  name = var.tags.Name
+  name = local.tags.Name
   delegation_set_id = var.delegation_set_id
   
   dynamic "vpc" {
@@ -9,7 +9,7 @@ resource "aws_route53_zone" "zone" {
     }
     
   }
-  tags = var.tags
+  tags = local.tags
 }
 
 resource "aws_route53_record" "record" {
