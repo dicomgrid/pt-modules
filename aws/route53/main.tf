@@ -1,13 +1,13 @@
 resource "aws_route53_zone" "zone" {
-  name = local.tags.Name
+  name              = local.tags.Name
   delegation_set_id = var.delegation_set_id
-  
+
   dynamic "vpc" {
     for_each = length(var.vpc_ids) > 0 ? var.vpc_ids : []
     content {
       vpc_id = vpc.value
     }
-    
+
   }
   tags = local.tags
 }

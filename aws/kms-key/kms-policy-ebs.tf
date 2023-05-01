@@ -31,14 +31,14 @@ data "aws_iam_policy_document" "ebs" {
 
     resources = ["*"]
     condition {
-      test = "StringEquals"
+      test     = "StringEquals"
       variable = "kms:ViaService"
-      values = ["ec2.${local.region}.amazonaws.com"]
+      values   = ["ec2.${local.region}.amazonaws.com"]
     }
     condition {
-      test = "StringEquals"
+      test     = "StringEquals"
       variable = "kms:CallerAccount"
-      values = [local.account_id]
+      values   = [local.account_id]
     }
   }
 
@@ -60,19 +60,19 @@ data "aws_iam_policy_document" "ebs" {
       values   = ["true"]
     }
     condition {
-      test = "StringEquals"
+      test     = "StringEquals"
       variable = "kms:ViaService"
-      values = ["ec2.${local.region}.amazonaws.com"]
+      values   = ["ec2.${local.region}.amazonaws.com"]
     }
     condition {
-      test = "StringEquals"
+      test     = "StringEquals"
       variable = "kms:CallerAccount"
-      values = [local.account_id]
+      values   = [local.account_id]
     }
   }
 
   dynamic "statement" {
-    for_each = var.ebs_kms_shared_account_roles != null ? [var.ebs_kms_shared_account_roles]: []
+    for_each = var.ebs_kms_shared_account_roles != null ? [var.ebs_kms_shared_account_roles] : []
     content {
       sid    = "Allow the use of the CMK by other accounts"
       effect = "Allow"

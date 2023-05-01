@@ -2,7 +2,7 @@ resource "aws_security_group" "main" {
   name        = local.tags.Name
   description = var.description
   vpc_id      = data.aws_vpc.main.id
-  tags = local.tags
+  tags        = local.tags
 
   lifecycle {
     # Necessary if changing 'name' or 'name_prefix' properties.

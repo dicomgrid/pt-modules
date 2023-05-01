@@ -1,7 +1,7 @@
 # TODO: Added features for replication and lifecycle rules etc.
 resource "aws_s3_bucket" "main" {
   bucket = local.tags.Name
-  tags = local.tags
+  tags   = local.tags
 }
 
 resource "aws_s3_bucket_ownership_controls" "main" {
@@ -19,8 +19,8 @@ resource "aws_s3_bucket_acl" "main" {
 # Objects (Directories)
 resource "aws_s3_object" "main" {
   for_each = var.directories
-  bucket = aws_s3_bucket.main.id
-  key    = each.key
+  bucket   = aws_s3_bucket.main.id
+  key      = each.key
 }
 
 # Versioning
@@ -33,7 +33,7 @@ resource "aws_s3_bucket_versioning" "main" {
 
 resource "aws_s3_bucket_lifecycle_configuration" "main" {
   count = length(var.lifecycle_rules) > 0 ? 1 : 0
-  
+
   bucket = aws_s3_bucket.main.id
 
   dynamic "rule" {
@@ -41,13 +41,13 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
     for_each = var.lifecycle_rules
 
     content {
-      id = rule.value.id
+      id     = rule.value.id
       status = rule.value.status
-      
+
       filter {
         object_size_greater_than = lookup(rule.value.filter, "object_size_greater_than", null)
-        object_size_less_than = lookup(rule.value.filter, "object_size_less_than", null)
-        prefix = lookup(rule.value.filter, "prefix", "")
+        object_size_less_than    = lookup(rule.value.filter, "object_size_less_than", null)
+        prefix                   = lookup(rule.value.filter, "prefix", "")
       }
 
       dynamic "expiration" {
@@ -61,8 +61,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
       dynamic "transition" {
         for_each = lookup(rule.value, "transitions", [])
         content {
-          days = transition.value.days
-          storage_class   = transition.value.storage_class
+          days          = transition.value.days
+          storage_class = transition.value.storage_class
         }
       }
 
@@ -70,16 +70,16 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
         for_each = lookup(rule.value, "noncurrent_version_expiration", [])
         content {
           newer_noncurrent_versions = noncurrent_version_expiration.value.newer_noncurrent_versions
-          noncurrent_days = noncurrent_version_expiration.value.noncurrent_days
+          noncurrent_days           = noncurrent_version_expiration.value.noncurrent_days
         }
       }
-      
+
       dynamic "noncurrent_version_transition" {
         for_each = lookup(rule.value, "noncurrent_version_transitions", [])
         content {
           newer_noncurrent_versions = noncurrent_version_transition.value.newer_noncurrent_versions
-          noncurrent_days = noncurrent_version_transition.value.noncurrent_days
-          storage_class   = noncurrent_version_transition.value.storage_class
+          noncurrent_days           = noncurrent_version_transition.value.noncurrent_days
+          storage_class             = noncurrent_version_transition.value.storage_class
         }
       }
 
@@ -89,7 +89,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
 
 # Encryption
 resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
-  count = var.sse_enabled ? 1 : 0
+  count  = var.sse_enabled ? 1 : 0
   bucket = aws_s3_bucket.main.id
   rule {
     apply_server_side_encryption_by_default {
@@ -101,18 +101,18 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
 
 # Logging
 resource "aws_s3_bucket" "log_bucket" {
-  count = var.logging_enabled ? 1 : 0
+  count  = var.logging_enabled ? 1 : 0
   bucket = "${local.tags.Name}-log-bucket"
 }
 
 resource "aws_s3_bucket_acl" "log_bucket_acl" {
-  count = var.logging_enabled ? 1 : 0
+  count  = var.logging_enabled ? 1 : 0
   bucket = aws_s3_bucket.log_bucket[0].id
   acl    = var.logging_acl
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "log_bucket" {
-  count = var.logging_enabled ? 1 : 0
+  count  = var.logging_enabled ? 1 : 0
   bucket = aws_s3_bucket.log_bucket[0].id
 
   rule {
@@ -133,7 +133,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "log_bucket" {
 }
 
 resource "aws_s3_bucket_logging" "main" {
-  count = var.logging_enabled ? 1 : 0
+  count  = var.logging_enabled ? 1 : 0
   bucket = aws_s3_bucket.main.id
 
   target_bucket = aws_s3_bucket.log_bucket[0].id

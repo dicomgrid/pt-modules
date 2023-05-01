@@ -6,7 +6,7 @@ resource "aws_lb" "main" {
   name                             = local.tags.Name
   security_groups                  = var.load_balancer_type == "application" ? data.aws_security_groups.main[0].ids : null
   subnets                          = data.aws_subnets.main.ids
-  tags = local.tags
+  tags                             = local.tags
 }
 
 resource "aws_lb_target_group" "main" {

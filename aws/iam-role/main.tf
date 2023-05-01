@@ -1,7 +1,7 @@
 resource "aws_iam_role" "main" {
   name               = local.tags.Name
   assume_role_policy = var.assume_role_policy
-  tags = local.tags
+  tags               = local.tags
 }
 
 resource "aws_iam_role_policy" "main" {
@@ -13,7 +13,7 @@ resource "aws_iam_role_policy" "main" {
 
 resource "aws_iam_instance_profile" "main" {
   count = var.instance_profile ? 1 : 0
-  name = local.tags.Name
-  role = aws_iam_role.main.id
-  tags = local.tags
+  name  = local.tags.Name
+  role  = aws_iam_role.main.id
+  tags  = local.tags
 }

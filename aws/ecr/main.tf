@@ -13,9 +13,9 @@ resource "aws_ecr_repository" "main" {
 }
 
 resource "aws_ecr_lifecycle_policy" "main" {
-  count = var.lifecycle_policy_enable == true ? 1 : 0
+  count      = var.lifecycle_policy_enable == true ? 1 : 0
   repository = aws_ecr_repository.main.name
-  policy = local.lifecycle_policy
+  policy     = local.lifecycle_policy
 }
 
 output "permissions" {
