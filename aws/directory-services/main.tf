@@ -11,12 +11,5 @@ resource "aws_directory_service_directory" "main" {
     subnet_ids = data.aws_subnets.main.ids
   }
 
-  tags = {
-    Application = var.application
-    Billing     = var.billing
-    Creator     = var.creator
-    Environment = var.environment
-    Name        = var.name
-    Owner       = var.owner
-  }
+  tags = local.tags
 }

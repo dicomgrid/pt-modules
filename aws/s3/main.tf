@@ -1,18 +1,141 @@
-resource "aws_s3_bucket" "s3" {
-  bucket = var.name
+# TODO: Added features for replication and lifecycle rules etc.
+resource "aws_s3_bucket" "main" {
+  bucket = local.tags.Name
+  tags   = local.tags
+}
+
+resource "aws_s3_bucket_ownership_controls" "main" {
+  bucket = aws_s3_bucket.main.id
+  rule {
+    object_ownership = var.object_ownership
+  }
+}
+
+resource "aws_s3_bucket_acl" "main" {
+  bucket = aws_s3_bucket_ownership_controls.main.id
   acl    = var.acl
+}
 
-  versioning {
-    enabled = var.versioning
-  }
+# Objects (Directories)
+resource "aws_s3_object" "main" {
+  for_each = var.directories
+  bucket   = aws_s3_bucket.main.id
+  key      = each.key
+}
 
-# TODO: Added features for encryption, replication, etc.
-  tags = {
-    Application = var.application
-    Billing     = var.billing
-    Creator     = var.creator
-    Environment = var.environment
-    Name        = var.name
-    Owner       = var.owner
+# Versioning
+resource "aws_s3_bucket_versioning" "main" {
+  bucket = aws_s3_bucket.main.id
+  versioning_configuration {
+    status = var.versioning_status
   }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "main" {
+  count = length(var.lifecycle_rules) > 0 ? 1 : 0
+
+  bucket = aws_s3_bucket.main.id
+
+  dynamic "rule" {
+
+    for_each = var.lifecycle_rules
+
+    content {
+      id     = rule.value.id
+      status = rule.value.status
+
+      filter {
+        object_size_greater_than = lookup(rule.value.filter, "object_size_greater_than", null)
+        object_size_less_than    = lookup(rule.value.filter, "object_size_less_than", null)
+        prefix                   = lookup(rule.value.filter, "prefix", "")
+      }
+
+      dynamic "expiration" {
+        for_each = lookup(rule.value, "expiration", [])
+        content {
+          days = lookup(expiration.value, "days", null)
+          date = lookup(expiration.value, "date", null)
+        }
+      }
+
+      dynamic "transition" {
+        for_each = lookup(rule.value, "transitions", [])
+        content {
+          days          = transition.value.days
+          storage_class = transition.value.storage_class
+        }
+      }
+
+      dynamic "noncurrent_version_expiration" {
+        for_each = lookup(rule.value, "noncurrent_version_expiration", [])
+        content {
+          newer_noncurrent_versions = noncurrent_version_expiration.value.newer_noncurrent_versions
+          noncurrent_days           = noncurrent_version_expiration.value.noncurrent_days
+        }
+      }
+
+      dynamic "noncurrent_version_transition" {
+        for_each = lookup(rule.value, "noncurrent_version_transitions", [])
+        content {
+          newer_noncurrent_versions = noncurrent_version_transition.value.newer_noncurrent_versions
+          noncurrent_days           = noncurrent_version_transition.value.noncurrent_days
+          storage_class             = noncurrent_version_transition.value.storage_class
+        }
+      }
+
+    }
+  }
+}
+
+# Encryption
+resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
+  count  = var.sse_enabled ? 1 : 0
+  bucket = aws_s3_bucket.main.id
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = data.aws_kms_key.by_alias[0].arn
+      sse_algorithm     = var.sse_algorithm
+    }
+  }
+}
+
+# Logging
+resource "aws_s3_bucket" "log_bucket" {
+  count  = var.logging_enabled ? 1 : 0
+  bucket = "${local.tags.Name}-log-bucket"
+}
+
+resource "aws_s3_bucket_acl" "log_bucket_acl" {
+  count  = var.logging_enabled ? 1 : 0
+  bucket = aws_s3_bucket.log_bucket[0].id
+  acl    = var.logging_acl
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "log_bucket" {
+  count  = var.logging_enabled ? 1 : 0
+  bucket = aws_s3_bucket.log_bucket[0].id
+
+  rule {
+    id = "log"
+
+    expiration {
+      days = var.logging_expiration
+    }
+
+    filter {
+      and {
+        prefix = "log/"
+      }
+    }
+
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "main" {
+  count  = var.logging_enabled ? 1 : 0
+  bucket = aws_s3_bucket.main.id
+
+  target_bucket = aws_s3_bucket.log_bucket[0].id
+  target_prefix = "log/"
 }

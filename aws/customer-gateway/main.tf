@@ -3,7 +3,5 @@ resource "aws_customer_gateway" "main" {
   ip_address = var.ip
   type       = var.type
 
-  tags = {
-    Name = var.name
-  }
+  tags = local.tags
 }

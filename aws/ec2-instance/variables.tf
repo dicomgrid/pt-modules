@@ -83,51 +83,23 @@ variable "user_data" {
 
 
 
-##tags
+# Tags
 locals {
-  tags = {
-    Application              = var.application
+  default_tags = {
     Backups                  = var.backups
-    Billing                  = var.billing
-    CodeManaged              = var.codemanaged
+    CodeManaged              = var.code_managed
     Compliance               = var.compliance
-    Environment              = var.environment
-    Name                     = var.name
     OneTime                  = var.onetime
-    Owner                    = var.owner
-    Product                  = var.product
     aws-migration-project-id = var.aws_project_id
     map-migrated             = var.map_migrated
   }
+  tags = merge(local.default_tags, var.tags)
 }
+variable "tags" {}
 
-variable "application" {
-  default = ""
-}
-variable "backups" {
-  default = null
-}
-variable "billing" {
-  default = ""
-}
-variable "codemanaged" {
-  default = "true"
-}
-variable "compliance" {
-  default = "null"
-}
-variable "environment" {}
-variable "name" {}
-variable "onetime" {
-  default = null
-}
-variable "owner" {
-  default = "platform"
-}
-variable "product" {}
-variable "aws_project_id" {
-  default = null
-}
-variable "map_migrated" {
-  default = null
-}
+variable "aws_project_id" { default = "null" }
+variable "backups" { default = "null" }
+variable "code_managed" { default = "true" }
+variable "compliance" { default = "null" }
+variable "map_migrated" { default = "null" }
+variable "onetime" { default = "null" }

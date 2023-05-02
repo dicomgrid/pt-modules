@@ -1,16 +1,16 @@
-locals {
-  rulesets = { for service in var.services : format("${service.protocol}%s-%s", service.from_port, service.from_port) => service }
+variable "attributes" {
+  default = [
+    {
+      name = "LockID"
+      type = "S"
+    }
+  ]
 }
-
-variable "description" {}
-variable "direction" {}
-variable "egress" {
-  type    = map(any)
-  default = {}
-}
-variable "services" {}
-variable "subnets" {}
-variable "vpc_name" {}
+variable "billing_mode" { default = "PAY_PER_REQUEST" }
+variable "hash_key" { default = "LockID" }
+variable "range_key" { default = null }
+variable "read_capacity" { default = null }
+variable "write_capacity" { default = null }
 
 # Tags
 locals {

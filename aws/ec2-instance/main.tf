@@ -1,6 +1,6 @@
 resource "aws_instance" "main" {
   ami = lookup({
-    centos7                     = data.aws_ami.centos7.id
+    centos7                      = data.aws_ami.centos7.id
     amazon_linux_2               = data.aws_ami.amazon_linux_2.id
     ubuntu_22_04                 = data.aws_ami.ubuntu_22_04.id
     rhel_8                       = data.aws_ami.rhel_8.id

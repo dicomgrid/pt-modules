@@ -1,17 +1,9 @@
-variable "application" {
-  default = ""
-}
-variable "billing" {}
-variable "creator" {
-  default = "Terraform"
-}
 variable "enable_cross_zone_load_balancing" {
   default = true
 }
 variable "enable_deletion_protection" {
   default = false
 }
-variable "environment" {}
 
 variable "health_check" {
   default = [
@@ -59,11 +51,6 @@ variable "listener_action_type" {}
 variable "listener_port" {}
 variable "listener_protocol" {}
 variable "load_balancer_type" {}
-variable "name" {}
-variable "owner" {
-  default = "Platform"
-}
-
 variable "security_groups" {
   default = null
 }
@@ -72,3 +59,23 @@ variable "target_instances" {}
 variable "target_port" {}
 variable "target_protocol" {}
 variable "vpc" {}
+
+
+# Tags
+locals {
+  default_tags = {
+    CodeManaged              = var.code_managed
+    Compliance               = var.compliance
+    OneTime                  = var.onetime
+    aws-migration-project-id = var.aws_project_id
+    map-migrated             = var.map_migrated
+  }
+  tags = merge(local.default_tags, var.tags)
+}
+variable "tags" {}
+
+variable "aws_project_id" { default = "null" }
+variable "code_managed" { default = "true" }
+variable "compliance" { default = "null" }
+variable "map_migrated" { default = "null" }
+variable "onetime" { default = "null" }
