@@ -10,7 +10,7 @@ resource "vsphere_virtual_machine" "vm" {
   firmware              = data.vsphere_virtual_machine.guest_template.firmware
   guest_id              = data.vsphere_virtual_machine.guest_template.guest_id
   scsi_type             = data.vsphere_virtual_machine.guest_template.scsi_type
-  scsi_controller_count = 1
+  scsi_controller_count = var.guest_disks_scsi2 == [] ? 1 : 2
 
   network_interface {
     network_id   = data.vsphere_network.port_group.id
@@ -31,11 +31,11 @@ resource "vsphere_virtual_machine" "vm" {
   }
 
   dynamic "disk" {
-    for_each = range(var.guest_disks_additional_count)
+    for_each = var.guest_disks_scsi2
 
     content {
       label            = "${var.guest_name}-${disk.key + 15}.vmdk"
-      size             = var.guest_disks_additional_size * 1024 # Default is in GB, using 1024 multiplier to convert to TB.
+      size             = disk.value.size
       unit_number      = disk.key + 15                          # The unit number is s(15)+b=n where “s” equals the scsi controller, “b” equals bus, and n equals unit_number.
       eagerly_scrub    = false
       thin_provisioned = true
