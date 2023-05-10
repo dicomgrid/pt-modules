@@ -66,7 +66,7 @@ variable "guest_dns_servers" {
     "nas6" = ["10.0.0.22", "10.0.0.21", ]
     "nas1" = ["10.0.8.2", "10.0.8.3", ]
     "mna"  = ["10.0.8.2", "10.0.8.3", ]
-    "dfw"  = ["10.125.0.22", "10.125.0.21", ]
+    "dfw"  = ["10.125.80.22", "10.125.80.21", ]
   }
 }
 
@@ -95,12 +95,8 @@ variable "guest_disks" {
   ]
 }
 
-variable "guest_disks_additional_count" {
-  default = 0
-}
-
-variable "guest_disks_additional_size" {
-  default = 1
+variable "guest_disks_scsi2" {
+  default = []
 }
 
 variable "client_time_zone" {}
