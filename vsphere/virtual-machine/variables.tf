@@ -99,6 +99,10 @@ variable "guest_disks_scsi2" {
   default = []
 }
 
+variable "guest_disks_scsi3" {
+  default = []
+}
+
 variable "client_time_zone" {}
 
 variable "linux_time_zones" {
