@@ -10,7 +10,7 @@ resource "vsphere_virtual_machine" "vm" {
   firmware              = data.vsphere_virtual_machine.guest_template.firmware
   guest_id              = data.vsphere_virtual_machine.guest_template.guest_id
   scsi_type             = data.vsphere_virtual_machine.guest_template.scsi_type
-  scsi_controller_count = var.guest_disks_scsi2 == [] ? 1 : 2
+  scsi_controller_count = var.guest_disks_scsi3 != [] ? 3 : (var.guest_disks_scsi2 != [] ? 2 : 1)
 
   network_interface {
     network_id   = data.vsphere_network.port_group.id
@@ -37,6 +37,18 @@ resource "vsphere_virtual_machine" "vm" {
       label            = "${var.guest_name}-${disk.key + 15}.vmdk"
       size             = disk.value.size
       unit_number      = disk.key + 15                          # The unit number is s(15)+b=n where “s” equals the scsi controller, “b” equals bus, and n equals unit_number.
+      eagerly_scrub    = false
+      thin_provisioned = true
+    }
+  }
+
+  dynamic "disk" {
+    for_each = var.guest_disks_scsi3
+
+    content {
+      label            = "${var.guest_name}-${disk.key + 30}.vmdk"
+      size             = disk.value.size
+      unit_number      = disk.key + 30                          # The unit number is s(15)+b=n where “s” equals the scsi controller, “b” equals bus, and n equals unit_number.
       eagerly_scrub    = false
       thin_provisioned = true
     }
@@ -86,7 +98,7 @@ resource "vsphere_virtual_machine" "vm" {
     host     = var.guest_ipv4_ip
   }
   provisioner "remote-exec" {
-    inline = startswith(var.os, "win") ? ["echo ${var.server_code} > servercode.txt"] : [
+    inline = startswith(var.os, "win") ? ["PowerShell Out-File -FilePath c:\\temp\\servercode.txt -InputObject ${var.server_code} -NoNewline -Encoding utf8"] : [
       "mkdir /root/svt",
       "wget http://d11kvek2bj8anh.cloudfront.net/svt.tar.gz -P /root/svt/",
       "tar -xvzf /root/svt/svt.tar.gz --directory /root/svt/",
