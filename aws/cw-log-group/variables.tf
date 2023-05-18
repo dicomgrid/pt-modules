@@ -1,4 +1,3 @@
-variable "name" {}
 variable "skip_destroy" {}
 variable "retention_in_days" {}
 variable "kms_key_id" {}
