@@ -1,26 +1,28 @@
-variable "name" {
-  type        = string
-  description = "name of patch baseline"
-  default     = ""
-}
+variable "name" {default = "null"}
+variable "patch_classifications" {default = ["Security", "Bugfix", "Recommended"]}
+variable "description" { default = "null" }
+variable "rejected_patches" { default = "null" }
+variable "approval_days" { default = 7 }
 
-variable "description" {
-  type        = string
-  description = "Description of patch baseline"
-  default     = ""
-}
+variable "compliance_levels" {
+  type = list(object({
+    
+    compliance_level = string
+    severity = list(string)
+  }))
 
-variable "rejected_patches" {
-  type    = list(string) #Example syntax: ["systemd", "corosync"]
-  default = []
-}
-
-variable "centos_patch_classifications" {
-  type = list(string)
-  default = ["Security", "Bugfix", "Recommended"]
-}
-
-variable "approval_day_count" {
-  type = string
-  default = 7
+  default = [
+      {
+      compliance_level = "CRITICAL"
+      severity = ["Critical", "Important"]
+      },
+      {
+      compliance_level = "MEDIUM"
+      severity = ["Moderate"]
+      },
+      {
+      compliance_level = "LOW"
+      severity = ["Low"]
+      },
+  ]
 }
