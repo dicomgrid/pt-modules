@@ -1,7 +1,7 @@
 resource "aws_ssm_patch_baseline" "pb-linux" {
   name             = var.name
   description      = var.description
-  operating_system = "CENTOS"
+  operating_system = "ROCKY_LINUX"
   rejected_patches = var.rejected_patches
   global_filter {
     key = "CLASSIFICATION"
