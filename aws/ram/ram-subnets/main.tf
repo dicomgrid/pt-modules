@@ -8,7 +8,7 @@ locals {
 
 resource "aws_ram_resource_share" "example" {
   name                      = "example"
-  allow_external_principals = true
+  allow_external_principals = false
 }
 
 resource "aws_ram_resource_association" "example" {
@@ -17,16 +17,8 @@ resource "aws_ram_resource_association" "example" {
   resource_share_arn = aws_ram_resource_share.example.arn
 }
 
-resource "aws_ram_principal_association" "example" {
-  for_each = toset(var.account_ids)
-
-  principal          = each.key
-  resource_share_arn = var.resource_share_arn
-}
-
 module "principal_association" {
-  source             = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/ram/ram-association?ref=master"
+  source             = "../ram-association/principal_association"
   account_ids        = var.account_ids
   resource_share_arn = aws_ram_resource_share.example.arn
-
 }
