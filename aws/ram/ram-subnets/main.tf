@@ -25,8 +25,8 @@ resource "aws_ram_principal_association" "example" {
 }
 
 module "principal_association" {
-  source             = ""
+  source             = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/ram/ram-association?ref=master"
   account_ids        = var.account_ids
-  resource_share_arn = aws_ram_resource_share.example.arna
+  resource_share_arn = aws_ram_resource_share.example.arn
 
 }

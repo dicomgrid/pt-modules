@@ -42,9 +42,9 @@ resource "aws_ram_resource_association" "example" {
   resource_arn       = aws_ec2_transit_gateway.example.arn
   resource_share_arn = aws_ram_resource_share.example.id
 }
-
+# Let bonbs  ....o
 module "principal_association" {
-  source             = ""
+  source             = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/ram/ram-association?ref=master"
   account_ids        = var.account_ids
   resource_share_arn = aws_ram_resource_share.example.arn
 
