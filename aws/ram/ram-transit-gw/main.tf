@@ -1,53 +1,45 @@
-
-data "aws_subnets" "example" {
-  vpc_id = var.vpc_id
-}
-
-locals {
-  filtered_subnets = { for s in data.aws_subnets.example.subnets : s.id => s if contains(s.tags["Name"], "platform") }
-}
-
-resource "aws_ram_resource_share" "example" {
-  name                      = "example"
-  allow_external_principals = true
-}
-
-resource "aws_ram_resource_association" "example" {
-  for_each           = local.filtered_subnets
-  resource_arn       = each.value.arn
-  resource_share_arn = aws_ram_resource_share.example.arn
-}
-
-resource "aws_ram_principal_association" "example" {
-  for_each = toset(var.account_ids)
-
-  principal          = each.key
-  resource_share_arn = aws_ram_resource_share.example.arn
-}
-
-resource "aws_ec2_transit_gateway" "example" {
-  description = "transit gateway"
-}
-
-resource "aws_ram_resource_share" "example" {
-  name                      = "example"
-  allow_external_principals = false
+resource "aws_ram_resource_share" "main" {
+  name = var.resource_share_name
 
   tags = {
-    Name = "example"
+    Name = var.resource_share_name
   }
 }
 
-resource "aws_ram_resource_association" "example" {
-  resource_arn       = aws_ec2_transit_gateway.example.arn
-  resource_share_arn = aws_ram_resource_share.example.id
+# Share the transit gateway...
+resource "aws_ram_resource_association" "main" {
+  resource_arn       = data.aws_ec2_transit_gateway.main.arn
+  resource_share_arn = aws_ram_resource_share.main.arn
 }
 
-module "principal_association" {
-  source             = "../ram-association/principal_association"
-  account_ids        = var.account_ids
-  resource_share_arn = aws_ram_resource_share.example.arn
+# ...with the second account.
+resource "aws_ram_principal_association" "main" {
+  for_each = toset(var.account_ids)
 
+  principal          = each.value
+  resource_share_arn = aws_ram_resource_share.main.arn
 }
 
 
+# # Create the VPC attachment in the second account...
+# resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
+#   provider = aws.second
+
+#   depends_on = [
+#     aws_ram_principal_association.main,
+#     aws_ram_resource_association.main,
+#   ]
+
+#   subnet_ids         = [data.aws_subnets.main.id]
+#   transit_gateway_id = var.tgw_id
+#   vpc_id             = var.vpc_id
+
+# }
+
+# # ...and accept it in the first account.
+# resource "aws_ec2_transit_gateway_vpc_attachment_accepter" "main" {
+#   provider = aws.first
+
+#   transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.main.id
+
+# }
