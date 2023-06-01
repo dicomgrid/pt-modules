@@ -1,14 +1,18 @@
+# getting list of all subnet ids based on vpc
+data "aws_subnets" "main" {
+  provider = aws.second
 
-# data "aws_ec2_transit_gateway" "main" {
-#   provider = aws.first
-#   id       = var.tgw_id
-# }
+  filter {
+    name   = "vpc-id"
+    values = [var.vpc_id]
+  }
+}
 
-# data "aws_subnets" "main" {
-#   provider = aws.second
+#piping returned subnets for az info
+data "aws_subnet" "main" {
+  provider = aws.second
+  for_each = toset(data.aws_subnets.main.ids)
 
-#   filter {
-#     name   = "vpc-id"
-#     values = [var.vpc_id]
-#   }
-# }
+  id = each.value
+}
+
