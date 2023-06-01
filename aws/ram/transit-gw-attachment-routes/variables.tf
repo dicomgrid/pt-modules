@@ -23,4 +23,7 @@ variable "default_tags" {
   }
 }
 
-variable "destination_cidr_blocks" {}
+
+variable "destination_cidr_blocks" {
+  default = []
+}
