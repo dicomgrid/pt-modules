@@ -4,7 +4,7 @@ data "aws_ec2_transit_gateway" "main" {
   id =  var.tgw_id
 }
 
-data "aws_subnets" "example" {
+data "aws_subnets" "main" {
   provider = aws.second
 
   filter {
