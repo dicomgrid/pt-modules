@@ -1,5 +1,3 @@
-
-
 variable "region" {
   description = "The AWS region to create resources in"
   type        = string
@@ -9,6 +7,7 @@ variable "region" {
 variable "vpc_id" {
   description = "The ID of the VPC where the subnets are located"
   type        = string
+
 }
 
 variable "default_tags" {
