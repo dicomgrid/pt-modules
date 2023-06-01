@@ -16,3 +16,8 @@ data "aws_subnet" "main" {
   id = each.value
 }
 
+data "aws_route_tables" "main" {
+  provider = aws.second
+
+  vpc_id = var.vpc_id
+}
