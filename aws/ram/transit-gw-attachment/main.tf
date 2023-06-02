@@ -29,4 +29,6 @@ module "subnet_routes" {
   rtb_id                  = each.key
   vpc_id                  = var.vpc_id
   tgw_id                  = var.tgw_id
+  
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment_accepter.main]
 }
