@@ -1,4 +1,3 @@
-
 variable "account_ids" {
   description = "The AWS Account ID numbers of the accounts with which you are sharing your subnet"
   type        = list(string)
