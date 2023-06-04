@@ -11,7 +11,6 @@ resource "aws_dx_transit_virtual_interface" "transit" {
   
   connection_id     = var.connection_id
   dx_gateway_id     = var.dx_gateway_id
-  owner_account_id  = var.owner_account_id
   name              = var.dx_transit_vif_name
   vlan              = var.dx_transit_vif_vlan_id
   address_family    = var.dx_transit_vif_address_family
