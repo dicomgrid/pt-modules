@@ -13,12 +13,12 @@ variable "dx_transit_hosted_vif_address_family" {
     description = "The address family of the directconnect hosted transit virtual interface"
     default = "ipv4"
    }
+   
 variable "create_dx_hosted_transit_vif" {
     description = "Whether to create a directconnect gateway"
     type = bool
    }
    
-
 variable "dx_transit_hosted_vif_name" {
       description = "The name of the directconnect hosted transit virtual interface"
 }
