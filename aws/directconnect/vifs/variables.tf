@@ -1,11 +1,10 @@
 variable "connection_id" { 
    description = "The ID of the pending directconnect connection"
    }
-variable "route_type_identifier" {
-   default = "CiscoSystemsInc-Nexus9KSeriesSwitches-NXOS93"
-   }
-
-   
+variable "owner_account_id" {
+   description = "The ID of the AWS account that owns the directconnect gateway"
+   default = null
+}
 variable "dx_transit_hosted_vif_address_family" {
     description = "The address family of the directconnect hosted transit virtual interface"
     default = "ipv4"

@@ -4,7 +4,7 @@ resource "aws_dx_hosted_transit_virtual_interface" "transit" {
   
   connection_id     = var.connection_id
 
-  owner_account_id  = data.aws_caller_identity.current.account_id
+  owner_account_id  = var.owner_account_id
   name              = var.dx_transit_hosted_vif_name
   vlan              = var.dx_transit_hosted_vif_vlan_id
   address_family    = var.dx_transit_hosted_vif_address_family
