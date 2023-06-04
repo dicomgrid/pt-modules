@@ -5,9 +5,6 @@ variable "route_type_identifier" {
    default = "CiscoSystemsInc-Nexus9KSeriesSwitches-NXOS93"
    }
 
-variable "dx_gateway_id" {
-    description = "The ID of the directconnect gateway"
-   }
    
 variable "dx_transit_hosted_vif_address_family" {
     description = "The address family of the directconnect hosted transit virtual interface"
