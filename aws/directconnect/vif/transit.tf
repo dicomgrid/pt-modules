@@ -1,10 +1,4 @@
 
-resource "aws_dx_gateway" "this" {
-  count               = var.create_dx_gateway ? 1 : 0
-  name                = var.dx_gateway_name
-  amazon_side_asn     = var.dx_gateway_amazon_side_as
-}
-
 resource "aws_dx_hosted_transit_virtual_interface" "transit" {
   count = var.create_dx_hosted_transit_vif ? 1 : 0
   
