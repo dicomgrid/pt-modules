@@ -3,7 +3,4 @@ data "aws_dx_router_configuration" "this" {
   router_type_identifier = var.route_type_identifier
 }
 
-data "aws_dx_connection" "example" {
-  name = var.connection_id
-}
 data "aws_caller_identity" "current" {}
