@@ -3,7 +3,6 @@ resource "aws_dx_hosted_transit_virtual_interface" "transit" {
   count = var.create_dx_hosted_transit_vif ? 1 : 0
   
   connection_id     = var.connection_id 
-  dx_gateway_id     = var.dx_gateway_id
   owner_account_id  = data.aws_caller_identity.current.account_id
   name              = var.dx_transit_hosted_vif_name
   vlan              = var.dx_transit_hosted_vif_vlan_id
