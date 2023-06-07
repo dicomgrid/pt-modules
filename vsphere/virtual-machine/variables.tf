@@ -42,7 +42,7 @@ variable "client_code" {}
 variable "client_architecture" {}
 
 variable "parent_folder" {
-  default = "I000-Intelerad"
+  default = "ims"
 }
 
 variable "guest_vcpu" {}
@@ -88,9 +88,8 @@ variable "run_once" {
 variable "guest_disks" {
   type = list(any)
   default = [
-    { size = 1 },  # boot
-    { size = 8 },  # swap
-    { size = 16 }, # /
+    { size = 16 },  # boot and /
+    { size = 15 },  # swap
     { size = 16 }, # /var
   ]
 }
