@@ -1,8 +1,9 @@
-resource "aws_ssm_patch_baseline" "pb-linux" {
+resource "aws_ssm_patch_baseline" "ssm-patch-baseline" {
   name             = var.name
   description      = var.description
-  operating_system = "ROCKY_LINUX"
+  operating_system = var.operating_system
   rejected_patches = var.rejected_patches
+
   global_filter {
     key = "CLASSIFICATION"
     values = var.patch_classifications
