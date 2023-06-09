@@ -10,3 +10,19 @@ resource "aws_ec2_transit_gateway_peering_attachment" "main" {
     Side      = "requester",
   })
 }
+
+data "aws_ec2_transit_gateway" "main" {
+  id = var.requester_transit_gateway_id
+}
+
+data "aws_ec2_transit_gateway_attachment" "main" {
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_peering_attachment.main.id
+}
+
+resource "aws_ec2_transit_gateway_route" "main" {
+  for_each = data.aws_ec2_transit_gateway_attachment.main.state == "available" ? toset(var.requester_routes) : []
+
+  destination_cidr_block         = each.value
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_peering_attachment.main.id
+  transit_gateway_route_table_id = data.aws_ec2_transit_gateway.main.association_default_route_table_id
+}

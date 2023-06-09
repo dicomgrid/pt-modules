@@ -1,3 +1,4 @@
+variable "accepter_routes" { default = [] }
 variable "accepter_transit_gateway" {}
 variable "requester_transit_gateway" {}
 variable "transit_gateway_attachment_id" {}
