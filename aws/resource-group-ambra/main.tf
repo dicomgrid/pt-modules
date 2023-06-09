@@ -4,9 +4,9 @@ resource "aws_resourcegroups_group" "resource_group" {
   description = var.description
 
   resource_query {
-    query = <<JSON #TODO: Make filter dynamic based on provided tag input
+    query = <<JSON
 {
-    "ResourceTypeFilters": ["AWS::SSM::ManagedInstance"],
+    "ResourceTypeFilters": ["AWS::EC2::Instance"],
     "TagFilters": [
         {
             "Key": "Environment",
