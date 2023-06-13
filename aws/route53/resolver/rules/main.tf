@@ -11,7 +11,7 @@ resource "aws_route53_resolver_rule" "main" {
     }
   }
 
-  tags = merge(local.tags, { Name = replace(var.domain_name, ".", "-dot-")})
+  tags = merge(local.tags, { Name = replace(var.domain_name, ".", "-dot-") })
 }
 
 resource "aws_route53_resolver_rule_association" "main" {
