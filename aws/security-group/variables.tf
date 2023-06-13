@@ -1,15 +1,22 @@
-locals {
-  rulesets = { for service in var.services : format("${service.protocol}%s-%s", service.from_port, service.from_port) => service }
-}
+# locals {
+#   rulesets = { for service in var.services : format("${service.protocol}%s-%s", service.from_port, service.from_port, service.direction) => service }
+# }
 
 variable "description" {}
-variable "direction" {}
+# variable "direction" {}
 variable "egress" {
-  type    = map(any)
-  default = {}
+  default = [
+    {
+      description = "All traffic"
+      from_port   = "0"
+      to_port     = "0"
+      protocol    = "-1"
+    }
+  ]
 }
-variable "services" {}
-variable "subnets" {}
+variable "ingress" {}
+# variable "services" {}
+# variable "subnets" {}
 variable "vpc_name" {}
 
 # Tags
