@@ -7,9 +7,3 @@ variable "max_errors" {default = "null"}
 variable "shell_task_window_target_id"  {default = "null"}
 variable "timeout_seconds" {default = "null"}
 variable "shell_task" {default = "null"}
-variable "shell_tasks" {
-  default = {
-    stop-pacs = "stop-pacs.sh"
-    start-pacs = "start-pacs.sh"
-  }
-}
