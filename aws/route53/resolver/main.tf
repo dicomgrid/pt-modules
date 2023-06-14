@@ -1,25 +1,9 @@
-variable "endpoint_name" { default = "default-rslvr" }
-
-data "aws_security_groups" "main" {
-  filter {
-    name   = "group-name"
-    values = var.security_groups
-  }
-
-  filter {
-    name   = "vpc-id"
-    values = [var.vpc_id]
-  }
-}
-
-
 resource "aws_route53_resolver_endpoint" "outbound" {
   count     = var.direction == "OUTBOUND" ? 1 : 0
   name      = var.endpoint_name
   direction = var.direction
 
-  security_group_ids = data.aws_security_groups.main.ids
-
+  security_group_ids = var.security_group_ids
   dynamic "ip_address" {
     for_each = var.subnet_ids
     content {

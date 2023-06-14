@@ -1,8 +1,10 @@
 variable "direction" {}
+variable "endpoint_name" { default = "default-rslvr" }
 variable "rules" { default = {} }
-variable "security_groups" {}
-variable "vpc_id" {}
+variable "security_group_ids" {}
 variable "subnet_ids" {}
+variable "vpc_id" {}
+
 
 # Tags
 locals {
