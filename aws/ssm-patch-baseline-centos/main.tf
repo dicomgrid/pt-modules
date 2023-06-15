@@ -2,8 +2,8 @@ resource "aws_ssm_patch_baseline" "centos-pb" {
   name             = var.name
   description      = var.description
   operating_system = "CENTOS"
-  rejected_patches = var.rejected_patches
-  approved_patches = var.approved_patches
+  rejected_patches = try(var.rejected_patches, false)
+  approved_patches = try(var.approved_patches, false)
   global_filter {
     key = "CLASSIFICATION"
     values = var.patch_classifications
