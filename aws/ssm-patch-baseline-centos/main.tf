@@ -1,4 +1,4 @@
-resource "aws_ssm_patch_baseline" "pb-pacs-centos" {
+resource "aws_ssm_patch_baseline" "centos-pb" {
   name             = var.name
   description      = var.description
   operating_system = "CENTOS"
