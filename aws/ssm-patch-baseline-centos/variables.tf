@@ -37,7 +37,7 @@ variable "source_repos" {
     {
     name = "base"
     products = ["CentOS"]
-    configuration = <<EOF
+    repo = <<EOF
 [base]
 name=CentOS-$releasever - Base
 #mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os&infra=$infra
