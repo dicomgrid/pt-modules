@@ -26,3 +26,26 @@ variable "compliance_levels" {
       },
   ]
 }
+
+variable "source_repos" {
+  type = list(object({
+    name = string
+    products = list(string)
+    configuration = string
+  }))
+  default = [
+    {
+    name = "base"
+    products = ["CentOS"]
+    configuration = <<EOF
+[base]
+name=CentOS-$releasever - Base
+#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os&infra=$infra
+baseurl=http://mirror.centos.org/centos/$releasever/os/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+EOF
+    }
+  ]
+
+}

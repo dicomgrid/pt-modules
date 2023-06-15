@@ -1,4 +1,4 @@
-resource "aws_ssm_patch_baseline" "pb-linux" {
+resource "aws_ssm_patch_baseline" "pb-pacs-centos" {
   name             = var.name
   description      = var.description
   operating_system = "CENTOS"
@@ -7,7 +7,6 @@ resource "aws_ssm_patch_baseline" "pb-linux" {
     key = "CLASSIFICATION"
     values = var.patch_classifications
   }
-
   dynamic "approval_rule" {
     for_each = var.compliance_levels
     content {
@@ -22,6 +21,15 @@ resource "aws_ssm_patch_baseline" "pb-linux" {
         values = [patch_filter.value]
         }
       }
+    }
+  }
+  dynamic "source" {
+    for_each = var.source_repo
+
+    content {
+      name = source.value.name
+      products = source.value.products
+      configuration = source.value.repo
     }
   }
 }
