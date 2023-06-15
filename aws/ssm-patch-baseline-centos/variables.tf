@@ -36,7 +36,18 @@ variable "source_repos" {
   default = [
     {
     name = "base"
-    products = ["CentOS"]
+    products = [
+      "CentOS7.0",
+      "CentOS7.1",
+      "CentOS7.2",
+      "CentOS7.3",
+      "CentOS7.4",
+      "CentOS7.5",
+      "CentOS7.6",
+      "CentOS7.7",
+      "CentOS7.8",
+      "CentOS7.9"
+      ]
     configuration = <<EOF
 [base]
 name=CentOS-$releasever - Base
@@ -47,5 +58,4 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 EOF
     }
   ]
-
 }
