@@ -29,7 +29,7 @@ resource "aws_ssm_patch_baseline" "centos-pb" {
     content {
       name = source.value.name
       products = source.value.products
-      configuration = source.value.repo
+      configuration = source.value.configuration
     }
   }
 }
