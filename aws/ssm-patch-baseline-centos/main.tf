@@ -24,7 +24,7 @@ resource "aws_ssm_patch_baseline" "pb-pacs-centos" {
     }
   }
   dynamic "source" {
-    for_each = var.source_repo
+    for_each = var.source_repos
 
     content {
       name = source.value.name
