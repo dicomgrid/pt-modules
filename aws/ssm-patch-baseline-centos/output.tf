@@ -1,7 +1,6 @@
-output "pb-linux-id" {
-  value = aws_ssm_patch_baseline.pb-linux.id
+output "centos-pb-id" {
+  value = aws_ssm_patch_baseline.centos-pb.id
 }
-
-output "pb-linux-arn" {
-  value = aws_ssm_patch_baseline.pb-linux.arn
+output "centos-pb-arn" {
+  value = aws_ssm_patch_baseline.centos-pb.arn
 }
