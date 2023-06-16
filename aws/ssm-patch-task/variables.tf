@@ -5,7 +5,7 @@ variable "service_role_arn" {default = "null"}
 variable "max_concurrency" {default = "null"}
 variable "max_errors" {default = "null"}
 variable "patch_window_target_id" {default = "null"}
-variable "timeout_seconds" {default = "null"}
+variable "timeout_seconds" {default = 600}
 
 variable "patch_tasks" {
   type = list(object({
