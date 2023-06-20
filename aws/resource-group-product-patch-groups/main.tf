@@ -1,4 +1,3 @@
-#TODO: make compatible with product patch group
 resource "aws_resourcegroups_group" "resource_group" {
   tags        = var.tags
   name        = var.name
@@ -17,8 +16,8 @@ resource "aws_resourcegroups_group" "resource_group" {
             "Values": ["${var.tags["Group"]}"]
         },
         {
-            "Key": "isDB",
-            "Values": ["${var.tags["isDB"]}"]
+            "Key": "Product",
+            "Values": ["${var.tags["Product"]}"]
         }
     ]
 }

@@ -1,3 +1,4 @@
+#TODO: replace with product patch group
 resource "aws_resourcegroups_group" "resource_group" {
   tags        = var.tags
   name        = var.name
@@ -14,6 +15,10 @@ resource "aws_resourcegroups_group" "resource_group" {
         {
             "Key": "Group",
             "Values": ["${var.tags["Group"]}"]
+        }
+        {
+            "Key": "Product",
+            "Values": ["${var.tags["Product"]}"]
         }
     ]
 }
