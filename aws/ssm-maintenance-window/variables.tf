@@ -21,7 +21,7 @@ variable "schedule" {
 variable "duration" {
   type        = number
   description = "hours of duration of maintenance window"
-  default     = 3
+  default     = 2
 }
 
 variable "cutoff" {
