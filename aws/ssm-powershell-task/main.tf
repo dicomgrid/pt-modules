@@ -3,7 +3,7 @@ resource "aws_ssm_maintenance_window_task" "ssm-powershell-task" {
   window_id        = var.powershell_task_window_id
   task_type        = "RUN_COMMAND"
   task_arn         = "AWS-RunPowerShellScript"
-  priority         = var.win_evac_priority
+  priority         = var.powershell_task_priority
   service_role_arn = var.service_role_arn
   max_concurrency  = var.max_concurrency
   max_errors       = var.max_errors
