@@ -1,7 +1,8 @@
-variable "name" {default = ""}
+variable "name" {default = "null"}
 variable "patch_classifications" {default = ["Security", "Bugfix", "Recommended"]}
 variable "description" { default = "null" }
-variable "rejected_patches" {default = ["null"]}
+variable "rejected_patches" { default = null }
+variable "approved_patches" { default = null }
 variable "operating_system" { default = "null" }
 variable "approval_days" { default = 7 }
 variable "enable_non_security" {default = true}
