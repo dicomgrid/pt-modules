@@ -3,7 +3,7 @@ resource "aws_ssm_patch_baseline" "ssm-patch-baseline" {
   description      = var.description
   operating_system = var.operating_system
   rejected_patches = try(var.rejected_patches, false)
-  approved_patches = try(var.rejected_patches, false)
+  approved_patches = try(var.approved_patches, false)
 
   global_filter {
     key = "CLASSIFICATION"
