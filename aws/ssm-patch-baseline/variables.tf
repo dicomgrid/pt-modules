@@ -4,7 +4,7 @@ variable "description" { default = "null" }
 variable "rejected_patches" {default = ["null"]}
 variable "operating_system" { default = "null" }
 variable "approval_days" { default = 7 }
-
+variable "enable_non_security" {default = "true"}
 variable "compliance_levels" {
   type = list(object({
     
