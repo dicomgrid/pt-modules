@@ -1,5 +1,5 @@
 variable "parent_folder" {
-  default = "I000-Intelerad"
+  default = "ims"
 }
 
 variable "client_code" {}
