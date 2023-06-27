@@ -1,6 +1,7 @@
 # TODO: Added features for replication and lifecycle rules etc.
 resource "aws_s3_bucket" "main" {
   bucket = local.tags.Name
+  object_lock_enabled = var.object_lock_enabled
   tags   = local.tags
 }
 
@@ -138,4 +139,19 @@ resource "aws_s3_bucket_logging" "main" {
 
   target_bucket = aws_s3_bucket.log_bucket[0].id
   target_prefix = "log/"
+}
+
+#Object Lock
+resource "aws_s3_bucket_object_lock_configuration" "main" {
+  count = var.object_lock_enabled == true ? 1 : 0
+  bucket = aws_s3_bucket.main.id
+  dynamic "rule" {
+    for_each = var.object_lock_period
+    content {
+      default_retention {
+        mode = local.object_lock_period[0].mode
+        days = local.object_lock_period[0].days
+      }
+    }
+  }
 }
