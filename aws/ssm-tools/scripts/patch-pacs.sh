@@ -7,7 +7,9 @@ sudo yum ${REPOS} ${SKIP} update -y
 needs-restarting -r
 if [ $? -eq 1 ]
 then
+        echo "Rebooting now..."
         exit 194
 else
+        echo "Exiting..."
         exit 0
 fi
