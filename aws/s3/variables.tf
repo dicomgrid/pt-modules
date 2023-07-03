@@ -4,8 +4,9 @@ locals {
 }
 
 variable "acl" { default = "private" }
+variable "bucket_key_enabled" { default = true }
 variable "directories" { default = {} }
-variable "kms_key_alias" { default = null }
+variable "kms_cmk_alias" { default = null }
 variable "lifecycle_rules" { default = {} }
 variable "object_lock_enabled" { default = false }
 variable "object_lock_period" {default = {} }
