@@ -206,8 +206,8 @@ function startGrid() {
 function handleErr() {
     exitCode=$?
     lastCommand=${BASH_COMMAND}
-    echo "stderr occurred!"
-    echo "last command: $lastCommand"
+    echo -e "stderr occurred!"
+    echo -e "last command: $lastCommand"
     echo -e "exit code: $exitCode"
     exit $exitCode
 }
