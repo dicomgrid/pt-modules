@@ -1,41 +1,30 @@
 #! /bin/bash
 set -e
 
-function stopPacs() {
-    if [[ -e $(ls /etc/rc.d/init.d/PACS) ]] 
+function checkPacs() {
+    if [[ -e $(ls /etc/rc.d/init.d/PACS) ]]
     then
         if [[ -e $(ls /etc/rc.d/init.d/corosync > /dev/null 2>&1) ]]
         then
-            echo "Attempting to stop corosync..."
-            sudo systemctl stop corosync > /dev/null 2>&1
+            service corosync status
             echo -e "\e"
             echo -e "\e"
             echo -e "corosync status"
             sudo service corosync status | head -n 7
 
-            echo "Attempting to stop pacemaker..."
-            sudo systemctl stop pacemaker > /dev/null 2>&1
+            service pacemaker status
             echo -e "\e"
             echo -e "\e"
             echo -e "pacemaker status"
             sudo service pacemaker status | head -n 7
         else
-            echo "No clustering services to stop, proceeding..."
+            echo "No clustering services to check, proceeding..."
         fi
-        echo "Attempting to stop IntelePACS services..."
-        /opt/intelerad/bin/padmin PACS stop > /dev/null 2>&1
-        echo "Attempting to stop Tomcat..."
-        /opt/intelerad/bin/padmin controlTomcat -t stop > /dev/null 2>&1
-        echo "Attempting to stop apache2..."
-        /opt/intelerad/bin/padmin sudo /etc/init.d/apache2 stop > /dev/null 2>&1
-        echo "Attempting to stop postgres-intelerad service..."
-        /opt/intelerad/bin/padmin sudo /etc/init.d/postgres-intelerad stop > /dev/null 2>&1
-        echo "Attempting to stop Sybase service..."
-        /opt/intelerad/bin/padmin sudo /etc/init.d/sybase -v stop > /dev/null 2>&1
-        
+            echo -e "\e"
+
         echo -e "\e"
         echo -e "\e"
-        echo "Reporting Post service stop status"
+        echo "Reporting Pre patching status"
         echo -e "sybase status"
         sudo service sybase status
         echo -e "\e"
@@ -56,7 +45,6 @@ function stopPacs() {
         /opt/intelerad/bin/padmin PACS status
         echo -e "\e"
         echo -e "\e"
-        echo "stop service tasks completed."
     else
         echo "PACS services not found, exiting..."
     fi
@@ -73,7 +61,7 @@ function handleErr() {
 trap handleErr ERR
 
 function main() {
-    export -f stopPacs
-    su admin -c "bash -c stopPacs"
+    export -f checkPacs
+    su admin -c "bash -c checkPacs"
 }
 main
