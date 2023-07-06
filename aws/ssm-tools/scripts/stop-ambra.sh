@@ -72,12 +72,12 @@ function stopGrid() {
     v3s-apache_state=$(systemctl is-active v3s-apache)
     if [[$v3s-apache_status == "enabled" ]] && [[ $v3s-apache_state != "active" ]] 
     then
-            echo "Attempting to stop v3s-apache services..."
-            sudo systemctl stop v3s-apache
-            echo -e "\e"
-            echo -e "\e"
-            echo -e "v3s-apache status"
-            sudo systemctl status v3s-apache | head -n 7
+        echo "Attempting to stop v3s-apache services..."
+        sudo systemctl stop v3s-apache
+        echo -e "\e"
+        echo -e "\e"
+        echo -e "v3s-apache status"
+        sudo systemctl status v3s-apache | head -n 7
     fi
 
     #v3s-cron
@@ -85,12 +85,12 @@ function stopGrid() {
     v3s-cron_state=$(systemctl is-active v3s-cron)
     if [[$v3s-cron_status == "enabled" ]] && [[ $v3s-cron_state != "active" ]] 
     then
-            echo "Attempting to stop v3s-cron services..."
-            sudo systemctl stop v3s-cron
-            echo -e "\e"
-            echo -e "\e"
-            echo -e "v3s-cron status"
-            sudo systemctl status v3s-cron | head -n 7
+        echo "Attempting to stop v3s-cron services..."
+        sudo systemctl stop v3s-cron
+        echo -e "\e"
+        echo -e "\e"
+        echo -e "v3s-cron status"
+        sudo systemctl status v3s-cron | head -n 7
     fi
 
     #v3s-postgres
@@ -98,12 +98,12 @@ function stopGrid() {
     v3s-postgres_state=$(systemctl is-active v3s-postgres)
     if [[$v3s-postgres_status == "enabled" ]] && [[ $v3s-postgres_state != "active" ]] 
     then
-            echo "Attempting to stop v3s-postgres services..."
-            sudo systemctl stop v3s-postgres
-            echo -e "\e"
-            echo -e "\e"
-            echo -e "v3s-postgres status"
-            sudo systemctl status v3s-postgres | head -n 7
+        echo "Attempting to stop v3s-postgres services..."
+        sudo systemctl stop v3s-postgres
+        echo -e "\e"
+        echo -e "\e"
+        echo -e "v3s-postgres status"
+        sudo systemctl status v3s-postgres | head -n 7
     fi
 
     #v3s-redis
@@ -111,12 +111,12 @@ function stopGrid() {
     v3s-redis_state=$(systemctl is-active v3s-redis)
     if [[$v3s-redis_status == "enabled" ]] && [[ $v3s-redis_state != "active" ]] 
     then
-            echo "Attempting to stop v3s-redis services..."
-            sudo systemctl stop v3s-redis
-            echo -e "\e"
-            echo -e "\e"
-            echo -e "v3s-redis status"
-            sudo systemctl status v3s-redis | head -n 7
+        echo "Attempting to stop v3s-redis services..."
+        sudo systemctl stop v3s-redis
+        echo -e "\e"
+        echo -e "\e"
+        echo -e "v3s-redis status"
+        sudo systemctl status v3s-redis | head -n 7
     fi
 
     #watchdog-services
@@ -124,12 +124,12 @@ function stopGrid() {
     watchdog_state=$(systemctl is-active watchdog)
     if [[$watchdog_status == "enabled" ]] && [[ $watchdog_state != "active" ]] 
     then
-            echo "Attempting to stop watchdog services..."
-            sudo systemctl stop watchdog-services
-            echo -e "\e"
-            echo -e "\e"
-            echo -e "watchdog status"
-            sudo systemctl status watchdog-services | head -n 7
+        echo "Attempting to stop watchdog services..."
+        sudo systemctl stop watchdog-services
+        echo -e "\e"
+        echo -e "\e"
+        echo -e "watchdog status"
+        sudo systemctl status watchdog-services | head -n 7
     fi 
 }
 
