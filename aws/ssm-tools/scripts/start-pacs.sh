@@ -13,7 +13,7 @@ function startPacs() {
         echo "Attempting to start Tomcat..."
         /opt/intelerad/bin/padmin controlTomcat -t start > /dev/null 2>&1
         echo "Attempting to start IntelePACS services..."
-        /opt/intelerad/bin/padmin PACS start
+        /opt/intelerad/bin/padmin PACS start > /dev/null 2>&1
         
         echo -e "\e"
         echo -e "\e"
