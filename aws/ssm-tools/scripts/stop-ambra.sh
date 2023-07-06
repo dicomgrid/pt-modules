@@ -42,6 +42,7 @@ function stopGrid() {
     if [[ -e $(ls /etc/systemd/system/multi-user.target.wants/openresty.service) ]] 
     then
             echo "Attempting to stop openresty..."
+            sudo systemctl enable openresty
             sudo systemctl stop openresty
             echo -e "\e"
             echo -e "\e"
@@ -53,6 +54,7 @@ function stopGrid() {
     if [[ -e $(ls /etc/systemd/system/v3s-redis.service) ]] 
     then
             echo "Attempting to stop v3s-redis..."
+            sudo systemctl enable v3s-redis
             sudo systemctl stop v3s-redis
             echo -e "\e"
             echo -e "\e"
@@ -64,6 +66,7 @@ function stopGrid() {
     if [[ -e $(ls /etc/systemd/system/transcoding*) ]] 
     then
             echo "Attempting to stop transcoding services..."
+            sudo systemctl enable transcoding*
             sudo systemctl stop transcoding*
             echo -e "\e"
             echo -e "\e"
@@ -86,6 +89,7 @@ function stopGrid() {
     if [[ -e $(ls /etc/systemd/system/multi-user.target.wants/watchdog-services.service) ]] 
     then
             echo "Attempting to stop watchdog services..."
+            sudo systemctl enable watchdog-services
             sudo systemctl stop watchdog-services
             echo -e "\e"
             echo -e "\e"
