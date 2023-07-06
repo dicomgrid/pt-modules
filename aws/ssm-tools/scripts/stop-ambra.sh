@@ -51,7 +51,7 @@ function stopGrid() {
         echo -e "\e"
         echo -e "\e"
         echo -e "openresty status"
-        sudo systemctl status openresty
+        sudo systemctl status openresty | head -n 7
     fi
 
     #transcoding*
@@ -64,7 +64,7 @@ function stopGrid() {
         echo -e "\e"
         echo -e "\e"
         echo -e "transcoding status"
-        sudo systemctl status transcoding*
+        sudo systemctl status transcoding* | head -n 7
     fi
 
     #v3s-apache
@@ -77,7 +77,7 @@ function stopGrid() {
             echo -e "\e"
             echo -e "\e"
             echo -e "v3s-apache status"
-            sudo systemctl status v3s-apache
+            sudo systemctl status v3s-apache | head -n 7
     fi
 
     #v3s-cron
@@ -90,7 +90,7 @@ function stopGrid() {
             echo -e "\e"
             echo -e "\e"
             echo -e "v3s-cron status"
-            sudo systemctl status v3s-cron
+            sudo systemctl status v3s-cron | head -n 7
     fi
 
     #v3s-postgres
@@ -103,7 +103,7 @@ function stopGrid() {
             echo -e "\e"
             echo -e "\e"
             echo -e "v3s-postgres status"
-            sudo systemctl status v3s-postgres
+            sudo systemctl status v3s-postgres | head -n 7
     fi
 
     #v3s-redis
@@ -116,7 +116,7 @@ function stopGrid() {
             echo -e "\e"
             echo -e "\e"
             echo -e "v3s-redis status"
-            sudo systemctl status v3s-redis
+            sudo systemctl status v3s-redis | head -n 7
     fi
 
     #watchdog-services
@@ -129,8 +129,8 @@ function stopGrid() {
             echo -e "\e"
             echo -e "\e"
             echo -e "watchdog status"
-            sudo systemctl status watchdog-services
-    fi
+            sudo systemctl status watchdog-services | head -n 7
+    fi 
 }
 
 function handleErr() {
