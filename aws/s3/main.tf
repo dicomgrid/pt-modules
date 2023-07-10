@@ -145,7 +145,7 @@ resource "aws_s3_bucket_logging" "main" {
 
 #Object Lock
 resource "aws_s3_bucket_object_lock_configuration" "main" {
-  count = var.object_lock_enabled == true ? 1 : 0
+  count = var.object_lock_enabled ? 1 : 0
   bucket = aws_s3_bucket.main.id
   dynamic "rule" {
     for_each = var.object_lock_period
