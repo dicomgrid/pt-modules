@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "cross_account_privatecloud_dr_imsuat" {
+data "aws_iam_policy_document" "cross_account_privatecloud_dr_strad" {
   statement {
     sid    = "s3WriteOnceReadMany"
     effect = "Allow"
