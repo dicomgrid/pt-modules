@@ -1,7 +1,6 @@
 locals {
   lifecycle_rules = var.lifecycle_rules
   object_lock_period = var.object_lock_period
-  bucket_policy = var.bucket_policy
 }
 
 variable "acl" { default = "private" }
