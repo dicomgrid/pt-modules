@@ -5,6 +5,8 @@ locals {
 
 variable "acl" { default = "private" }
 variable "bucket_key_enabled" { default = true }
+variable "bucket_policy_enabled" { default = false }
+variable "bucket_policy" { default = "" }
 variable "directories" { default = {} }
 variable "kms_cmk_alias" { default = null }
 variable "lifecycle_rules" { default = {} }

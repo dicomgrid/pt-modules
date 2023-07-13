@@ -135,6 +135,12 @@ resource "aws_s3_bucket_lifecycle_configuration" "log_bucket" {
   }
 }
 
+resource "aws_s3_bucket_policy" "main" {
+  count  = var.bucket_policy_enabled ? 1 : 0
+  bucket = aws_s3_bucket.main.id
+  policy = var.bucket_policy
+}
+
 resource "aws_s3_bucket_logging" "main" {
   count  = var.logging_enabled ? 1 : 0
   bucket = aws_s3_bucket.main.id
