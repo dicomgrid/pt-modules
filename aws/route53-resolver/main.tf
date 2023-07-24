@@ -1,3 +1,20 @@
+module "endpoint_info" {
+  source = "../common/vpc-subnet-id-per-az-lookup"
+
+  subnets_filter = var.subnets_filter
+  vpc_name       = var.vpc_name
+}
+
+module "security_group" {
+  source = "../security-group"
+
+  description = try(var.security_group.description, null)
+  vpc_name    = var.vpc_name
+  ingress     = var.security_group.ingress
+  egress      = try(var.security_group.egress, var.egress_default)
+  tags        = merge(var.tags, try(var.security_group.tags, {}), { Name = "${var.endpoint_name}-sg" })
+}
+
 resource "aws_route53_resolver_endpoint" "outbound" {
   count     = var.direction == "OUTBOUND" ? 1 : 0
   name      = var.endpoint_name
