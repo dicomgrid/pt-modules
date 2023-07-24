@@ -18,7 +18,6 @@ variable "egress_default" {
 }
 variable "security_group" {}
 variable "subnets_filter" { default = "*" }
-variable "tags" {}
 variable "vpc_name" {}
 
 # Tags
