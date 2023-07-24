@@ -5,6 +5,21 @@ variable "security_group_ids" {}
 variable "subnet_ids" {}
 variable "vpc_id" {}
 
+variable "egress_default" {
+  default = [
+    {
+      description = "All traffic"
+      from_port   = "0"
+      to_port     = "0"
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+}
+variable "security_group" {}
+variable "subnets_filter" { default = "*" }
+variable "tags" {}
+variable "vpc_name" {}
 
 # Tags
 locals {
