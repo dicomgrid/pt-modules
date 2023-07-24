@@ -15,7 +15,7 @@ resource "aws_route53_resolver_endpoint" "outbound" {
 }
 
 module "rules" {
-  source               = "./rules"
+  source               = "../rules"
   for_each             = var.rules
   dns_server_ips       = each.value.dns_server_ips
   domain_name          = each.value.domain_name
