@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "main" {
       actions       = try(statement.value.actions, [])
       not_actions   = try(statement.value.not_actions, [])
       resources     = try(statement.value.resources, [])
-      not_resources = try(statement.value.resources, [])
+      not_resources = try(statement.value.not_resources, [])
       dynamic "condition" {
         for_each = try(statement.value.condition, {})
         content {
