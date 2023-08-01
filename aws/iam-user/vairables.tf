@@ -1,7 +1,9 @@
 variable "aws_policies" { default = [] }
+variable "create_access_key" { default = false }
 variable "groups" { default = [] }
 variable "inline_policy" { default = null }
 variable "path" { default = null }
+variable "pgp_public_key" { default = null }
 variable "service_account" { default = false }
 variable "service_account_map" {
   type = map(any)
@@ -10,7 +12,6 @@ variable "service_account_map" {
     false = true
   }
 }
-
 # Tags
 locals {
   default_tags = {

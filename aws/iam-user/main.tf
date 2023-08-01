@@ -23,3 +23,9 @@ resource "aws_iam_user_group_membership" "main" {
   user   = aws_iam_user.main.name
   groups = var.groups
 }
+
+resource "aws_iam_access_key" "main" {
+  count = var.create_access_key && var.pgp_public_key != null ? 1 : 0
+  user    = aws_iam_user.main.name
+  pgp_key = var.pgp_public_key
+}
