@@ -1,13 +1,16 @@
 locals {
   lifecycle_rules = var.lifecycle_rules
   object_lock_period = var.object_lock_period
+  acl = var.access_control_policy == null ? var.acl : null
 }
 
 variable "acl" { default = "private" }
+variable "access_control_policy" { default = null }
 variable "bucket_key_enabled" { default = true }
 variable "bucket_policy_enabled" { default = false }
 variable "bucket_policy" { default = "" }
 variable "directories" { default = {} }
+variable "expected_bucket_owner" { default = null }
 variable "kms_cmk_alias" { default = null }
 variable "lifecycle_rules" { default = {} }
 variable "object_lock_enabled" { default = false }
