@@ -13,8 +13,31 @@ resource "aws_s3_bucket_ownership_controls" "main" {
 }
 
 resource "aws_s3_bucket_acl" "main" {
-  bucket = aws_s3_bucket_ownership_controls.main.id
-  acl    = var.acl
+  bucket = aws_s3_bucket.main.id
+  expected_bucket_owner = try (var.expected_bucket_owner, null)
+  acl    = local.acl
+
+  dynamic access_control_policy {
+    for_each = var.access_control_policy == null ? [] : [var.access_control_policy]
+    content {
+      dynamic "grant" {
+        for_each = access_control_policy.value.grants
+        content {
+            grantee {
+              email_address = try(grant.value.email_address, null)
+              id   = try(grant.value.id, null)
+              type = grant.value.type
+              uri = try(grant.value.uri, null)
+            }
+            permission = grant.value.permission
+        }
+      }
+      owner {
+        id = try(access_control_policy.value.owner_id, data.aws_canonical_user_id.main.id)
+        display_name = try(access_control_policy.value.owner_display_name, null)
+      }
+    }
+  }
 }
 
 # Objects (Directories)
