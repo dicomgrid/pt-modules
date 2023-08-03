@@ -114,7 +114,7 @@ function stopV3sApache() {
     fi 
 }
 
-function stopV3sCron() {
+function stopV3sCron() { 
     if [[ -f /etc/systemd/system/v3s-cron.service ]]
     then
         v3s-cron_status=$(systemctl is-enabled v3s-cron)
@@ -123,6 +123,8 @@ function stopV3sCron() {
         then
             echo "Attempting to stop v3s-cron services..."
             sudo systemctl stop v3s-cron
+            #TODO: Stop first, wait 15 mins before apache
+            sleep 600
         fi
         echo -e "\e"
         echo -e "v3s-cron status"
@@ -201,15 +203,15 @@ function handleErr() {
 trap handleErr ERR
 
 function main() {
+    stopV3sCron
     stopDga
     stopGrid
     stopHaproxy
     stopOpenresty
     stopTranscoding
     stopV3sApache
-    stopV3sCron
-    stopV3sPostgres
     stopV3sRedis
     stopWatchdog
+    stopV3sPostgres
 }
 main
