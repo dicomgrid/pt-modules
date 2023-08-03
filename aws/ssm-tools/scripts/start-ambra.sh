@@ -281,15 +281,15 @@ function handleErr() {
 trap handleErr ERR
 
 function main() {
-    startDga
-    startGrid
-    startHaproxy
-    startOpenresty
+    startV3sPostgres
+    startWatchdog
+    startV3sRedis
     startTranscoding
     startV3sApache
+    startOpenresty
+    startHaproxy
+    startGrid
+    startDga
     startV3sCron
-    startV3sPostgres
-    startV3sRedis
-    startWatchdog
 }
 main
