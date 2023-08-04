@@ -13,12 +13,10 @@ resource "aws_ec2_transit_gateway_vpc_attachment_accepter" "main" {
   provider = aws.first
 
   transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.main.id
-
 }
 
-
 module "subnet_routes" {
-  source   = "../subnet-routes"
+  source = "../subnet-routes"
   providers = {
     aws = aws.second
   }
@@ -29,6 +27,6 @@ module "subnet_routes" {
   rtb_id                  = each.key
   vpc_id                  = var.vpc_id
   tgw_id                  = var.tgw_id
-  
+
   depends_on = [aws_ec2_transit_gateway_vpc_attachment_accepter.main]
 }
