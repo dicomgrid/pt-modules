@@ -6,6 +6,10 @@ data "aws_subnets" "main" {
     name   = "vpc-id"
     values = [var.vpc_id]
   }
+
+  tags = {
+    Name = var.subnets_filter
+  }
 }
 
 #piping returned subnets for az info
