@@ -62,11 +62,6 @@ function stopPacs() {
     fi
 }
 
-function main() {
-    su admin -c "bash -c stopPacs"
-}
-
-export -f stopPacs
 export REPOS="--disablerepo=* --enablerepo=centos7-x86_64 --enablerepo=epel --enablerepo=base --enablerepo=updates"
 export SKIP="--exclude=pacemaker* --exclude=corosync*"
 sudo yum --disableplugin=rhnplugin  update ca-certificates -y
@@ -77,7 +72,8 @@ export REBOOT=$(needs-restarting -r | grep required)
 if [[ $REBOOT ]]
 then
         echo "Rebooting now..."
-        main
+        export -f stopPacs
+        su admin -c "bash -c stopPacs"
         exit 194
 else
         echo "Exiting..."
