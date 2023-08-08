@@ -1,6 +1,6 @@
 # getting list of all subnet ids based on vpc
 data "aws_subnets" "main" {
-  provider = aws.second
+  provider = aws.requester
 
   filter {
     name   = "vpc-id"
@@ -14,14 +14,14 @@ data "aws_subnets" "main" {
 
 #piping returned subnets for az info
 data "aws_subnet" "main" {
-  provider = aws.second
+  provider = aws.requester
   for_each = toset(data.aws_subnets.main.ids)
 
   id = each.value
 }
 
 data "aws_route_tables" "main" {
-  provider = aws.second
+  provider = aws.requester
 
   vpc_id = var.vpc_id
 }
