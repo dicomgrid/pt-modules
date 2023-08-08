@@ -1,0 +1,21 @@
+formatter: markdown table
+
+sections:
+  hide-all: true
+  show:
+  - inputs
+  - outputs
+  - requirements
+  - resources
+  - data-sources
+  - modules
+
+sort:
+  enabled: true
+  by: required
+settings:
+  indent: 3
+
+working-dir: aws/*
+output-file: README.md
+output-method: inject
