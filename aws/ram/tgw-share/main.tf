@@ -1,9 +1,7 @@
 resource "aws_ram_resource_share" "main" {
   name = var.resource_share_name
 
-  tags = {
-    Name = var.resource_share_name
-  }
+  tags = merge(local.tags, { Name = var.resource_share_name })
 }
 
 # Share the transit gateway...
