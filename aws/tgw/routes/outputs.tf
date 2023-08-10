@@ -1,3 +1,3 @@
-output "id" {
-  value = aws_ec2_transit_gateway_route.main.id
+output "routes" {
+  value = aws_ec2_transit_gateway_route.main
 }
