@@ -1,14 +1,6 @@
-# variable "accepter_account_id" { default = null }
-# variable "accepter_region" {}
-variable "subnets_tag_name" {
-  default     = "*"
-  description = "Addtional filter option for subnets to use with VPC attachment"
-}
-variable "tgw_id" {}
-# variable "accepter_transit_gateway" {}
-# variable "requester_routes" { default = [] }
-variable "vpc_id" {}
-# variable "requester_transit_gateway" {}
+variable "routes" {}
+variable "transit_gateway_id" {}
+variable "transit_gateway_attachment_id" {}
 
 # Tags
 locals {
@@ -21,8 +13,8 @@ locals {
   }
   tags = merge(local.default_tags, var.tags)
 }
-
 variable "tags" {}
+
 variable "aws_project_id" { default = "null" }
 variable "code_managed" { default = "true" }
 variable "compliance" { default = "null" }
