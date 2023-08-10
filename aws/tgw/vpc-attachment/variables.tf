@@ -1,7 +1,7 @@
 # variable "accepter_account_id" { default = null }
 # variable "accepter_region" {}
-variable "subnets_tag_name" { 
-  default = "*"
+variable "subnets_tag_name" {
+  default     = "*"
   description = "Addtional filter option for subnets to use with VPC attachment"
 }
 variable "tgw_id" {}
