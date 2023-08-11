@@ -1,7 +1,3 @@
-data "aws_ec2_transit_gateway" "main" {
-  id = var.transit_gateway_id
-}
-
 resource "aws_ec2_transit_gateway_route" "main" {
   for_each = toset(var.routes)
 

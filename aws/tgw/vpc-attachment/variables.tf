@@ -1,14 +1,19 @@
-# variable "accepter_account_id" { default = null }
-# variable "accepter_region" {}
-variable "subnets_tag_name" {
+locals {
+  # Create map of AZs to subnet IDs
+  az_subnets = {
+    for s in data.aws_subnet.main : s.availability_zone => s.id...
+  }
+}
+
+variable "tgw_routes" { default = [] }
+variable "vpc_routes" { default = [] }
+variable "subnets_tags_filter" {
   default     = "*"
   description = "Addtional filter option for subnets to use with VPC attachment"
 }
+
 variable "tgw_id" {}
-# variable "accepter_transit_gateway" {}
-# variable "requester_routes" { default = [] }
 variable "vpc_id" {}
-# variable "requester_transit_gateway" {}
 
 # Tags
 locals {
