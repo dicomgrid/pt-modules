@@ -1,5 +1,5 @@
 locals {
-  route_sets = merge([for i in data.aws_route_tables.main.ids : { for v in var.routes : "${i}-${v}" => { route_table_id = i, destination_cidr_block = v } }]...)
+  route_sets = merge([for id in data.aws_route_tables.main.ids : { for route in var.routes : "${id}-${route}" => { route_table_id = id, destination_cidr_block = route } }]...)
 }
 
 variable "routes" {}
