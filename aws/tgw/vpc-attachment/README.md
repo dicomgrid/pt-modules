@@ -14,7 +14,10 @@
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_tgw_routes"></a> [tgw\_routes](#module\_tgw\_routes) | ../routes | n/a |
+| <a name="module_vpc_routes"></a> [vpc\_routes](#module\_vpc\_routes) | ../vpc-routes | n/a |
 
 ## Resources
 
@@ -33,10 +36,12 @@ No modules.
 | <a name="input_compliance"></a> [compliance](#input\_compliance) | n/a | `string` | `"null"` | no |
 | <a name="input_map_migrated"></a> [map\_migrated](#input\_map\_migrated) | n/a | `string` | `"null"` | no |
 | <a name="input_onetime"></a> [onetime](#input\_onetime) | n/a | `string` | `"null"` | no |
-| <a name="input_subnets_tag_name"></a> [subnets\_tag\_name](#input\_subnets\_tag\_name) | Addtional filter option for subnets to use with VPC attachment | `string` | `"*"` | no |
+| <a name="input_subnets_tags_filter"></a> [subnets\_tags\_filter](#input\_subnets\_tags\_filter) | Addtional filter option for subnets to use with VPC attachment | `string` | `"*"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | n/a | `any` | n/a | yes |
 | <a name="input_tgw_id"></a> [tgw\_id](#input\_tgw\_id) | n/a | `any` | n/a | yes |
-| <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | variable "accepter\_transit\_gateway" {} variable "requester\_routes" { default = [] } | `any` | n/a | yes |
+| <a name="input_tgw_routes"></a> [tgw\_routes](#input\_tgw\_routes) | n/a | `list` | `[]` | no |
+| <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | n/a | `any` | n/a | yes |
+| <a name="input_vpc_routes"></a> [vpc\_routes](#input\_vpc\_routes) | n/a | `list` | `[]` | no |
 
 ## Outputs
 
@@ -45,4 +50,5 @@ No modules.
 | <a name="output_id"></a> [id](#output\_id) | n/a |
 | <a name="output_tags_all"></a> [tags\_all](#output\_tags\_all) | n/a |
 | <a name="output_vpc_owner_id"></a> [vpc\_owner\_id](#output\_vpc\_owner\_id) | n/a |
+| <a name="output_vpc_routes"></a> [vpc\_routes](#output\_vpc\_routes) | n/a |
 <!-- END_TF_DOCS -->
