@@ -28,8 +28,9 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_routes"></a> [routes](#input\_routes) | n/a | `any` | n/a | yes |
-| <a name="input_transit_gateway_attachment_id"></a> [transit\_gateway\_attachment\_id](#input\_transit\_gateway\_attachment\_id) | n/a | `any` | n/a | yes |
-| <a name="input_transit_gateway_id"></a> [transit\_gateway\_id](#input\_transit\_gateway\_id) | n/a | `any` | n/a | yes |
+| <a name="input_tgw_attachment_id"></a> [tgw\_attachment\_id](#input\_tgw\_attachment\_id) | n/a | `any` | n/a | yes |
+| <a name="input_tgw_id"></a> [tgw\_id](#input\_tgw\_id) | n/a | `any` | n/a | yes |
+| <a name="input_tgw_rtb_id"></a> [tgw\_rtb\_id](#input\_tgw\_rtb\_id) | n/a | `any` | `null` | no |
 
 ## Outputs
 
