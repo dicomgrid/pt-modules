@@ -12,9 +12,12 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
 module "tgw_routes" {
   source = "../routes"
 
-  routes                        = var.tgw_routes
-  transit_gateway_id            = var.tgw_id
-  transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.main.id
+  for_each = var.tgw_routes
+
+  routes            = each.value.routes
+  tgw_id            = var.tgw_id
+  tgw_attachment_id = aws_ec2_transit_gateway_vpc_attachment.main.id
+  tgw_rtb_id        = try(each.value.tgw_rtb_id, null)
 }
 
 # Create routes if any are needed to route traffic back to the transit gateway

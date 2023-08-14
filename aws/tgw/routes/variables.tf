@@ -1,3 +1,4 @@
 variable "routes" {}
-variable "transit_gateway_id" {}
-variable "transit_gateway_attachment_id" {}
+variable "tgw_id" {}
+variable "tgw_attachment_id" {}
+variable "tgw_rtb_id" { default = null }
