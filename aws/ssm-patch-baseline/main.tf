@@ -13,7 +13,7 @@ resource "aws_ssm_patch_baseline" "ssm-patch-baseline" {
   dynamic "approval_rule" {
     for_each = var.compliance_levels
     content {
-      approve_after_days = var.approval_days
+      approve_after_days = var.approve_after_days
       approve_until_date = var.approve_until_date
       enable_non_security = try(var.enable_non_security, true)
       compliance_level = approval_rule.value.compliance_level

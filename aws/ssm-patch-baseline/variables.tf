@@ -1,6 +1,6 @@
-variable "approval_days" { default = 7 }
+variable "approve_after_days" { default = 7 }
 variable "approved_patches" { default = null }
-variable "approval_until_date" { default = null }
+variable "approve_until_date" { default = null }
 variable "description" { default = "null" }
 variable "enable_non_security" { default = true }
 variable "name" { default = "null" }
