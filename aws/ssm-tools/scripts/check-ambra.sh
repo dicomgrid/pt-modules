@@ -152,7 +152,7 @@ function checkWatchdog() {
         then
             echo -e "\e"
             echo -e "watchdog status"
-            sudo systemctl status watchdog
+            sudo systemctl status watchdog-services
             echo -e "\e"
         fi
     else
