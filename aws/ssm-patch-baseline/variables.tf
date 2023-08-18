@@ -1,11 +1,12 @@
-variable "name" {default = "null"}
-variable "patch_classifications" {default = ["Security", "Bugfix", "Recommended"]}
-variable "description" { default = "null" }
-variable "rejected_patches" { default = null }
-variable "approved_patches" { default = null }
-variable "operating_system" { default = "null" }
 variable "approval_days" { default = 7 }
-variable "enable_non_security" {default = true}
+variable "approved_patches" { default = null }
+variable "approval_until_date" { default = null }
+variable "description" { default = "null" }
+variable "enable_non_security" { default = true }
+variable "name" { default = "null" }
+variable "operating_system" { default = "null" }
+variable "patch_classifications" { default = ["Security", "Bugfix", "Recommended"] }
+variable "rejected_patches" { default = null }
 variable "compliance_levels" {
   type = list(object({
     
