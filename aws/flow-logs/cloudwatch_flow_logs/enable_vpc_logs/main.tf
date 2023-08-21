@@ -7,7 +7,7 @@ locals {
 resource "aws_flow_log" "enable_vpc_logs" {
   for_each = { for vpc_id in data.aws_vpcs.selected_vpcs.ids : vpc_id => vpc_id }
 
-  iam_role_arn         = var.iam_role_name
+  iam_role_arn         = data.aws_iam_role.existing_role
   log_destination_type = var.log_destination_type
   log_destination      = var.log_destination
   traffic_type         = var.traffic_type

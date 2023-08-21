@@ -1,10 +1,15 @@
 
 
-resource "aws_cloudwatch_log_group" "log_group" {
-
-  name              = var.log_destination
+locals {
+  log_destination   = var.log_destination
   retention_in_days = var.retention_in_days
   tags              = var.tags
+}
+
+resource "aws_cloudwatch_log_group" "log_group" {
+  name              = local.log_destination
+  retention_in_days = local.retention_in_days
+  tags              = local.tags
 }
 resource "aws_cloudwatch_log_stream" "log_name" {
   name           = aws_cloudwatch_log_group.log_group.name
@@ -13,8 +18,8 @@ resource "aws_cloudwatch_log_stream" "log_name" {
 
 
 module "enable_eni_logs" {
-  source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_eni_logs?ref=v1.0.0"
-  for_each                 = var.enable_eni_logs ? { enable_eni_logs = true } : {}
+  source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_eni_logs?ref=1339x2"
+  for_each                 = var.enable_eni_logs ? 1 : 0
   iam_role_name            = data.aws_iam_role.existing_role.arn
   log_destination_type     = var.log_destination_type
   log_destination          = aws_cloudwatch_log_group.log_group
@@ -27,7 +32,7 @@ module "enable_eni_logs" {
 module "enable_vpc_logs" {
   source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_vpc_logs?ref=PLT-1339x2"
   count                    = var.enable_vpc_logs ? 1 : 0
-  iam_role_name            = data.aws_iam_role.existing_role.arn
+  iam_role_name            = data.aws_iam_role.existing_role
   log_destination_type     = var.log_destination_type
   log_destination          = aws_cloudwatch_log_group.log_group
   traffic_type             = var.traffic_type
@@ -44,7 +49,7 @@ module "enable_subnet_logs" {
   source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_subnet_logs?ref=PLT-1339x2"
   count  = var.enable_subnet_logs ? 1 : 0
 
-  iam_role_arn             = data.aws_iam_role.existing_role.arn
+  iam_role_arn             = data.aws_iam_role.existing_role
   log_destination_type     = var.log_destination_type
   log_destination          = aws_cloudwatch_log_group.log_group
   traffic_type             = var.traffic_type
