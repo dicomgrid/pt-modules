@@ -3,7 +3,7 @@
 locals {
   log_destination   = var.log_destination
   retention_in_days = var.retention_in_days
-  tags = var.tags
+  tags              = var.tags
 }
 
 resource "aws_cloudwatch_log_group" "log_group" {
@@ -18,10 +18,10 @@ resource "aws_cloudwatch_log_stream" "log_name" {
 
 module "enable_eni_logs" {
   source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_eni_logs?ref=PLT-1339x2"
-  count               = var.enable_eni_logs ? 1 : 0
+  count                    = var.enable_eni_logs ? 1 : 0
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
-  log_destination          = aws_cloudwatch_log_group.log_group
+  log_destination          = aws_cloudwatch_log_group.log_group.arn
   traffic_type             = var.traffic_type
   vpc_id                   = var.vpc_id
   max_aggregation_interval = var.max_aggregation_interval
@@ -33,7 +33,7 @@ module "enable_vpc_logs" {
   count                    = var.enable_vpc_logs ? 1 : 0
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
-  log_destination          = aws_cloudwatch_log_group.log_group
+  log_destination          = aws_cloudwatch_log_group.log_group.arn
   traffic_type             = var.traffic_type
   vpc_id                   = var.vpc_id
   enable_vpc_logs          = var.enable_vpc_logs
@@ -50,7 +50,7 @@ module "enable_subnet_logs" {
 
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
-  log_destination          = aws_cloudwatch_log_group.log_group
+  log_destination          = aws_cloudwatch_log_group.log_group.arn
   traffic_type             = var.traffic_type
   vpc_id                   = var.vpc_id
   subnets                  = data.aws_subnets.example.ids
@@ -64,12 +64,11 @@ module "enable_tgw_attachment_logs" {
   count  = var.enable_tgw_attachment_logs ? 1 : 0
 
 
-  iam_role_arn         = var.iam_role_arn
-  log_destination_type = var.log_destination_type
-  log_destination      = aws_cloudwatch_log_group.log_group
-  traffic_type         = var.traffic_type
-  vpc_id               = var.vpc_id
-
+  iam_role_arn             = var.iam_role_arn
+  log_destination_type     = var.log_destination_type
+  log_destination          = aws_cloudwatch_log_group.log_group.arn
+  traffic_type             = var.traffic_type
+  vpc_id                   = var.vpc_id
   max_aggregation_interval = var.max_aggregation_interval
   tags                     = var.tags
 }
