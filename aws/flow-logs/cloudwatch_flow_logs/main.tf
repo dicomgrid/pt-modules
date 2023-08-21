@@ -57,7 +57,7 @@ module "enable_subnet_logs" {
 }
 
 module "enable_tgw_attachment_logs" {
-  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_tgw_attachments_logs?ref=PLT-1339x2"
+  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_tgw_attachment_logs?ref=PLT-1339x2"
   count  = var.enable_tgw_attachment_logs ? 1 : 0
 
 
