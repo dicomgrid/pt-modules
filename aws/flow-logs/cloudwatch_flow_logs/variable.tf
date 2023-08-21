@@ -50,8 +50,6 @@ variable "enable_eni_logs" {
   type    = bool
   default = false
 }
-variable "iam_role_name" {}
-
 variable "enable_tgw_attachment_logs" {
   type    = bool
   default = false
