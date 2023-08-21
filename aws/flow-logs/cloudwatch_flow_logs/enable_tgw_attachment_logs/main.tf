@@ -9,7 +9,7 @@ locals {
 }
 resource "aws_flow_log" "enable_tgw_attachment_logs" {
   for_each                      = local.transit_gateways_in_vpc
-  iam_role_arn                  = var.iam_role_arn
+  iam_role_arn                  = var.iam_role_name
   transit_gateway_attachment_id = each.key
   log_destination_type          = var.log_destination_type
   log_destination               = var.log_destination
