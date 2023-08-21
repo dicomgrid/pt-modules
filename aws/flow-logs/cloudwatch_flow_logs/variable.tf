@@ -36,7 +36,7 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
-variable "iam_role_arn" {}
+variable "iam_role_name" {}
 
 variable "enable_subnet_logs" {
   type    = bool
