@@ -1,7 +1,7 @@
 
 
 
-variable "iam_role_name" {
+variable "iam_role_arn" {
   description = "IAM role ARN for CloudWatch logs"
 }
 
