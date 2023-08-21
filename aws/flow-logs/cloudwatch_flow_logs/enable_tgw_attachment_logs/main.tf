@@ -3,10 +3,6 @@ locals {
     for attachment in data.aws_ec2_transit_gateway_attachments.filtered.ids :
     attachment => attachment
   }
-
-  additional_tags = {
-    ObjectType = "subnet"
-  }
 }
 resource "aws_flow_log" "enable_tgw_attachment_logs" {
   for_each                      = local.transit_gateways_in_vpc
