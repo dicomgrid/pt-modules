@@ -13,11 +13,11 @@ resource "aws_cloudwatch_log_stream" "log_name" {
 
 
 module "enable_eni_logs" {
-  source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_eni_logs?ref=PLT-1339x2"
-  count                    = var.enable_eni_logs ? 1 : 0
-  iam_role_arn             = data.aws_iam_role.existing_role
+  source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_eni_logs?ref=v1.0.0"
+  for_each                 = var.enable_eni_logs ? { enable_eni_logs = true } : {}
+  iam_role_name            = data.aws_iam_role.existing_role.arn
   log_destination_type     = var.log_destination_type
-  log_destination          = aws_cloudwatch_log_group.log_name.arn
+  log_destination          = aws_cloudwatch_log_group.log_group
   traffic_type             = var.traffic_type
   vpc_id                   = var.vpc_id
   max_aggregation_interval = var.max_aggregation_interval
@@ -27,9 +27,9 @@ module "enable_eni_logs" {
 module "enable_vpc_logs" {
   source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_vpc_logs?ref=PLT-1339x2"
   count                    = var.enable_vpc_logs ? 1 : 0
-  iam_role_arn             = data.aws_iam_role.existing_role
+  iam_role_name            = data.aws_iam_role.existing_role.arn
   log_destination_type     = var.log_destination_type
-  log_destination          = aws_cloudwatch_log_group.log_name
+  log_destination          = aws_cloudwatch_log_group.log_group
   traffic_type             = var.traffic_type
   vpc_id                   = var.vpc_id
   enable_vpc_logs          = var.enable_vpc_logs
@@ -44,9 +44,9 @@ module "enable_subnet_logs" {
   source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_subnet_logs?ref=PLT-1339x2"
   count  = var.enable_subnet_logs ? 1 : 0
 
-  iam_role_arn             = data.aws_iam_role.existing_role
+  iam_role_arn             = data.aws_iam_role.existing_role.arn
   log_destination_type     = var.log_destination_type
-  log_destination          = aws_cloudwatch_log_group.log_group.arn
+  log_destination          = aws_cloudwatch_log_group.log_group
   traffic_type             = var.traffic_type
   vpc_id                   = var.vpc_id
   subnets                  = data.aws_subnets.example.ids
@@ -61,7 +61,7 @@ module "enable_tgw_attachment_logs" {
 
   iam_role_arn         = data.aws_iam_role.existing_role
   log_destination_type = var.log_destination_type
-  log_destination      = aws_cloudwatch_log_group.log_group.arn
+  log_destination      = aws_cloudwatch_log_group.log_group
   traffic_type         = var.traffic_type
   vpc_id               = var.vpc_id
 
