@@ -13,7 +13,7 @@ resource "aws_cloudwatch_log_stream" "log_name" {
 
 
 module "enable_eni_logs" {
-  source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/cloudwatch_flow_logs/enable_eni_logs?ref=PLT-1339x2"
+  source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_eni_logs?ref=PLT-1339x2"
   count                    = var.enable_eni_logs ? 1 : 0
   iam_role_arn             = data.aws_iam_role.existing_role.arn
   log_destination_type     = var.log_destination_type
@@ -27,7 +27,7 @@ module "enable_eni_logs" {
 
 
 module "enable_vpc_logs" {
-  source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/cloudwatch_flow_logs/enable_vpc_logs?ref=PLT-1339x2"
+  source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_vpc_logs?ref=PLT-1339x2"
   count                    = var.enable_vpc_logs ? 1 : 0
   iam_role_arn             = data.aws_iam_role.existing_role.arn
   log_destination_type     = var.log_destination_type
@@ -43,7 +43,7 @@ module "enable_vpc_logs" {
 # Attach IAM policy to the IAM role
 
 module "enable_subnet_logs" {
-  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/cloudwatch_flow_logs/enable_subnet_logs?ref=PLT-1339x2"
+  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_subnet_logs?ref=PLT-1339x2"
   count  = var.enable_subnet_logs ? 1 : 0
 
   iam_role_arn             = data.aws_iam_role.existing_role.arn
@@ -57,7 +57,7 @@ module "enable_subnet_logs" {
 }
 
 module "enable_tgw_attachment_logs" {
-  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/cloudwatch_flow_logs/enable_tgw_attachments_logs?ref=PLT-1339x2"
+  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_tgw_attachments_logs?ref=PLT-1339x2"
   count  = var.enable_tgw_attachment_logs ? 1 : 0
 
 
