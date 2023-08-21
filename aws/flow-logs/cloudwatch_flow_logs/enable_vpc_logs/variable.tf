@@ -10,6 +10,7 @@ variable "log_destination_type" {
 }
 
 variable "log_destination" {
+  type        = string
   description = "Log destination ARN"
 }
 

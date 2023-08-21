@@ -18,7 +18,7 @@ resource "aws_cloudwatch_log_stream" "log_name" {
 
 module "enable_eni_logs" {
   source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/flow-logs/cloudwatch_flow_logs/enable_eni_logs?ref=PLT-1339x2"
-  for_each                 = var.enable_eni_logs ? 1 : 0
+  count               = var.enable_eni_logs ? 1 : 0
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
   log_destination          = aws_cloudwatch_log_group.log_group

@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 
 data "aws_ec2_transit_gateway_attachments" "attachments" {
   filter {
