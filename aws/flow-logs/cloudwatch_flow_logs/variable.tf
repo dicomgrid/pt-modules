@@ -37,7 +37,7 @@ variable "tags" {
   default     = {}
 }
 
-variable "iam_role_arn"
+variable "iam_role_arn" {}
 variable "enable_subnet_logs" {
   type    = bool
   default = false
