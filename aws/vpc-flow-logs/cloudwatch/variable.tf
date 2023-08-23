@@ -6,7 +6,7 @@ variable "account_id" {
 variable "region" {
   description = "The region where the resources will be provisioned."
   type        = string
-  default     = "us-west-2"
+  default     = "us-east-2"
 }
 
 variable "vpc_id" {
