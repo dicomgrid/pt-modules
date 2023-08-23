@@ -72,7 +72,7 @@ module "enable-vpc-logs" {
   log_destination          = aws_cloudwatch_log_group.log_group.arn
   traffic_type             = var.traffic_type
   vpc_id                   = var.vpc_id
-  enable_vpcs              = var.enable-vpc-logs
+  enable-vpc-logs          = var.enable-vpc-logs
   max_aggregation_interval = var.max_aggregation_interval
   tags                     = var.tags
 }
