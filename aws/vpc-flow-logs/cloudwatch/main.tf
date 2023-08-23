@@ -1,69 +1,61 @@
 
 
-locals {
-  log_destination   = var.log_destination
+resource "aws_cloudwatch_log_group" "log_group" {
+  name              = var.log_destination
   retention_in_days = var.retention_in_days
   tags              = var.tags
 }
-
-resource "aws_cloudwatch_log_group" "log_group" {
-  name              = local.log_destination
-  retention_in_days = local.retention_in_days
-  tags              = local.tags
-}
-resource "aws_cloudwatch_log_stream" "log_name" {
+resource "aws_cloudwatch_log_stream" "log_stream" {
   name           = aws_cloudwatch_log_group.log_group.name
   log_group_name = aws_cloudwatch_log_group.log_group.name
 }
 
-module "enable_eni_logs" {
-  source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/vpc-flow-logs/cloudwatch/enable_eni_logs?ref=master"
-  count                    = var.enable_eni_logs ? 1 : 0
-  iam_role_arn             = var.iam_role_arn
-  log_destination_type     = var.log_destination_type
-  log_destination          = aws_cloudwatch_log_group.log_group.arn
-  traffic_type             = var.traffic_type
-  vpc_id                   = var.vpc_id
-  max_aggregation_interval = var.max_aggregation_interval
-
-  tags = var.tags
-}
-module "enable_vpc_logs" {
-  source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/vpc-flow-logs/cloudwatch/enable_vpc_logs?ref=master"
-  count                    = var.enable_vpc_logs ? 1 : 0
-  iam_role_arn             = var.iam_role_arn
-  log_destination_type     = var.log_destination_type
-  log_destination          = aws_cloudwatch_log_group.log_group.arn
-  traffic_type             = var.traffic_type
-  vpc_id                   = var.vpc_id
-  enable_vpc_logs          = var.enable_vpc_logs
-  max_aggregation_interval = var.max_aggregation_interval
-
-
-  tags = var.tags
-}
-# Attach IAM policy to the IAM role
-
-module "enable_subnet_logs" {
-  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/vpc-flow-logs/cloudwatch/enable_subnet_logs?ref=master"
-  count  = var.enable_subnet_logs ? 1 : 0
-
-  iam_role_arn             = var.iam_role_arn
-  log_destination_type     = var.log_destination_type
-  log_destination          = aws_cloudwatch_log_group.log_group.arn
-  traffic_type             = var.traffic_type
-  vpc_id                   = var.vpc_id
-  subnets                  = data.aws_subnets.example.ids
-  max_aggregation_interval = var.max_aggregation_interval
-  tags                     = var.tags
-
+data "aws_iam_role" "existing_role" {
+  name = var.role_name
 }
 
-module "enable_tgw_attachment_logs" {
-  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/vpc-flow-logs/cloudwatch/enable_tgw_attachment_logs?ref=master"
-  count  = var.enable_tgw_attachment_logs ? 1 : 0
+resource "aws_iam_role" "new_role" {
+  count = length(data.aws_iam_role.existing_role.*.arn) == 0 ? 1 : 0 
+  name = var.role_name
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid    = "",
+        Effect = "Allow",
+        Principal = {
+          Service = "vpc-flow-logs.amazonaws.com"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ],
+  })
+}
 
+resource "aws_iam_role_policy" "new_role_policy" {
+  count  = length(data.aws_iam_role.existing_role.*.arn) == 0 ? 1 : 0
+  role   = aws_iam_role.new_role[0].arn
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogGroups",
+          "logs:DescribeLogStreams"
+        ],
+        Effect   = "Allow",
+        Resource = "*"
+      }
+    ] # Correctly closing the Statement array
+  })
+}
 
+module "enable-eni-logs" {
+  source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/vpc-flow-logs/cloudwatch/enable-eni-logs?ref=master"
+  count                    = var.enable-eni-logs ? 1 : 0
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
   log_destination          = aws_cloudwatch_log_group.log_group.arn
@@ -72,3 +64,47 @@ module "enable_tgw_attachment_logs" {
   max_aggregation_interval = var.max_aggregation_interval
   tags                     = var.tags
 }
+module "enable-vpc-logs" {
+  source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/vpc-flow-logs/cloudwatch/enable-vpc-logs?ref=master"
+  count                    = var.enable-vpc-logs ? 1 : 0-
+  iam_role_arn             = var.iam_role_arn
+  log_destination_type     = var.log_destination_type
+  log_destination          = aws_cloudwatch_log_group.log_group.arn
+  traffic_type             = var.traffic_type
+  vpc_id                   = var.vpc_id
+  enable_vpcs              = var.enable-vpc-logs
+  max_aggregation_interval = var.max_aggregation_interval
+  tags                     = var.tags
+}
+
+module "enable-subnet-logs" {
+  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/vpc-flow-logs/cloudwatch/enable-subnet-logs?ref=master"
+  count  = var.enable-subnet-logs ? 1 : 0
+
+  iam_role_arn             = var.iam_role_arn
+  log_destination_type     = var.log_destination_type
+  log_destination          = aws_cloudwatch_log_group.log_group.arn
+  traffic_type             = var.traffic_type
+  vpc_id                   = var.vpc_id
+  subnets                  = data.aws_subnets.get_subnets.ids
+  max_aggregation_interval = var.max_aggregation_interval
+  tags                     = var.tags
+}
+
+module "enable-tgw-attachment-logs" {
+  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/vpc-flow-logs/cloudwatch/enable-tgw-attachment-logs?ref=master"
+  count  = var.enable-tgw-attachment-logs ? 1 : 0
+
+
+  iam_role_arn         = var.iam_role_arn
+  log_destination_type = var.log_destination_type
+  log_destination      = aws_cloudwatch_log_group.log_group.arn
+  traffic_type         = var.traffic_type
+  vpc_id               = var.vpc_id
+
+  max_aggregation_interval = var.max_aggregation_interval
+  tags                     = var.tags
+}
+
+
+
