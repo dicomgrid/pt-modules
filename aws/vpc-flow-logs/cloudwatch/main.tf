@@ -49,7 +49,7 @@ resource "aws_iam_role_policy" "new_role_policy" {
         Effect   = "Allow",
         Resource = "*"
       }
-    ] # Correctly closing the Statement array
+    ] 
   })
 }
 
