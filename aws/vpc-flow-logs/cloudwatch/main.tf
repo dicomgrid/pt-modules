@@ -66,7 +66,7 @@ module "enable-eni-logs" {
 }
 module "enable-vpc-logs" {
   source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/vpc-flow-logs/cloudwatch/enable-vpc-logs?ref=master"
-  count                    = var.enable-vpc-logs ? 1 : 0-
+  count                    = var.enable-vpc-logs ? 1 : 0
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
   log_destination          = aws_cloudwatch_log_group.log_group.arn
@@ -78,8 +78,8 @@ module "enable-vpc-logs" {
 }
 
 module "enable-subnet-logs" {
-  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/vpc-flow-logs/cloudwatch/enable-subnet-logs?ref=master"
-  count  = var.enable-subnet-logs ? 1 : 0
+  source                   = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/vpc-flow-logs/cloudwatch/enable-subnet-logs?ref=master"
+  count                    = var.enable-subnet-logs ? 1 : 0
 
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
@@ -92,8 +92,8 @@ module "enable-subnet-logs" {
 }
 
 module "enable-tgw-attachment-logs" {
-  source = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/vpc-flow-logs/cloudwatch/enable-tgw-attachment-logs?ref=master"
-  count  = var.enable-tgw-attachment-logs ? 1 : 0
+  source                = "git::ssh://git@github.com/dicomgrid/pt-modules.git//aws/vpc-flow-logs/cloudwatch/enable-tgw-attachment-logs?ref=master"
+  count                 = var.enable-tgw-attachment-logs ? 1 : 0
 
 
   iam_role_arn         = var.iam_role_arn
