@@ -8,14 +8,14 @@ data "aws_ec2_transit_gateway_attachments" "attachments" {
     values = [var.vpc_id]
   }
 }
-data "aws_subnets" "get_subnets" {
+data "aws_subnets" "example" {
   filter {
     name   = "vpc-id"
     values = [var.vpc_id]
   }
 }
 
-data "aws_subnet" "get_subnets" {
-  for_each = { for s in data.aws_subnets.get_subnets.ids : s => s }
+data "aws_subnet" "example" {
+  for_each = { for s in data.aws_subnets.example.ids : s => s }
   id       = each.value
 }
