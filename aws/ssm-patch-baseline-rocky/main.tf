@@ -1,3 +1,4 @@
+#TODO: verify not used and delete module
 resource "aws_ssm_patch_baseline" "pb-linux" {
   name             = var.name
   description      = var.description

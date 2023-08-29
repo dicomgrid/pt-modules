@@ -1,3 +1,4 @@
+#TODO: verify not used and delete module
 resource "aws_ssm_maintenance_window_task" "task_patch_reboot_hooks" {
   name             = var.patch_reboot_name
   window_id        = var.patch_reboot_window_id

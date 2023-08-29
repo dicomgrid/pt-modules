@@ -1,3 +1,4 @@
+#TODO: verify not used and delete module
 resource "aws_resourcegroups_group" "resource_group" {
   tags        = var.tags
   name        = var.name

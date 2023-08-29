@@ -1,3 +1,4 @@
+#TODO: verify not used and delete module
 resource "aws_ssm_patch_baseline" "centos-pb" {
   name             = var.name
   description      = var.description
