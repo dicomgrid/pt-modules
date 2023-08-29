@@ -14,11 +14,8 @@ variable "LogDeliveryEnabled" {
   type    = bool
   default = true
 }
-variable "log_source" {
-  type    = string
-  default = "vpc"
-}
-variable "codemanaged" {
+
+variable "CodeManaged" {
   type    = string
   default = "Terraform"
 
@@ -46,7 +43,7 @@ variable "enable-subnet-logs" {
 }
 variable "enable-vpc-logs" {
   type    = bool
-  default = false
+  default = true
 }
 variable "enable-eni-logs" {
   type    = bool
@@ -55,5 +52,5 @@ variable "enable-eni-logs" {
 
 variable "enable-tgw-attachment-logs" {
   type    = bool
-  default = false
+  default = true
 }
