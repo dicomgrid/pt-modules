@@ -15,7 +15,6 @@ resource "aws_cloudwatch_log_stream" "log_name" {
   log_group_name = aws_cloudwatch_log_group.log_group.name
 }
 
-
 module "enable-eni-logs" {
   source                   = "./enable-eni-logs"
   count                    = var.enable-eni-logs ? 1 : 0
@@ -40,12 +39,10 @@ module "enable-vpc-logs" {
   max_aggregation_interval = var.max_aggregation_interval
   tags = var.tags
 }
-# Attach IAM policy to the IAM role
-
 
 module "enable-subnet-logs" {
   source                   = "./enable-subnet-logs" 
-0
+  count                    = var.enable-subnet-logs ? 1 : 0
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
   log_destination          = aws_cloudwatch_log_group.log_group.arn
