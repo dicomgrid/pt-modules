@@ -40,7 +40,6 @@ variable "iam_role_arn" {
   type = string
 }
 
-
 variable "enable-subnet-logs" {
   type    = bool
   default = false
