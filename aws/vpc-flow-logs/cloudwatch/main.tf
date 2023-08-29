@@ -17,7 +17,7 @@ resource "aws_cloudwatch_log_stream" "log_name" {
 
 
 module "enable-eni-logs" {
-  source                   = "github.com/dicomgrid/pt-modules/aws/vpc-flow-logs/cloudwatch/enable-eni-logs"
+  source                   = "./enable-eni-logs"
   count                    = var.enable-eni-logs ? 1 : 0
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
@@ -29,7 +29,7 @@ module "enable-eni-logs" {
 }
 
 module "enable-vpc-logs" {
-  source                   = "github.com/dicomgrid/pt-modules/aws/vpc-flow-logs/cloudwatch/enable-vpc-logs"
+  source                   = "./enable-vpc-logs"
   count                    = var.enable-vpc-logs ? 1 : 0
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
@@ -44,8 +44,8 @@ module "enable-vpc-logs" {
 
 
 module "enable-subnet-logs" {
-  source                   = "github.com/dicomgrid/pt-modules/aws/vpc-flow-logs/cloudwatch/enable-subnet-logs" 
-  count                    = var.enable-subnet-logs ? 1 : 0
+  source                   = "./enable-subnet-logs" 
+0
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
   log_destination          = aws_cloudwatch_log_group.log_group.arn
@@ -56,8 +56,9 @@ module "enable-subnet-logs" {
   tags                     = var.tags
 }
 module "enable-tgw-attachment-logs" {
-  source                   = "github.com/dicomgrid/pt-modules/aws/vpc-flow-logs/cloudwatch/enable-tgw-attachment-logs"
   count                    = var.enable-tgw-attachment-logs ? 1 : 0
+  source                   = "./enable-tgw-attachment-logs"
+
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
   log_destination          = aws_cloudwatch_log_group.log_group.arn

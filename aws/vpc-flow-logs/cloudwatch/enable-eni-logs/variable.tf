@@ -25,7 +25,4 @@ variable "tags" {
 variable "max_aggregation_interval" {}
 
 
-variable "enable-eni-logs" {
-  type    = bool
-  default = false
-}
+
