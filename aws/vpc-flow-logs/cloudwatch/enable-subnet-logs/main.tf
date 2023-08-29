@@ -5,7 +5,11 @@ locals {
   }
 }
 
-resource "aws_flow_log" "enable_subnet_logs" {
+
+
+
+resource "aws_flow_log" "enable-subnet-logs" {
+
 
   for_each             = toset(var.subnets)
   subnet_id            = each.value

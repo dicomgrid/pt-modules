@@ -23,7 +23,6 @@ variable "tags" {
   type        = map(string)
 }
 variable "max_aggregation_interval" {}
-variable "enable_eni_logs" {
-  type    = bool
-  default = false
-}
+
+
+

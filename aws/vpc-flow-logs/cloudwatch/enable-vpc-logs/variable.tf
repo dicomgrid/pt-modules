@@ -23,6 +23,8 @@ variable "tags" {
   type        = map(string)
 }
 variable "max_aggregation_interval" {}
-variable "enable_vpc_logs" {}
+
+variable "enable-vpc-logs" {}
+
 variable "vpc_id" {
 }

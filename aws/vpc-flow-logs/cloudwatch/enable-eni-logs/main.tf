@@ -4,8 +4,8 @@ locals {
   }
 }
 
+resource "aws_flow_log" "enable-eni-logs" {
 
-resource "aws_flow_log" "enable_eni_logs" {
   for_each = { for eni in data.aws_network_interfaces.enis.ids : eni => eni }
 
   eni_id                   = each.key

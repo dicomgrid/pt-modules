@@ -4,7 +4,7 @@ locals {
   }
 }
 
-resource "aws_flow_log" "enable_vpc_logs" {
+resource "aws_flow_log" "enable-vpc-logs" {
   for_each = { for vpc_id in data.aws_vpcs.selected_vpcs.ids : vpc_id => vpc_id }
 
   iam_role_arn         = var.iam_role_arn
