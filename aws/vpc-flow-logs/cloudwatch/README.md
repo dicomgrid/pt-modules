@@ -2,7 +2,7 @@
 ### Requirements
 
 Use "enable" boolean variables to enable/disable that particular log source. ie to enable just flow logs for each ENI
-set: 
+set:
 
 enable-eni-logs = true
 
