@@ -48,7 +48,7 @@ module "enable-subnet-logs" {
   log_destination          = aws_cloudwatch_log_group.log_group.arn
   traffic_type             = var.traffic_type
   vpc_id                   = var.vpc_id
-  subnets                  = data.aws_subnets.example.ids
+  subnets                  = data.aws_subnets.get_subnets.ids
   max_aggregation_interval = var.max_aggregation_interval
   tags                     = var.tags
 }
