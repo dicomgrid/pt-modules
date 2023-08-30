@@ -1,3 +1,4 @@
+#TODO: verify not used and delete module
 resource "aws_ssm_maintenance_window_task" "task-win-evac" {
   name             = var.win_evac_name
   window_id        = var.win_evac_window_id
