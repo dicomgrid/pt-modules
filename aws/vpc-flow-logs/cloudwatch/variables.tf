@@ -10,16 +10,6 @@ variable "traffic_type" {}
 
 variable "max_aggregation_interval" {}
 
-variable "LogDeliveryEnabled" {
-  type    = bool
-  default = true
-}
-
-variable "CodeManaged" {
-  type    = string
-  default = "Terraform"
-
-}
 variable "retention_in_days" {
   type    = number
   default = 180
