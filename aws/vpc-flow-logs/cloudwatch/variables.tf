@@ -28,19 +28,15 @@ variable "iam_role_arn" {
 }
 
 variable "enable-subnet-logs" {
-  type    = bool
-  default = false
+
 }
 variable "enable-vpc-logs" {
-  type    = bool
-  default = true
+
 }
 variable "enable-eni-logs" {
-  type    = bool
-  default = false
+
 }
 
 variable "enable-tgw-attachment-logs" {
-  type    = bool
-  default = true
+
 }
