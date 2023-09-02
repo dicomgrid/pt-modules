@@ -1,7 +1,7 @@
 resource "aws_cloudwatch_log_group" "log_group_per_vpc" {
 for_each = toset(local.vpc_list)
 
-name              = "vpc-flow-logs-${each.value}"
+name              = "vpc-flow-logs-${each.value.vpc_id}"
 retention_in_days = var.retention_in_days
 
 

@@ -4,12 +4,12 @@ provider "aws" {
 
 module "cw_log_group" {
 source = ./cw-log-group
-for_each = toset(local.vpcs)
+for_each = toset(local.flowlogs)
+
 }
 
 module "enable-eni-logs" { 
-  source                   = ./enable-log-logs
- 
+  source                   = "./enable-log-logs"
   count                    = var.enable-vpc-logs ? 1 : 0
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
@@ -22,7 +22,7 @@ module "enable-eni-logs" {
 
 module "enable-subnet-logs" {
   count                    = var.enable-subnet-logs ? 1 : 0
-  source                   = ./enable-subnet-tags
+  source                   = "./enable-subnet-tags"
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
   log_destination          = aws_cloudwatch_log_group.log_group.arn
@@ -35,6 +35,7 @@ module "enable-subnet-logs" {
 
 module "enable-tgw-attachment-logs" {
   count                    = var.enable-tgw-attachment-logs ? 1 : 0
+  source                   = "./enable-tgw-attaechment-logs"
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
   log_destination          = aws_cloudwatch_log_group.log_group.arn
