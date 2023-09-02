@@ -1,6 +1,6 @@
 data "aws_iam_policy_document" "vpc-flow-role" {
   statement {
-    sid    = ""
+    sid    = "VPCFlowLogsPermissions"
     effect = "Allow"
     resources = ["*"]
     actions = [
@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "vpc-flow-role" {
     ]
   }
 }
+
 output "vpc-flow-role" {
   value = data.aws_iam_policy_document.vpc-flow-role.json
 }
-

@@ -15,7 +15,7 @@ resource "aws_cloudwatch_log_stream" "log_name" {
   log_group_name = aws_cloudwatch_log_group.log_group.name
 }
 
-module "enable-eni-logs" {
+module "enable-eni-logs" { 
   source                   = "./enable-eni-logs"
   count                    = var.enable-eni-logs ? 1 : 0
   iam_role_arn             = var.iam_role_arn
@@ -24,9 +24,8 @@ module "enable-eni-logs" {
   traffic_type             = var.traffic_type
   vpc_id                   = var.vpc_id
   max_aggregation_interval = var.max_aggregation_interval
-  tags = var.tags
+  tags                     = var.tags
 }
-
 module "enable-vpc-logs" {
   source                   = "./enable-vpc-logs"
   count                    = var.enable-vpc-logs ? 1 : 0
@@ -41,8 +40,8 @@ module "enable-vpc-logs" {
 }
 
 module "enable-subnet-logs" {
-  source                   = "./enable-subnet-logs" 
   count                    = var.enable-subnet-logs ? 1 : 0
+  source                   = "./enable-subnet-logs"
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
   log_destination          = aws_cloudwatch_log_group.log_group.arn
@@ -52,10 +51,10 @@ module "enable-subnet-logs" {
   max_aggregation_interval = var.max_aggregation_interval
   tags                     = var.tags
 }
+
 module "enable-tgw-attachment-logs" {
   count                    = var.enable-tgw-attachment-logs ? 1 : 0
   source                   = "./enable-tgw-attachment-logs"
-
   iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
   log_destination          = aws_cloudwatch_log_group.log_group.arn
@@ -63,4 +62,5 @@ module "enable-tgw-attachment-logs" {
   vpc_id                   = var.vpc_id
   max_aggregation_interval = var.max_aggregation_interval
   tags                     = var.tags
-}
+}     
+
