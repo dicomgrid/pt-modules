@@ -4,7 +4,7 @@ locals {
     attachment => attachment
   }
   additional_tags = {
-    ObjectType = "tgw"
+    ObjectType = "tgw_attachment"
   }
 }
 resource "aws_flow_log" "enable-tgw-attachment-logs" {
