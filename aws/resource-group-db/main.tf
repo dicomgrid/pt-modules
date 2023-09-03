@@ -1,4 +1,5 @@
-#TODO: verify not used and delete moduleresource "aws_resourcegroups_group" "resource_group" {
+#TODO: verify not used and delete module
+resource "aws_resourcegroups_group" "resource_group" {
   tags        = var.tags
   name        = var.name
   description = var.description
@@ -22,5 +23,7 @@
     ]
 }
 JSON
-}
+
+  }
+
 }
