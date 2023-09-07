@@ -1,4 +1,4 @@
-resource "aws_ssm_patch_baseline" "ssm-patch-baseline" {
+resource "aws_ssm_patch_baseline" "linux_pb" {
   name             = var.name
   description      = var.description
   operating_system = var.operating_system
