@@ -27,7 +27,7 @@ resource "aws_ssm_patch_baseline" "ssm-patch-baseline" {
     }
   }
     dynamic "source" {
-    for_each = var.source_repos
+    for_each = var.source_repos != null ? var.source_repos : []
 
     content {
       name = source.value.name
