@@ -1,7 +1,7 @@
-output "windows-pb-id" {
+output "id" {
   value = aws_ssm_patch_baseline.windows_pb.id
 }
 
-output "windows-pb-arn" {
+output "arn" {
   value = aws_ssm_patch_baseline.windows_pb.arn
 }

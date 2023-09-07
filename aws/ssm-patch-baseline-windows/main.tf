@@ -1,12 +1,10 @@
-#TODO: verify not used and delete module
 resource "aws_ssm_patch_baseline" "windows_pb" {
   name             = var.name
   description      = var.description
   operating_system = "WINDOWS"
-  approved_patches = var.windows_approved_patches
-  rejected_patches = var.windows_rejected_patches
+  approved_patches = try(var.approved_patches, false)
+  rejected_patches = try(var.rejected_patches, false)
 
-  #Default rule and classifications, tuned towards critical and security updates
   global_filter {
     key    = "PRODUCT"
     values = var.windows_patch_product
