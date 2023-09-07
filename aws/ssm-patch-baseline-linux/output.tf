@@ -1,7 +1,7 @@
-output "pb-linux-id" {
+output "id" {
   value = aws_ssm_patch_baseline.ssm-patch-baseline.id
 }
 
-output "pb-linux-arn" {
+output "arn" {
   value = aws_ssm_patch_baseline.ssm-patch-baseline.arn
 }
