@@ -1,7 +1,7 @@
 output "id" {
-  value = aws_ssm_patch_baseline.ssm-patch-baseline.id
+  value = aws_ssm_patch_baseline.linux_pb.id
 }
 
 output "arn" {
-  value = aws_ssm_patch_baseline.ssm-patch-baseline.arn
+  value = aws_ssm_patch_baseline.linux_pb.arn
 }
