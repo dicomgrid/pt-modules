@@ -41,14 +41,14 @@ data "aws_iam_policy_document" "this" {
 }
 
 resource "aws_iam_role" "this" {
-  count = var.create ? 1 : 0
+
 
   name        = var.name
   name_prefix = var.name_prefix
   path        = var.path
   description = var.description
 
-  assume_role_policy    = data.aws_iam_policy_document.this[0].json
+  assume_role_policy    = data.aws_iam_policy_document.this.json
   max_session_duration  = var.max_session_duration
   force_detach_policies = var.force_detach_policies
 
@@ -56,8 +56,8 @@ resource "aws_iam_role" "this" {
 }
 
 resource "aws_iam_role_policy_attachment" "this" {
-  for_each = { for k, v in var.policies : k => v if var.create }
+  for_each = { for k, v in var.policies : k => v  }
 
-  role       = aws_iam_role.this[0].name
+  role       = aws_iam_role.this.name
   policy_arn = each.value
 }
