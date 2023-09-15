@@ -1,5 +1,6 @@
 variable "approval_day_count" { default = 7 }
 variable "approved_patches" { default = [] }
+variable "approve_until_date" { default = null }
 variable "name" { default = "" }
 variable "description" { default = "" }
 variable "rejected_patches" { default = [] }
