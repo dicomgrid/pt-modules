@@ -4,4 +4,4 @@ variable "delete_version_after" { default = 12600 }
 variable "description" { default = "" }
 variable "max_versions" { default = 5 }
 variable "namespace" { default = null }
-variable "path" { default = "" }
+variable "path" { default = "secret/" }
