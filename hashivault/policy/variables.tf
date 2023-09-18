@@ -1,2 +1,3 @@
-variable "name" {default = "null"}
-variable "policy" {default = "null"}
+variable "name" { default = "" }
+variable "namespace" { default = null }
+variable "policy" { default = "" }
