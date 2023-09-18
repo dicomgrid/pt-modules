@@ -1,3 +1,3 @@
 variable "name" { default = "" }
-variable "name" { default = null }
+variable "namespace" { default = null }
 variable "policy" { default = "" }
