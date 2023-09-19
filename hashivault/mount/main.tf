@@ -13,7 +13,7 @@ resource "vault_kv_secret_backend_v2" "kvv2_backend" {
   cas_required         = var.cas_required
   delete_version_after = var.delete_version_after
   max_versions         = var.max_versions
-  mount                = vault_mount.main.path
+  mount                = vault_mount.kvv2.path
   namespace            = var.namespace
 }
 
@@ -26,7 +26,7 @@ resource "vault_mount" "ssh" {
 
 resource "vault_ssh_secret_backend_ca" "ssh_backend" {
   count = var.ssh_enabled ? 1 : 0
-  backend   = vault_mount.main.path
+  backend   = vault_mount.ssh.path
   namespace = var.namespace
   generate_signing_key = var.generate_signing_key
 }
