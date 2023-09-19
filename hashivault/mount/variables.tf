@@ -2,6 +2,7 @@ variable "allowed_managed_keys" { default = [] }
 variable "cas_required" { default = true }
 variable "delete_version_after" { default = 12600 }
 variable "description" { default = "" }
+variable "generate_signing_key" { default = true }
 variable "kvv2_enabled" { default = false }
 variable "max_versions" { default = 5 }
 variable "namespace" { default = null }
