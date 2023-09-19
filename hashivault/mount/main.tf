@@ -8,19 +8,12 @@ resource "vault_mount" "kvv2" {
   type                 = "kv"
 }
 
-  dynamic "rule" {
-    for_each = var.object_lock_period
-    content {
-      default_retention {
-        mode = local.object_lock_period[*].mode
-
 resource "vault_kv_secret_backend_v2" "kvv2_backend" {
   count = var.kvv2_enabled ? 1 : 0
-  dynamic 
   cas_required         = var.cas_required
   delete_version_after = var.delete_version_after
   max_versions         = var.max_versions
-  mount                = vault_mount.kvv2[0].path
+  mount                = vault_mount.kvv2[*].path
   namespace            = var.namespace
 }
 
