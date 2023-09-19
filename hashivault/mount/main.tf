@@ -1,4 +1,4 @@
-resource "vault_mount" "main" {
+resource "vault_mount" "kvv2" {
   count = var.kvv2_enabled ? 1 : 0
   allowed_managed_keys = var.allowed_managed_keys
   description          = var.description
@@ -8,7 +8,7 @@ resource "vault_mount" "main" {
   type                 = "kv"
 }
 
-resource "vault_kv_secret_backend_v2" "main" {
+resource "vault_kv_secret_backend_v2" "kvv2_backend" {
   count = var.kvv2_enabled ? 1 : 0
   cas_required         = var.cas_required
   delete_version_after = var.delete_version_after
@@ -17,14 +17,14 @@ resource "vault_kv_secret_backend_v2" "main" {
   namespace            = var.namespace
 }
 
-resource "vault_mount" "main" {
+resource "vault_mount" "ssh" {
   count = var.ssh_enabled ? 1 : 0
   type      = "ssh"
   namespace = var.namespace
   path      = var.path
 }
 
-resource "vault_ssh_secret_backend_ca" "main" {
+resource "vault_ssh_secret_backend_ca" "ssh_backend" {
   count = var.ssh_enabled ? 1 : 0
   backend   = vault_mount.main.path
   namespace = var.namespace
