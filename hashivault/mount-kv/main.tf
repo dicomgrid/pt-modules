@@ -1,3 +1,10 @@
+resource "vault_mount" "kvv1" {
+  path        = "kvv1"
+  type        = "kv"
+  options     = { version = "1" }
+  description = "KV Version 1 secret engine mount"
+}
+
 resource "vault_mount" "kvv2" {
   allowed_managed_keys = var.allowed_managed_keys
   description          = var.description

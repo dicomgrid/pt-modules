@@ -1,0 +1,9 @@
+variable "allowed_domains" { default = [] }
+variable "allow_ip_sans" { default = true }
+variable "allow_subdomains" { default = true }
+variable "default_lease_ttl_seconds" { default = 3600 }
+variable "key_type" { default = "rsa" }
+variable "key_bits" { default = 4096 }
+variable "name" { default = "" }
+variable "max_lease_ttl_seconds" { default = 86400 }
+variable "ttl" { default = 3600 }
