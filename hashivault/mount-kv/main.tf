@@ -3,8 +3,7 @@ resource "vault_mount" "kvv1" {
   type        = "kv"
   namespace   = var.namespace
   options     = { version = "1" }
-  description = "KV Version 1 secret engine mount"
-}
+  description = var.description
 
 resource "vault_mount" "kvv2" {
   allowed_managed_keys = var.allowed_managed_keys
