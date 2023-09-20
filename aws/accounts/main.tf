@@ -1,12 +1,18 @@
 resource "aws_organizations_account" "account" {
-  name      = var.name
-  email     = "devops+${var.name}@intelerad.com"
-  role_name = var.role
-  parent_id = local.ou_map[var.ou_name]
-  #tags                       = var.tags
+  name              = var.name
+  close_on_deletion = var.close_on_deletion
+  email             = coalesce(var.email, local.email)
+  parent_id         = local.ou_map[var.ou_name]
+  role_name         = var.role
+  tags              = local.tags
 
   lifecycle {
-    ignore_changes = [role_name, iam_user_access_to_billing, parent_id]
+    ignore_changes = [
+      email,
+      iam_user_access_to_billing,
+      parent_id,
+      role_name,
+    ]
   }
 }
 
