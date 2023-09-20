@@ -1,6 +1,7 @@
 resource "vault_mount" "kvv1" {
   path        = "kvv1"
   type        = "kv"
+  namespace   = var.namespace
   options     = { version = "1" }
   description = "KV Version 1 secret engine mount"
 }
