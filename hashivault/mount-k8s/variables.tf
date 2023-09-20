@@ -1,0 +1,10 @@
+variable "bound_service_account_names" { default = [] }
+variable "bound_service_account_namespaces" { default = [] }
+variable "token_ttl" { default = 3600 }
+variable "token_policies" { default = [] }
+variable "audience" { default = "vault" }
+variable "kubernetes_host" { default = "" }
+variable "kubernetes_ca_cert" { default = "" }
+variable "token_reviewer_jwt" { default = "" }
+variable "issuer" { default = "api" }
+variable "disable_iss_validation" { default = true }
