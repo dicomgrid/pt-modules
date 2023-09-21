@@ -1,14 +1,14 @@
 resource "vault_mount" "kvv1" {
   path        = var.kvv1_path
   type        = "kv"
+  description = "${var.namespace} kv secret engine mount"
   namespace   = var.namespace
   options     = { version = "1" }
-  description = var.description
-
+}
 resource "vault_mount" "kvv2" {
   allowed_managed_keys = var.allowed_managed_keys
-  description          = var.description
   namespace            = var.namespace
+  description          = "${var.namespace} kvv2 secret engine mount"
   options              = { version = "2" }
   path                 = var.kvv2_path
   type                 = "kv"
