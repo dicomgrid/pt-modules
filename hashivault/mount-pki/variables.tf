@@ -6,4 +6,5 @@ variable "key_type" { default = "rsa" }
 variable "key_bits" { default = 4096 }
 variable "name" { default = "" }
 variable "max_lease_ttl_seconds" { default = 86400 }
+variable "path" { default = "pki" }
 variable "ttl" { default = 3600 }

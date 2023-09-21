@@ -1,5 +1,6 @@
 resource "vault_auth_backend" "main" {
   type = "kubernetes"
+  path = var.path
 }
 
 resource "vault_kubernetes_auth_backend_role" "main" {
