@@ -6,6 +6,7 @@ variable "issuer" { default = "api" }
 variable "kubernetes_ca_cert" { default = "" }
 variable "kubernetes_host" { default = "" }
 variable "role_name" { default = "" }
+variable "path" { default = "kubernetes" }
 variable "token_policies" { default = [] }
 variable "token_reviewer_jwt" { default = "" }
 variable "token_ttl" { default = 3600 }
