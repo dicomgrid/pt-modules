@@ -7,13 +7,14 @@ resource "aws_route_table" "main" {
 module "route" {
   source = "../route"
 
-  for_each = var.routes
+  for_each = { for v in var.routes : v.destination_cidr_block => v }
 
   destination_cidr_block      = try(each.value.destination_cidr_block, null)
   destination_ipv6_cidr_block = try(each.value.destination_ipv6_cidr_block, null)
   destination_prefix_list_id  = try(each.value.destination_prefix_list_id, null)
-  gateway_id = each.value.gateway_id
-  route_table_id = each.value.route_table_id
+  gateway_id                  = each.value.gateway_id
+  route_table_id              = aws.route_table.id
+  
 }
 
 module "route_table_association" "main" {
