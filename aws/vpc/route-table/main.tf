@@ -17,7 +17,7 @@ module "route" {
   
 }
 
-module "route_table_association" "main" {
+module "route_table_association" {
   source = "../route-table-association"
 
   for_each = var.route_table_associations
