@@ -13,7 +13,7 @@ module "route" {
   destination_ipv6_cidr_block = try(each.value.destination_ipv6_cidr_block, null)
   destination_prefix_list_id  = try(each.value.destination_prefix_list_id, null)
   gateway_id                  = each.value.gateway_id
-  route_table_id              = aws.route_table.id
+  route_table_id              = aws_route_table.main.id
   
 }
 
