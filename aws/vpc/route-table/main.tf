@@ -23,6 +23,6 @@ module "route_table_association" "main" {
   for_each = var.route_table_associations
 
   gateway_id = try(each.value.gateway_id, null)
-  route_table_id = aws_route_table.main
+  route_table_id = aws_route_table.main.id
   subnet_id = try(each.value.subnet_id, null)
 }
