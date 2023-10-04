@@ -124,6 +124,6 @@ module "vpc-explicit-route-tables" {
 module "vpc-explicit-route-tables-associations" {
   source         = "./route_table_association"
   for_each       = { for sb in var.vpc-details.vpc_subnets : sb.subnet_cidr_block => sb if try(sb.route_table, "") != "" }
-  route_table_id = module.vpc-explicit-route-tables[each.value["route_table"]].id
+  route_table_id = module.vpc-explicit-route-table[each.value["route_table"]].id
   subnet_id      = module.vpc-subnets[each.key].id
 }
