@@ -1,4 +1,4 @@
-resource "vault_policy" "admin_policy" {
+resource "vault_policy" "main" {
   name      = var.name
   namespace = var.namespace
   policy    = var.policy
