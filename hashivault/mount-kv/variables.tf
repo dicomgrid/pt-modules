@@ -1,6 +1,6 @@
 variable "allowed_managed_keys" { default = [] }
 variable "cas_required" { default = true }
-variable "delete_version_after" { default = 12600 }
+variable "delete_version_after" { default = null }
 variable "kvv1_description" { default = "" }
 variable "kvv2_description" { default = "" }
 variable "max_versions" { default = 5 }
