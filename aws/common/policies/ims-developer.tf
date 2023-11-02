@@ -51,17 +51,11 @@ data "aws_iam_policy_document" "ims_developer" {
       "sts:Assume*",
     ]
   }
+}
 
-  statement {
-    sid       = "SupportBilling"
-    effect    = "Allow"
-    resources = ["*"]
-    actions = [
-      "aws-portal:ViewBilling",
-      "aws-portal:ViewUsage",
-      "support:*",
-    ]
-  }
+data "aws_iam_policy_document" "ims_developer" {
+  source_policy_documents   = [data.aws_iam_policy_document.support_billing.json]
+  override_policy_documents = [data.aws_iam_policy_document.ims_developer_override.json]
 }
 
 output "ims_developer" {
