@@ -1,7 +1,7 @@
 data "aws_iam_policy_document" "support_billing" {
 
   statement {
-    sid       = "SupportBillingLegacy"
+    sid       = "SupportBilling"
     effect    = "Allow"
     resources = ["*"]
     actions = [
@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "support_billing" {
 
   # https://aws.amazon.com/blogs/aws-cloud-financial-management/changes-to-aws-billing-cost-management-and-account-consoles-permissions/
   statement {
-    sid       = "SupportBilling"
+    sid       = "SupportBillingPendingMigration"
     effect    = "Allow"
     resources = ["*"]
     actions = [
@@ -36,4 +36,8 @@ data "aws_iam_policy_document" "support_billing" {
       "tax:List*",
     ]
   }
+}
+
+output "support_billing" {
+  value = data.aws_iam_policy_document.support_billing.json
 }
