@@ -17,9 +17,9 @@ data "aws_iam_policy_document" "cloud-conformity-part1" {
       "autoscaling:DescribeLoadBalancers",
       "autoscaling:DescribeNotificationConfigurations",
       "autoscaling:DescribeTags",
-    #   "aws-portal:ViewBilling", #https://aws.amazon.com/blogs/aws-cloud-financial-management/changes-to-aws-billing-cost-management-and-account-consoles-permissions
-    #   "aws-portal:ViewUsage",
-    #   "budgets:ViewBudget", 
+      #   "aws-portal:ViewBilling", #https://aws.amazon.com/blogs/aws-cloud-financial-management/changes-to-aws-billing-cost-management-and-account-consoles-permissions
+      #   "aws-portal:ViewUsage",
+      #   "budgets:ViewBudget", 
       "billing:Get*",
       "ce:Get*",
       "ce:Describe*",
@@ -351,9 +351,9 @@ data "aws_iam_policy_document" "cloud-conformity-part2" {
 }
 
 output "cloud-conformity-part1" {
-    value = data.aws_iam_policy_document.cloud-conformity-part1.json
+  value = data.aws_iam_policy_document.cloud-conformity-part1.json
 }
 
 output "cloud-conformity-part2" {
-    value = data.aws_iam_policy_document.cloud-conformity-part2.json
+  value = data.aws_iam_policy_document.cloud-conformity-part2.json
 }

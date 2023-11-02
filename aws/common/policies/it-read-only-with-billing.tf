@@ -25,5 +25,5 @@ data "aws_iam_policy_document" "it_billing_readonly" {
 }
 
 output "it_billing_readonly" {
-    value = data.aws_iam_policy_document.it_billing_readonly.json
+  value = data.aws_iam_policy_document.it_billing_readonly.json
 }
