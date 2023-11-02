@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "ims_developer" {
+data "aws_iam_policy_document" "ims_developer_override" {
   statement {
     sid    = "IAM"
     effect = "Allow"
