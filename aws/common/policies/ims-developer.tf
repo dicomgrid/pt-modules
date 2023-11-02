@@ -11,6 +11,7 @@ data "aws_iam_policy_document" "ims_developer_override" {
       "iam:AttachRolePolicy",
       "iam:AttachUserPolicy",
       "iam:CreateInstanceProfile",
+      "iam:CreateOpenIDConnectProvider",
       "iam:CreatePolicy",
       "iam:CreatePolicyVersion",
       "iam:CreateRole",
@@ -48,7 +49,6 @@ data "aws_iam_policy_document" "ims_developer_override" {
     not_actions = [
       "iam:*",
       "organizations:*",
-      "sts:Assume*",
     ]
   }
 }

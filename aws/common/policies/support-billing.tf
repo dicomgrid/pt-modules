@@ -17,23 +17,23 @@ data "aws_iam_policy_document" "support_billing" {
     effect    = "Allow"
     resources = ["*"]
     actions = [
+      "ce:Get*",
+      "ce:Describe*",
+      "ce:List*",
       "account:GetAccountInformation",
       "billing:Get*",
-      "ce:Describe*",
-      "ce:Get*",
-      "ce:List*",
+      "payments:List*",
+      "payments:Get*",
+      "tax:List*",
+      "tax:Get*",
       "consolidatedbilling:Get*",
       "consolidatedbilling:List*",
+      "invoicing:List*",
+      "invoicing:Get*",
       "cur:Get*",
       "cur:Validate*",
       "freetier:Get*",
-      "invoicing:Get*",
-      "invoicing:List*",
-      "payments:Get*",
-      "payments:List*",
       "support:*",
-      "tax:Get*",
-      "tax:List*",
     ]
   }
 }
