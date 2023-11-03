@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "cloud-conformity-part1" {
+data "aws_iam_policy_document" "cloud-conformity" {
   statement {
     sid       = "CloudConformityPart1"
     effect    = "Allow"
@@ -218,9 +218,6 @@ data "aws_iam_policy_document" "cloud-conformity-part1" {
       "tag:GetTagValues"
     ]
   }
-}
-
-data "aws_iam_policy_document" "cloud-conformity-part2" {
   statement {
     sid       = "CloudConformityPart2"
     effect    = "Allow"
@@ -349,11 +346,7 @@ data "aws_iam_policy_document" "cloud-conformity-part2" {
     ]
   }
 }
-
-output "cloud-conformity-part1" {
-  value = data.aws_iam_policy_document.cloud-conformity-part1.json
+output "cloud-conformity" {
+  value = data.aws_iam_policy_document.cloud-conformity.json
 }
 
-output "cloud-conformity-part2" {
-  value = data.aws_iam_policy_document.cloud-conformity-part2.json
-}
