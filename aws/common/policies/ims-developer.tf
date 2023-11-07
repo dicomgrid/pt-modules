@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "ims_developer" {
+data "aws_iam_policy_document" "ims_developer_override" {
   statement {
     sid    = "IAM"
     effect = "Allow"
@@ -7,15 +7,18 @@ data "aws_iam_policy_document" "ims_developer" {
       "arn:aws:iam::*:role/cross_account_admin"
     ]
     actions = [
+      "iam:AddClientIDToOpenIDConnectProvider",
       "iam:AddRoleToInstanceProfile",
       "iam:AttachRolePolicy",
       "iam:AttachUserPolicy",
       "iam:CreateInstanceProfile",
+      "iam:CreateOpenIDConnectProvider",
       "iam:CreatePolicy",
       "iam:CreatePolicyVersion",
       "iam:CreateRole",
       "iam:CreateServiceLinkedRole",
       "iam:DeleteInstanceProfile",
+      "iam:DeleteOpenIDConnectProvider",
       "iam:DeletePolicy",
       "iam:DeletePolicyVersion",
       "iam:DeleteRole",
@@ -24,18 +27,17 @@ data "aws_iam_policy_document" "ims_developer" {
       "iam:DeleteUserPolicy",
       "iam:DetachRolePolicy",
       "iam:DetachUserPolicy",
+      "iam:GenerateServiceLastAccessedDetails",
       "iam:Get*",
       "iam:List*",
       "iam:PassRole",
       "iam:PutRolePolicy",
+      "iam:RemoveClientIDFromOpenIDConnectProvider",
       "iam:RemoveRoleFromInstanceProfile",
-      "iam:TagInstanceProfile",
-      "iam:tagPolicy",
-      "iam:TagRole",
-      "iam:UntagRole",
-      "iam:UntagPolicy",
-      "iam:UntagRole",
+      "iam:Tag*",
+      "iam:Untag*",
       "iam:UpdateAssumeRolePolicy",
+      "iam:UpdateOpenIDConnectProviderThumbprint",
       "iam:UpdateRole",
       "iam:UpdateRoleDescription",
     ]
@@ -48,20 +50,13 @@ data "aws_iam_policy_document" "ims_developer" {
     not_actions = [
       "iam:*",
       "organizations:*",
-      "sts:Assume*",
     ]
   }
+}
 
-  statement {
-    sid       = "SupportBilling"
-    effect    = "Allow"
-    resources = ["*"]
-    actions = [
-      "aws-portal:ViewBilling",
-      "aws-portal:ViewUsage",
-      "support:*",
-    ]
-  }
+data "aws_iam_policy_document" "ims_developer" {
+  source_policy_documents   = [data.aws_iam_policy_document.support_billing.json]
+  override_policy_documents = [data.aws_iam_policy_document.ims_developer_override.json]
 }
 
 output "ims_developer" {
