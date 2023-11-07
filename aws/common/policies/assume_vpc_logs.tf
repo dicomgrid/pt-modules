@@ -1,14 +1,14 @@
 data "aws_iam_policy_document" "vpc-flow-role" {
   statement {
-    sid    = "VPCFlowLogsPermissions"
-    effect = "Allow"
+    sid       = "VPCFlowLogsPermissions"
+    effect    = "Allow"
     resources = ["*"]
     actions = [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents",
-        "logs:DescribeLogGroups",
-        "logs:DescribeLogStreams"
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams"
     ]
   }
 }
