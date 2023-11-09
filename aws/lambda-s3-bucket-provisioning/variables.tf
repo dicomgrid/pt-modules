@@ -26,6 +26,13 @@ variable "ambra_storage1_account" {
 #  default     = ""
 #}
 
+variable "access_logging" {
+  default = true
+}
+
+variable "object_expiration" {
+  default = 14
+}
 variable "aws_region" {
   description = "AWS region"
   type        = string
