@@ -137,7 +137,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "ambra_orphan_buck
 resource "aws_lambda_function" "s3_bucket_provisioning" {
   provider      = aws.primary
   function_name = "s3-bucket-provisioning"
-  filename      = "${path.module}/s3-bucket-provisioning-1.1.2-SNAPSHOT.jar"
+  filename      = "${path.module}/s3-bucket-provisioning-1.2.0-SNAPSHOT.jar"
 
   handler     = "com.ambrahealth.aws.lambda.S3BucketProvisioningHandler"
   role        = aws_iam_role.iam_for_s3_bucket_provisioning.arn
@@ -151,11 +151,13 @@ resource "aws_lambda_function" "s3_bucket_provisioning" {
   }
   environment {
     variables = {
+      AMBRA_ENABLE_ACCESS_LOGGING   = "${var.access_logging}"
       AMBRA_ENVIRONMENT             = "${var.environment}"
       AMBRA_MAX_BUCKETS_PER_ACCOUNT = "${var.max_buckets_per_account}"
       AMBRA_REGION                  = "${var.aws_region}"
       AMBRA_PHR_ACCOUNT             = "${var.ambra_storage1_account}"
       AMBRA_PHR_BUCKET              = "ambra-${var.environment}-${var.aws_region}-phr"
+      AMBRA_OBJECT_EXPIRATION_DAYS  = "${var.object_expiration}"
       AMBRA_ORPHAN_ACCOUNT          = "${var.ambra_storage1_account}"
       AMBRA_ORPHAN_BUCKET           = "ambra-${var.environment}-${var.aws_region}-orphan"
       AMBRA_STORAGE_ACCOUNTS        = "${join(",", [for s in var.ambra_storage_accounts : format("%q", s)])}"
@@ -268,7 +270,10 @@ resource "aws_iam_role" "main" {
         {
             "Action": "sts:AssumeRole",
             "Principal": {
-               "Service": "ec2.amazonaws.com"
+               "Service": [
+                    "ec2.amazonaws.com",
+                    "ssm.amazonaws.com"
+                ]
             },
             "Effect": "Allow",
             "Sid": ""
