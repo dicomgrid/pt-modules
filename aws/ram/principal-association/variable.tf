@@ -1,5 +1,5 @@
-variable "principal" {
-  description = "The principal to associate with the resource share. AWS account ID, an AWS Organizations Organization ARN, or an AWS Organizations Organization Unit ARN."
+variable "principals" {
+  description = "The principals to associate with the resource share. AWS account ID, an AWS Organizations Organization ARN, or an AWS Organizations Organization Unit ARN."
   type        = list(string)
 }
 
