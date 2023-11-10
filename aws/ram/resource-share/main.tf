@@ -8,15 +8,15 @@ resource "aws_ram_resource_share" "main" {
 module "resource_association" {
     source = "../resource-association"
 
-    for_each = toset(var.resource_associations)
+    count = length(var.resource_arns) > 0 ? 1 : 0
+    resource_arns = var.resource_arns
     resource_share_arn = aws_ram_resource_share.main.arn
-    resource_arns = each.value
 }
 
 module "principal_association" {
     source = "../principal-association"
 
-    for_each = toset(var.principal_associations)
+    count = length(var.principals) > 0 ? 1 : 0
+    principals = var.principals
     resource_share_arn = aws_ram_resource_share.main.arn
-    principals = each.value
 }

@@ -1,8 +1,8 @@
 variable "allow_external_principals" { default = false }
 variable "name" {}
 variable "permission_arns" { default = null }
-variable "resource_associations" { default = [] }
-variable "principal_associations" { default = [] }
+variable "resource_arns" { default = [] }
+variable "principals" { default = [] }
 
 # Tags
 locals {
