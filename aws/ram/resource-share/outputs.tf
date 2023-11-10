@@ -1,5 +1,5 @@
 output "allow_external_principals" { value = aws_ram_resource_share.main.allow_external_principals }
-output "arn" { value = aws_ram_resource_share.arn }
+output "arn" { value = aws_ram_resource_share.main.arn }
 output "id" { value = aws_ram_resource_share.main.id }
 output "name" { value = aws_ram_resource_share.main.name }
 output "permission_arns" { value = aws_ram_resource_share.main.permission_arns }
