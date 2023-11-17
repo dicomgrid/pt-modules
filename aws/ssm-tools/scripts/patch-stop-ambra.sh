@@ -123,6 +123,7 @@ function stopV3sCron() {
         then
             echo "Attempting to stop v3s-cron services..."
             sudo systemctl stop v3s-cron
+            sudo -u v3s -i ctl cron_stop #drain manually started processes
             sleep 600 #to allow ingestion to drain
         fi
         echo -e "\e"
