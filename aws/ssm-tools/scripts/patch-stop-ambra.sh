@@ -202,8 +202,7 @@ function handleErr() {
 }
 trap handleErr ERR
 
-export REPOS="--disablerepo=* --enablerepo=centos7-x86_64 --enablerepo=epel --enablerepo=base --enablerepo=updates"
-sudo yum install yum-utils -y
+export REPOS="--disablerepo=* --enablerepo=base --enablerepo=epel --enablerepo=base --enablerepo=updates"
 sudo yum ${REPOS} update -y
 sudo yum-complete-transaction --cleanup-only
 export REBOOT=$(needs-restarting -r | grep required)
