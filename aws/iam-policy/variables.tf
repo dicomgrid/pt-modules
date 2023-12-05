@@ -1,7 +1,7 @@
 
 
 variable "name" {}
-variable "description" {
-  default = ""
-}
+variable "name_prefix" { default = null }
+variable "description" { default = "" }
 variable "policy" {}
+variable "path" { default = "/" }
