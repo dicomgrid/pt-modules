@@ -14,7 +14,6 @@ resource "vault_aws_secret_backend" "aws" {
 resource "vault_aws_secret_backend_role" "main" {
   backend         = vault_aws_secret_backend.aws.path
   name            = var.name
-  credential_type = "iam_user"
-
-  policy_document = var.policy_document
+  credential_type = var.credential_type
+  role_arns       = var.role_arns
 }
