@@ -1,0 +1,11 @@
+variable "access_key" { default = "" }
+variable "secret_key" { default = "" }
+variable "region" { default = "" }
+variable "default_lease_ttl_seconds" { default = 3600 }
+variable "description" { default = "" }
+variable "max_lease_ttl_seconds" { default = 7200 }
+variable "name" { default = "" }
+variable "namespace" { default = null }
+variable "path" { default = "aws" }
+variable "policy_document" { default = {} }
+variable "type" { default = "aws" }
