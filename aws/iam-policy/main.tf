@@ -1,5 +1,8 @@
 resource "aws_iam_policy" "main" {
-  name        = var.name
-  policy      = var.policy
   description = var.description
+  name        = var.name
+  name_prefix = var.name_prefix
+  path        = var.path
+  policy      = var.policy
+  tags        = var.tags
 }
