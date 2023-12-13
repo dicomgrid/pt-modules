@@ -11,11 +11,11 @@ resource "vault_aws_secret_backend" "main" {
 }
 
 resource "vault_aws_secret_backend_role" "main" {
-  for_each = var.roles
-
+  for_each        = { for k in var.roles : k.name => k }
   backend         = vault_aws_secret_backend.main.path
-  name            = roles.value["name"]
-  credential_type = roles.value["credential_type"]
-  role_arns       = roles.value["role_arns"]
-  policy_document = roles.value["policy_document"]
+  name            = each.value.name
+  credential_type = each.value.credential_type
+  policy_document = each.value.policy_document
+  namespace       = each.value.namespace
+  role_arns       = each.value.role_arns
 }
