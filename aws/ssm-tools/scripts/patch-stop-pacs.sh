@@ -66,7 +66,7 @@ export REPOS="--disablerepo=* --enablerepo=epel --enablerepo=base --enablerepo=u
 export SKIP="--exclude=pacemaker* --exclude=corosync*"
 sudo yum --disableplugin=rhnplugin update ca-certificates -y
 sudo yum --disableplugin=rhnplugin install yum-utils -y
-sudo yum --disableplugin=rhnplugin  ${REPOS} ${SKIP} update -y
+sudo yum --disableplugin=rhnplugin ${REPOS} ${SKIP} update -y
 sudo yum-complete-transaction --disableplugin=rhnplugin --cleanup-only
 export REBOOT=$(needs-restarting -r | grep required)
 if [[ $REBOOT ]]
