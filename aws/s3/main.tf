@@ -13,8 +13,8 @@ resource "aws_s3_bucket_ownership_controls" "main" {
 }
 
 resource "aws_s3_bucket_acl" "main" {
-  bucket = aws_s3_bucket.main.id
-  expected_bucket_owner = try (var.expected_bucket_owner, null)
+  bucket = aws_s3_bucket_ownership_controls.main.id
+  expected_bucket_owner = try (var.expected_bucket_owner, "BucketOwnerPreferred")
   acl    = local.acl
 
   dynamic access_control_policy {
