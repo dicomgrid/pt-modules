@@ -2,7 +2,7 @@
 set -e
 
 function stopPacs() {
-    if [[ -e $(ls /etc/rc.d/init.d/PACS) ]] 
+    if [[ -e $(ls /etc/rc.d/init.d/PACS) ]]
     then
         if [[ -e $(ls /etc/rc.d/init.d/corosync > /dev/null 2>&1) ]]
         then
@@ -32,7 +32,7 @@ function stopPacs() {
         /opt/intelerad/bin/padmin sudo /etc/init.d/postgres-intelerad stop > /dev/null 2>&1
         echo "Attempting to stop Sybase service..."
         /opt/intelerad/bin/padmin sudo /etc/init.d/sybase -v stop > /dev/null 2>&1
-        
+
         echo -e "\e"
         echo -e "\e"
         echo "Reporting Post service stop status"
@@ -62,12 +62,12 @@ function stopPacs() {
     fi
 }
 
-export REPOS="--disablerepo=* --enablerepo=centos7-x86_64 --enablerepo=epel --enablerepo=base --enablerepo=updates"
+export REPOS="--disablerepo=* --enablerepo=epel --enablerepo=base --enablerepo=updates"
 export SKIP="--exclude=pacemaker* --exclude=corosync*"
-sudo yum --disableplugin=rhnplugin  update ca-certificates -y
-sudo yum install yum-utils -y
-sudo yum ${REPOS} ${SKIP} update -y
-sudo yum-complete-transaction --cleanup-only
+sudo yum --disableplugin=rhnplugin update ca-certificates -y
+sudo yum --disableplugin=rhnplugin install yum-utils -y
+sudo yum --disableplugin=rhnplugin ${REPOS} ${SKIP} update -y
+sudo yum-complete-transaction --disableplugin=rhnplugin --cleanup-only
 export REBOOT=$(needs-restarting -r | grep required)
 if [[ $REBOOT ]]
 then
