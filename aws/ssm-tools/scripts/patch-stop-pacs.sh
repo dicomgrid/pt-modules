@@ -62,20 +62,36 @@ function stopPacs() {
     fi
 }
 
-export REPOS="--disablerepo=* --enablerepo=epel --enablerepo=base --enablerepo=updates"
 export SKIP="--exclude=pacemaker* --exclude=corosync*"
-sudo yum --disableplugin=rhnplugin update ca-certificates -y
-sudo yum --disableplugin=rhnplugin install yum-utils -y
-sudo yum --disableplugin=rhnplugin ${REPOS} ${SKIP} update -y
-sudo yum-complete-transaction --disableplugin=rhnplugin --cleanup-only
+export DISABLED_PLUGINS="--disableplugin=rhnplugin"
+if [[ ! -z $(cat /etc/os-release | grep ID= | grep rocky) ]]
+then
+    echo "Rocky Instance Found..."
+    export REPOS="--disablerepo=* --enablerepo=epel --enablerepo=appstream --enablerepo=baseos --enablerepo=extras"
+    sudo yum ${DISABLED_PLUGINS} update ca-certificates -y
+    sudo yum ${DISABLED_PLUGINS} install yum-utils -y
+    sudo yum ${DISABLED_PLUGINS} ${REPOS} ${SKIP} update -y
+    sudo package-cleanup --cleandupes
+fi
+
+if [[ ! -z $(cat /etc/os-release | grep ID= | grep centos) ]]
+then
+    echo "CentOS Instance Found..."
+    export REPOS="--disablerepo=* --enablerepo=epel --enablerepo=base --enablerepo=updates"
+    sudo yum ${DISABLED_PLUGINS} update ca-certificates -y
+    sudo yum ${DISABLED_PLUGINS} install yum-utils -y
+    sudo yum ${DISABLED_PLUGINS} ${REPOS} ${SKIP} update -y
+    sudo yum-complete-transaction ${DISABLED_PLUGINS} --cleanup-only
+fi
+
 export REBOOT=$(needs-restarting -r | grep required)
 if [[ $REBOOT ]]
 then
-        echo "Rebooting now..."
-        export -f stopPacs
-        su admin -c "bash -c stopPacs"
-        exit 194
+    echo "Rebooting now..."
+    export -f stopPacs
+    su admin -c "bash -c stopPacs"
+    exit 194
 else
-        echo "Exiting..."
-        exit 0
+    echo "Exiting..."
+    exit 0
 fi
