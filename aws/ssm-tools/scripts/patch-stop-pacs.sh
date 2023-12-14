@@ -68,8 +68,6 @@ if [[ ! -z $(cat /etc/os-release | grep ID= | grep rocky) ]]
 then
     echo "Rocky Instance Found..."
     export REPOS="--disablerepo=* --enablerepo=epel --enablerepo=appstream --enablerepo=baseos --enablerepo=extras"
-    sudo yum ${DISABLED_PLUGINS} update ca-certificates -y
-    sudo yum ${DISABLED_PLUGINS} install yum-utils -y
     sudo yum ${DISABLED_PLUGINS} ${REPOS} ${SKIP} update -y
     sudo package-cleanup --cleandupes
 fi
