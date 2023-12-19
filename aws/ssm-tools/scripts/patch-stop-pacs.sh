@@ -68,8 +68,8 @@ if [[ ! -z $(cat /etc/os-release | grep ID= | grep rocky) ]]
 then
     echo "Rocky Instance Found..."
     export REPOS="--disablerepo=* --enablerepo=epel --enablerepo=appstream --enablerepo=baseos --enablerepo=extras"
-    sudo yum ${DISABLED_PLUGINS} ${REPOS} ${SKIP} update -y
-    sudo package-cleanup --cleandupes
+    sudo yum ${DISABLED_PLUGINS} ${REPOS} ${SKIP} update -y --nobest || true
+    sudo package-cleanup --cleandupes || true
 fi
 
 if [[ ! -z $(cat /etc/os-release | grep ID= | grep centos) ]]
@@ -87,7 +87,7 @@ if [[ $REBOOT ]]
 then
     echo "Rebooting now..."
     export -f stopPacs
-    su admin -c "bash -c stopPacs"
+    su admin -c "bash -c stopPacs" || true
     exit 194
 else
     echo "Exiting..."
