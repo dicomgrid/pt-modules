@@ -87,7 +87,7 @@ if [[ $REBOOT ]]
 then
     echo "Rebooting now..."
     export -f stopPacs
-    su admin -c "bash -c stopPacs"
+    su admin -c "bash -c stopPacs" || true
     exit 194
 else
     echo "Exiting..."
