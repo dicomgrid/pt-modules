@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "lambda_function" {
-  architecture     = var.architecture
+  architectures     = var.architectures
   function_name    = var.function_name
   handler          = var.handler
   role             = var.role

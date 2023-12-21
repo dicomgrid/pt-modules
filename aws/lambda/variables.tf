@@ -1,4 +1,4 @@
-variable "architecture" {}
+variable "architectures" {}
 variable "function_name" {}
 variable "handler" {}
 variable "source_code_filename" {}
