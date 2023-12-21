@@ -1,0 +1,36 @@
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.64.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.64.0 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_cloudwatch_event_rule.eventbridge_rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule) | resource |
+| [aws_cloudwatch_event_target.eventbridge_target](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_event_pattern"></a> [event\_pattern](#input\_event\_pattern) | n/a | `string` | `""` | no |
+| <a name="input_eventbus_name"></a> [eventbus\_name](#input\_eventbus\_name) | n/a | `any` | `null` | no |
+| <a name="input_lambda_arn"></a> [lambda\_arn](#input\_lambda\_arn) | n/a | `any` | n/a | yes |
+| <a name="input_rule_name"></a> [rule\_name](#input\_rule\_name) | n/a | `any` | n/a | yes |
+
+## Outputs
+
+No outputs.
