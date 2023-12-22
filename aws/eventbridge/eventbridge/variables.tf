@@ -1,4 +1,4 @@
-variable "lambda_arn" {}
+variable "lambda_arn" { type = string }
 variable "eventbus_name" { default = null }
-variable "rule_name" {}
+variable "rule_name" { type = string }
 variable "event_pattern" { default = "" }
