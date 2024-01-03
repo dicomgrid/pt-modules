@@ -121,6 +121,15 @@ data "aws_ami" "rocky_8" {
   }
 }
 
+data "aws_ami" "rocky_8_custom" {
+  most_recent = true
+  owners      = ["273055129372"]
+  filter {
+    name   = "name"
+    values = ["rocky8*"]
+  }
+}
+
 data "aws_ami" "windows_server_2016" {
   most_recent = true
   owners      = ["801119661308"]
