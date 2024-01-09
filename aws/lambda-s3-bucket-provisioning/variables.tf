@@ -68,3 +68,8 @@ variable "primary_account" {
 variable "instance_role" {
   default = ""
 }
+
+variable "s3objectmanager_policy_name" {
+  default = "s3ObjectManager" # adding for the rare occasion where the lambda will exist on the same acct(different regions). 
+                              #this will allow for the creation of different policies that will limit scope of allowed roles to assume
+}

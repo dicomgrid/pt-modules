@@ -299,7 +299,7 @@ resource "aws_iam_role_policy" "main" {
 ##creating policy for storage ec2 roles to be allowed to assume s3ObjectManager role
 resource "aws_iam_policy" "s3objectmanager" {
   provider    = aws.primary
-  name        = "s3ObjectManager"
+  name        = var.s3objectmanager_policy_name
   description = "Allows ec2 to assume ss3objectmanager role on storage accounts"
 
   # Terraform's "jsonencode" function converts a
