@@ -69,7 +69,16 @@ variable "instance_role" {
   default = ""
 }
 
+# adding follow 3 variables the rare occasion where the lambda will exist on the same acct(different regions). 
+#this will allow for the creation of different policies that will limit scope of allowed roles to assume
 variable "s3objectmanager_policy_name" {
-  default = "s3ObjectManager" # adding for the rare occasion where the lambda will exist on the same acct(different regions). 
-                              #this will allow for the creation of different policies that will limit scope of allowed roles to assume
+  default = "s3ObjectManager"
+}
+
+variable "services_instance_profile_name" {
+  default = "s3-bucket-provisioning-instance-profile"
+}
+
+variable "lambda_execution_role_name" {
+  default = "s3-bucket-provisioning-lambda-execution-role"
 }

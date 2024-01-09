@@ -195,7 +195,7 @@ resource "aws_lambda_function_url" "s3_bucket_provisioning_alias_url" {
 # Create the role that allows the Lambda to carry out its work
 resource "aws_iam_role" "iam_for_s3_bucket_provisioning" {
   provider = aws.primary
-  name     = "s3-bucket-provisioning-lambda-execution-role"
+  name     = var.lambda_execution_role_name
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -212,13 +212,6 @@ resource "aws_iam_role" "iam_for_s3_bucket_provisioning" {
   })
 }
 
-# Give the lambda role the right to read AWS organizations in a read-only fashion
-#REMVOE BLOCK
-#resource "aws_iam_role_policy_attachment" "s3_bucket_provisioning_org_read_only" {
-#  provider = aws.primary
-#  role = aws_iam_role.iam_for_s3_bucket_provisioning.name
-#  policy_arn = data.aws_iam_policy.AWSOrganizationsReadOnlyAccess.arn
-#}
 
 # Give the lambda role the right to assume the S3BucketManager role in each Ambra storage account
 resource "aws_iam_role_policy_attachment" "s3_bucket_provisioning_assume_sub_account" {
@@ -262,7 +255,7 @@ resource "aws_s3_bucket_policy" "ambra_orphan_bucket_policy" {
 resource "aws_iam_role" "main" {
   provider           = aws.primary
   description        = "Allows EC2 instances to call AWS services on your behalf."
-  name               = "s3-bucket-provisioning-instance-profile"
+  name               = var.services_instance_profile_name
   assume_role_policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -288,11 +281,17 @@ resource "aws_iam_instance_profile" "main" {
   role     = aws_iam_role.main.id
 }
 
-resource "aws_iam_role_policy" "main" {
-  provider = aws.primary
-  name     = aws_iam_role.main.name
-  role     = aws_iam_role.main.id
-  policy   = data.aws_iam_policy_document.s3-bucket-provisioning-instance-profile.json
+resource "aws_iam_policy" "main" {
+  provider    = aws.primary
+  name        = "${aws_iam_role.main.name}-policy"
+  description = "Allows EC2 instances to call AWS services on your behalf."
+  policy      = data.aws_iam_policy_document.s3-bucket-provisioning-instance-profile.json
+}
+
+resource "aws_iam_role_policy_attachment" "main" {
+  provider   = aws.primary
+  role       = aws_iam_role.main.id
+  policy_arn = aws_iam_policy.main.arn
 }
 
 
