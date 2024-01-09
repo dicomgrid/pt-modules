@@ -16,3 +16,9 @@ resource "aws_subnet" "main" {
 
   tags = var.tags
 }
+
+resource "aws_network_acl_association" "main" {
+  count          = var.network_acl_association == null ? 0 : 1
+  network_acl_id = var.network_acl_id
+  subnet_id      = aws_subnet.main.id
+}
