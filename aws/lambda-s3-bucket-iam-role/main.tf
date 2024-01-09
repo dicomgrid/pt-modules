@@ -224,9 +224,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "s3_logging" {
 }
 
 # Encryption scheme for Ambra PHR bucket
-resource "aws_s3_bucket_server_side_encryption_configuration" "ambra_phr_bucket_encryption" {
-  provider = aws.ambra_storage1_account
-  bucket   = aws_s3_bucket.ambra_phr_bucket.bucket
+resource "aws_s3_bucket_server_side_encryption_configuration" "s3_logging" {
+  bucket   = aws_s3_bucket.s3_logging.id
 
   rule {
     apply_server_side_encryption_by_default {
