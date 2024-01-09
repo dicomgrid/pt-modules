@@ -42,10 +42,6 @@ output "gateway_id" {
   value = aws_route.main.gateway_id
 }
 
-output "instance_id" {
-  value = aws_route.main.instance_id
-}
-
 output "nat_gateway_id" {
   value = aws_route.main.nat_gateway_id
 }
