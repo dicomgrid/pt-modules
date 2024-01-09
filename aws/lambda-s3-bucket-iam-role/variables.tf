@@ -8,3 +8,7 @@ variable "instance_role" {
   description = "instance role that the storage ec2 instances use"
   default     = ""
 }
+
+variable "environment" {
+  default = ""
+}
