@@ -52,6 +52,10 @@ variable "map_public_ip_on_launch" {
   default = ""
 }
 
+variable "network_acl_association" { default = null }
+
+variable "network_acl_id" { default = null }
+
 variable "outpost_arn" {
   type    = string
   default = ""

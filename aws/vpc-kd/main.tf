@@ -57,6 +57,14 @@ resource "aws_vpc_dhcp_options_association" "main" {
   dhcp_options_id = var.dhcp-options-set-ids[var.vpc-details.dhcp-options-set]
 }
 
+module "network_acl" {
+  source   = "./network-acl"
+  for_each = var.vpc-details.vpc_network_acls
+  rules    = each.value.rules
+  tags     = merge(var.tags, { Name = each.key })
+  vpc_id   = module.vpc.id
+}
+
 module "vpc-subnets" {
   source                  = "./subnet"
   for_each                = { for sb in var.vpc-details.vpc_subnets : sb.subnet_cidr_block => sb }
@@ -64,6 +72,8 @@ module "vpc-subnets" {
   cidr_block              = each.value["subnet_cidr_block"]
   availability_zone       = each.value["availability_zone"]
   map_public_ip_on_launch = each.value["map_public_ip_on_launch"]
+  network_acl_association = try(each.value.network_acl_association, null)
+  network_acl_id          = try(module.network_acl[each.value.network_acl_association].id, null)
   tags = merge(
     var.tags,
     {
