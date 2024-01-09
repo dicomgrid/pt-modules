@@ -262,7 +262,7 @@ resource "aws_s3_bucket_policy" "ambra_orphan_bucket_policy" {
 resource "aws_iam_role" "main" {
   provider           = aws.primary
   description        = "Allows EC2 instances to call AWS services on your behalf."
-  name               = "s3-bucket-provisioning-instance-profile"
+  name               = var.service_role_name
   assume_role_policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -288,11 +288,17 @@ resource "aws_iam_instance_profile" "main" {
   role     = aws_iam_role.main.id
 }
 
-resource "aws_iam_role_policy" "main" {
+resource "aws_iam_policy" "main" {
   provider = aws.primary
-  name     = aws_iam_role.main.name
-  role     = aws_iam_role.main.id
+  name     = "${aws_iam_role.main.name}-policy"
+  description = "Allows EC2 instances to call AWS services on your behalf."
   policy   = data.aws_iam_policy_document.s3-bucket-provisioning-instance-profile.json
+}
+
+resource "aws_iam_role_policy_attachment" "main" {
+  provider   = aws.primary
+  role       = aws_iam_role.main.id
+  policy_arn = aws_iam_policy.main.arn
 }
 
 

@@ -73,3 +73,7 @@ variable "s3objectmanager_policy_name" {
   default = "s3ObjectManager" # adding for the rare occasion where the lambda will exist on the same acct(different regions). 
                               #this will allow for the creation of different policies that will limit scope of allowed roles to assume
 }
+
+variable "service_role_name" {
+  default = "s3-bucket-provisioning-instance-profile-aus" # creating for the same reason as above
+}
