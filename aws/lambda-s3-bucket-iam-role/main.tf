@@ -181,25 +181,25 @@ resource "aws_iam_policy" "s3_object_management_main" {
 # S3 bucket for customer bucket logs
 resource "aws_s3_bucket" "s3_logging" {
 
-  bucket   = "ambra-storage-s3-logging-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.name}"
+  bucket = "ambra-storage-s3-logging-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.name}"
 
   tags = {
-    Name                     = "ambra-storage-s3-logging-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.name}"
-    Billing                  = "ambra"
-    Environment              = var.environment
-    Owner                    = "platform"
-    CodeManaged              = "true"
-    Compliance               = "phi"
-    Product                  = "ambra"
-    OneTime                  = "null"
-    Application              = "storage-lt"
+    Name        = "ambra-storage-s3-logging-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.name}"
+    Billing     = "ambra"
+    Environment = var.environment
+    Owner       = "platform"
+    CodeManaged = "true"
+    Compliance  = "phi"
+    Product     = "ambra"
+    OneTime     = "null"
+    Application = "storage-lt"
   }
 }
 
 
 # Lifecycle rules for s3 logging bucket
 resource "aws_s3_bucket_lifecycle_configuration" "s3_logging" {
-   bucket     = aws_s3_bucket.s3_logging.id
+  bucket = aws_s3_bucket.s3_logging.id
   rule {
     id = "delete-old-logs"
     filter {
@@ -225,7 +225,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "s3_logging" {
 
 # Encryption scheme for Ambra PHR bucket
 resource "aws_s3_bucket_server_side_encryption_configuration" "s3_logging" {
-  bucket   = aws_s3_bucket.s3_logging.id
+  bucket = aws_s3_bucket.s3_logging.id
 
   rule {
     apply_server_side_encryption_by_default {
