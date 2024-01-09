@@ -195,7 +195,7 @@ resource "aws_lambda_function_url" "s3_bucket_provisioning_alias_url" {
 # Create the role that allows the Lambda to carry out its work
 resource "aws_iam_role" "iam_for_s3_bucket_provisioning" {
   provider = aws.primary
-  name     = var.iam_for_s3_bucket_provisioning_name
+  name     = var.lambda_execution_role_name
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -255,7 +255,7 @@ resource "aws_s3_bucket_policy" "ambra_orphan_bucket_policy" {
 resource "aws_iam_role" "main" {
   provider           = aws.primary
   description        = "Allows EC2 instances to call AWS services on your behalf."
-  name               = var.service_role_name
+  name               = var.services_instance_profile_name
   assume_role_policy = <<EOF
 {
     "Version": "2012-10-17",

@@ -75,10 +75,10 @@ variable "s3objectmanager_policy_name" {
   default = "s3ObjectManager"
 }
 
-variable "service_role_name" {
+variable "services_instance_profile_name" {
   default = "s3-bucket-provisioning-instance-profile"
 }
 
-variable "iam_for_s3_bucket_provisioning_name" {
+variable "lambda_execution_role_name" {
   default = "s3-bucket-provisioning-lambda-execution-role"
 }
