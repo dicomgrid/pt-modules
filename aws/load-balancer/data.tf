@@ -1,10 +1,3 @@
-data "aws_instances" "main" {
-  filter {
-    name   = "tag:Name"
-    values = var.target_instances
-  }
-}
-
 data "aws_vpc" "main" {
   filter {
     name   = "tag:Name"
