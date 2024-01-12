@@ -35,10 +35,10 @@ resource "aws_network_acl" "main" {
 }
 
 resource "aws_network_acl_rule" "main" {
-  for_each        = var.rules
+  for_each        = merge([for type, type_value in var.rules : { for rule, rule_value in type_value : "${type}_${rule}" => merge(rule_value, { direction = type, rule_key = rule }) }]...)
   network_acl_id  = aws_network_acl.main.id
-  rule_number     = each.value.rule_number
-  egress          = try(each.value.egress, false)
+  rule_number     = try(each.value.rule_number, each.value.rule_key)
+  egress          = each.value.direction == "egress" ? true : false
   protocol        = each.value.protocol
   rule_action     = each.value.rule_action
   cidr_block      = try(each.value.cidr_block, null)
