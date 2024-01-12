@@ -1,71 +1,39 @@
-variable "enable_cross_zone_load_balancing" {
-  default = true
-}
-variable "enable_deletion_protection" {
-  default = false
-}
-
-variable "health_check" {
-  default = [
-    {
-      healthy_threshold   = null
-      interval            = null
-      matcher             = null
-      path                = null
-      port                = null
-      timeout             = null
-      unhealthy_threshold = null
-    }
-  ]
-}
-/*
-variable "health_check" {
-  default = []
-  type = list(object({
-    healthy_threshold   = number
-    interval            = number
-    matcher             = string
-    path                = string
-    port                = number
-    timeout             = number
-    unhealthy_threshold = number
-  }))
-}
-
-variable "ebs_block_device" {
-  default = [
-    {
-      delete_on_termination = null
-      device_name           = null
-      encrypted             = null
-      volume_size           = null
-      volume_type           = null
-      iops                  = null
-      throughput            = null
-    }
-  ]
-}
-*/
+variable "access_logs" { default = {} }
+variable "connection_logs" { default = {} }
+variable "customer_owned_ipv4_pool" { default = null }
+variable "desync_mitigation_mode" { default = null }
+variable "dns_record_client_routing_policy" { default = null }
+variable "drop_invalid_header_fields" { default = null }
+variable "enable_cross_zone_load_balancing" { default = true }
+variable "enable_deletion_protection" { default = false }
+variable "enable_http2" { default = null }
+variable "enable_tls_version_and_cipher_suite_headers" { default = null }
+variable "enable_waf_fail_open" { default = null }
+variable "enable_xff_client_port" { default = null }
+variable "enforce_security_group_inbound_rules_on_private_link_traffic" { default = null }
+variable "idle_timeout" { default = null }
 variable "internal" {}
-variable "listener_action_type" {}
-variable "listener_port" {}
-variable "listener_protocol" {}
+variable "ip_address_type" { default = null }
+variable "listeners" { default = {} }
 variable "load_balancer_type" {}
-variable "security_groups" {
-  default = null
-}
+variable "name_prefix" { default = null }
+variable "name" {}
+variable "preserve_host_header" { default = null }
+variable "security_groups" { default = null }
+variable "subnet_mapping" { default = [] }
 variable "subnets" {}
-variable "target_instances" {}
-variable "target_port" {}
-variable "target_protocol" {}
+variable "target_group_attachments" { default = {} }
+variable "target_groups" { default = {} }
+variable "timeouts" { default = {} }
 variable "vpc" {}
-
+variable "xff_header_processing_mode" { default = null }
 
 # Tags
 locals {
   default_tags = {
     CodeManaged              = var.code_managed
     Compliance               = var.compliance
+    Name                     = var.name
     OneTime                  = var.onetime
     aws-migration-project-id = var.aws_project_id
     map-migrated             = var.map_migrated
