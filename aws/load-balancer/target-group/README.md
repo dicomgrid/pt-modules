@@ -60,3 +60,5 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_arn"></a> [arn](#output\_arn) | n/a |
+| <a name="output_arn_suffix"></a> [arn\_suffix](#output\_arn\_suffix) | n/a |
+| <a name="output_name"></a> [name](#output\_name) | n/a |
