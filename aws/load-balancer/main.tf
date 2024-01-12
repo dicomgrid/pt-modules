@@ -17,8 +17,8 @@ resource "aws_lb" "main" {
   name                                                         = var.name
   name_prefix                                                  = var.name_prefix
   preserve_host_header                                         = var.preserve_host_header
-  security_groups                                              = var.load_balancer_type == "application" ? data.aws_security_groups.main[0].ids : null
-  subnets                                                      = data.aws_subnets.main.ids
+  security_groups                                              = var.load_balancer_type == "application" ? var.security_groups : null
+  subnets                                                      = var.subnets
   tags                                                         = local.tags
   xff_header_processing_mode                                   = var.xff_header_processing_mode
 
@@ -80,7 +80,7 @@ module "target_group" {
   protocol           = each.value.protocol
   tags               = merge(local.tags, { Name = try(each.value.name, "${var.name}-${each.key}"), LoadBalancer = var.name }, try(each.value.tags, {}))
   target_type        = try(each.value.target_type, "instance")
-  vpc_id             = data.aws_vpc.main.id
+  vpc_id             = var.vpc
 }
 
 resource "aws_lb_listener" "main" {
