@@ -5,6 +5,7 @@ resource "aws_lb_target_group" "main" {
   ip_address_type                    = var.ip_address_type
   lambda_multi_value_headers_enabled = var.lambda_multi_value_headers_enabled
   load_balancing_algorithm_type      = var.load_balancing_algorithm_type
+  load_balancing_anomaly_mitigation  = var.load_balancing_algorithm_type == "weighted_random" ? var.load_balancing_anomaly_mitigation : null
   load_balancing_cross_zone_enabled  = var.load_balancing_cross_zone_enabled
   name                               = var.name
   name_prefix                        = var.name_prefix
@@ -18,6 +19,7 @@ resource "aws_lb_target_group" "main" {
   target_type                        = var.target_type
   vpc_id                             = var.vpc_id
 
+  # Known TCP/matcher bug: https://github.com/hashicorp/terraform-provider-aws/issues/8305
   dynamic "health_check" {
     for_each = var.health_check == {} ? [] : [var.health_check]
 

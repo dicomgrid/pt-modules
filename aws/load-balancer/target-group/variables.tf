@@ -5,6 +5,7 @@ variable "health_check" { default = {} }
 variable "ip_address_type" { default = null }
 variable "lambda_multi_value_headers_enabled" { default = null }
 variable "load_balancing_algorithm_type" { default = null }
+variable "load_balancing_anomaly_mitigation" { default = null }
 variable "load_balancing_cross_zone_enabled" { default = null }
 variable "name_prefix" { default = null }
 variable "name" {}
@@ -18,7 +19,7 @@ variable "target_type" { default = "instance" }
 variable "vpc_id" {}
 variable "stickiness" { default = {} }
 variable "target_failover" { default = {} }
-variable "target_health_state" { default = {}}
+variable "target_health_state" { default = {} }
 variable "load_balancer_type" { default = null }
 
 
