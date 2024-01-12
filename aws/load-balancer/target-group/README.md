@@ -3,13 +3,13 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.9 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.20.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.32.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.20.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.32.0 |
 
 ## Modules
 
@@ -37,6 +37,7 @@ No modules.
 | <a name="input_lambda_multi_value_headers_enabled"></a> [lambda\_multi\_value\_headers\_enabled](#input\_lambda\_multi\_value\_headers\_enabled) | n/a | `any` | `null` | no |
 | <a name="input_load_balancer_type"></a> [load\_balancer\_type](#input\_load\_balancer\_type) | n/a | `any` | `null` | no |
 | <a name="input_load_balancing_algorithm_type"></a> [load\_balancing\_algorithm\_type](#input\_load\_balancing\_algorithm\_type) | n/a | `any` | `null` | no |
+| <a name="input_load_balancing_anomaly_mitigation"></a> [load\_balancing\_anomaly\_mitigation](#input\_load\_balancing\_anomaly\_mitigation) | n/a | `any` | `null` | no |
 | <a name="input_load_balancing_cross_zone_enabled"></a> [load\_balancing\_cross\_zone\_enabled](#input\_load\_balancing\_cross\_zone\_enabled) | n/a | `any` | `null` | no |
 | <a name="input_map_migrated"></a> [map\_migrated](#input\_map\_migrated) | n/a | `string` | `"null"` | no |
 | <a name="input_name"></a> [name](#input\_name) | n/a | `any` | n/a | yes |

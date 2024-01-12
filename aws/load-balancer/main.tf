@@ -72,15 +72,30 @@ module "target_group" {
 
   for_each = var.target_groups
 
-  attachments        = each.value.attachments
-  health_check       = try(each.value.health_check,[])
-  load_balancer_type = var.load_balancer_type
-  name               = try(each.value.name, "${var.name}-${each.key}")
-  port               = each.value.port
-  protocol           = each.value.protocol
-  tags               = merge(local.tags, { Name = try(each.value.name, "${var.name}-${each.key}"), LoadBalancer = var.name }, try(each.value.tags, {}))
-  target_type        = try(each.value.target_type, "instance")
-  vpc_id             = var.vpc
+  attachments                        = try(each.value.attachments, [{}])
+  connection_termination             = try(each.value.connection_termination, null)
+  deregistration_delay               = try(each.value.deregistration_delay, null)
+  health_check                       = try(each.value.health_check, {})
+  ip_address_type                    = try(each.value.ip_address_type, null)
+  lambda_multi_value_headers_enabled = try(each.value.lambda_multi_value_headers_enabled, null)
+  load_balancer_type                 = var.load_balancer_type
+  load_balancing_algorithm_type      = try(each.value.load_balancing_algorithm_type, null)
+  load_balancing_anomaly_mitigation  = try(each.value.load_balancing_anomaly_mitigation, null)
+  load_balancing_cross_zone_enabled  = try(each.value.load_balancing_cross_zone_enabled, null)
+  name                               = try(each.value.name, "${var.name}-${each.key}")
+  name_prefix                        = try(each.value.name_prefix, null)
+  port                               = each.value.port
+  preserve_client_ip                 = try(each.value.preserve_client_ip, null)
+  protocol                           = each.value.protocol
+  protocol_version                   = try(each.value.protocol_version, null)
+  proxy_protocol_v2                  = try(each.value.proxy_protocol_v2, null)
+  slow_start                         = try(each.value.slow_start, null)
+  stickiness                         = try(each.value.stickiness, {})
+  tags                               = merge(local.tags, { Name = try(each.value.name, "${var.name}-${each.key}"), LoadBalancer = var.name }, try(each.value.tags, {}))
+  target_failover                    = try(each.value.target_failover, {})
+  target_health_state                = try(each.value.target_health_state, {})
+  target_type                        = try(each.value.target_type, "instance")
+  vpc_id                             = var.vpc
 }
 
 resource "aws_lb_listener" "main" {
