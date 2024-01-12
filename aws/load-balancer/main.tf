@@ -73,7 +73,7 @@ module "target_group" {
   for_each = var.target_groups
 
   attachments        = each.value.attachments
-  health_check       = each.value.health_check
+  health_check       = try(each.value.health_check,[])
   load_balancer_type = var.load_balancer_type
   name               = try(each.value.name, "${var.name}-${each.key}")
   port               = each.value.port
