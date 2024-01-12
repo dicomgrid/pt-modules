@@ -68,4 +68,9 @@
 
 | Name | Description |
 |------|-------------|
-| <a name="output_target_group_arn"></a> [target\_group\_arn](#output\_target\_group\_arn) | n/a |
+| <a name="output_arn"></a> [arn](#output\_arn) | n/a |
+| <a name="output_arn_suffix"></a> [arn\_suffix](#output\_arn\_suffix) | n/a |
+| <a name="output_dns_name"></a> [dns\_name](#output\_dns\_name) | n/a |
+| <a name="output_listener_arn"></a> [listener\_arn](#output\_listener\_arn) | n/a |
+| <a name="output_target_group"></a> [target\_group](#output\_target\_group) | n/a |
+| <a name="output_zone_id"></a> [zone\_id](#output\_zone\_id) | n/a |
