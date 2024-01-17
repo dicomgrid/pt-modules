@@ -5,7 +5,6 @@ try {
         $mirth = get-service -name "mirth*" | select -expandproperty starttype | get-unique
         if ($mirth -ne $null) {
             get-service -name $mirth | stop-service
-            get-service -name $mirth | set-service -startuptype manual
             Write-Host "Finished attempting to stop Mirth services"
         }
     }
@@ -16,7 +15,6 @@ try {
         $CLSVCVer = $CLSVC -replace '^([^-]*- )','' | get-unique
             if ($CLSVCVer -like "3.*"){ 
             get-service -displayname "zvision*" | stop-service
-            get-service -displayname "zvision*" | set-service -startuptype manual
             Write-Host "Finished attempting to stop Clario services"
         }
     }
@@ -26,7 +24,6 @@ try {
         $CorePoint = get-service -name "corepoint*" | select -expandproperty Description
         if ($CorePoint -ne $null) {
             get-service -displayname $CorePoint | stop-service
-            get-service -displayname $CorePoint | set-service -startuptype manual
             Write-Host "Finished attempting to start CorePoint services"
         }
     }
@@ -36,13 +33,10 @@ try {
         $mmodal = get-service -displayname "Connexion*" | start-service
         if ($mmodal -ne $null) {
             get-service -displayname "Connexion*" | stop-service
-            get-service -displayname "Connexion*" | set-service -startuptype manual
             get-service -displayname "CdsProxyCleanupServices" | stop-service
             get-service -displayname "CdsProxyCleanupServices" | set-service -startuptype manual
             get-service -displayname "FDSupport" | stop-service #M*Modal
-            get-service -displayname "FDSupport" | set-service -startuptype manual
             get-service -displayname "ISCAgent" | stop-service
-            get-service -displayname "ISCAgent" | set-service -startuptype manual
         }
     }
 
