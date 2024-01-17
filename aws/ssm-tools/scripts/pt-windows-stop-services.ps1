@@ -34,7 +34,6 @@ try {
         if ($mmodal -ne $null) {
             get-service -displayname "Connexion*" | stop-service
             get-service -displayname "CdsProxyCleanupServices" | stop-service
-            get-service -displayname "CdsProxyCleanupServices" | set-service -startuptype manual
             get-service -displayname "FDSupport" | stop-service #M*Modal
             get-service -displayname "ISCAgent" | stop-service
         }
