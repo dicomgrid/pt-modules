@@ -21,7 +21,7 @@ variable "kms_master_key_id" { default = null }
 variable "max_message_size" { default = 262144 }
 variable "message_retention_seconds" { default = 345600 }
 variable "name" { default = null }
-variable "queue_policy_statements" {}
+variable "queue_policy_statements" { default = {} }
 variable "receive_wait_time_seconds" { default = 0 }
 variable "source_queue_policy_documents" { default = [] }
 variable "override_queue_policy_documents" { default = [] }
