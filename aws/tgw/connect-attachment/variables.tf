@@ -1,23 +1,12 @@
-locals {
-  # Create map of AZs to subnet IDs
-  az_subnets = {
-    for s in data.aws_subnet.main : s.availability_zone => s.id...
-  }
-}
-
 variable "association_route_table_id" { default = null }
-variable "connect_attachments" { default = {} }
+variable "name" { default = null }
+variable "peers" { default = {} }
 variable "propagation_route_table_ids" { default = [] }
-variable "subnets_tags_filter" {
-  default     = "*"
-  description = "Addtional filter option for subnets to use with VPC attachment"
-}
-variable "tgw_id" {}
-variable "tgw_routes" { default = [] }
+variable "protocol" { default = "gre" }
 variable "transit_gateway_default_route_table_association" { default = true }
 variable "transit_gateway_default_route_table_propagation" { default = true }
-variable "vpc_id" {}
-variable "vpc_routes" { default = [] }
+variable "transit_gateway_id" { default = null }
+variable "transport_attachment_id" { default = null }
 
 # Tags
 locals {
@@ -30,8 +19,8 @@ locals {
   }
   tags = merge(local.default_tags, var.tags)
 }
-
 variable "tags" {}
+
 variable "aws_project_id" { default = "null" }
 variable "code_managed" { default = "true" }
 variable "compliance" { default = "null" }
