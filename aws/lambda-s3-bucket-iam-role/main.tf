@@ -34,7 +34,10 @@ resource "aws_iam_role" "s3_object_manager_main" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        "Action" : "sts:AssumeRole",
+        "Action" : [
+          "sts:AssumeRole",
+          "sts:TagSession"
+        ],
         "Principal" : {
           "AWS" : "arn:aws:iam::${var.primary_account}:role/${var.instance_role}"
         },
@@ -234,3 +237,4 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_logging" {
     bucket_key_enabled = true
   }
 }
+
