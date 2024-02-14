@@ -18,11 +18,17 @@ resource "aws_sqs_queue" "main" {
   tags = var.tags
 }
 
-#TODO: Adapt to use kms module
-# resource "aws_kms_key" "main" {
-#   count = var.encryption_type == "kms" ? 1 : 0
-#   description = var.use_name_prefix ? null : (var.fifo_queue ? "${local.name}.fifo.sqs-key" : "${local.name}-sqs-key")
-# }
+module "kms_key_use1" {
+  count = var.encryption_type == "kms" ? 1 : 0
+  source = "../kms-key"
+
+  account_id              = var.account_id
+  description             = var.description
+  deletion_window_in_days = var.deletion_window_in_days
+  kms_policy              = var.kms_policy
+  region                  = var.region
+  tags = var.tags
+}
 
 data "aws_iam_policy_document" "main" {
   count = var.create && var.create_queue_policy ? 1 : 0
