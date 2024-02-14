@@ -8,7 +8,7 @@ variable "create_queue_policy" { default = true }
 variable "content_based_deduplication" { default = false }
 variable "deduplication_scope" { default = null } #allowed values: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue#deduplication_scope
 variable "delay_seconds" { default = 0 }
-variable "deletion_window_in_days" { default = 5 }
+variable "deletion_window_in_days" { default = 7 }
 variable "encryption_type" {
   default = "sse"
   validation {
