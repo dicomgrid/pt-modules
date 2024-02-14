@@ -18,17 +18,17 @@ resource "aws_sqs_queue" "main" {
   tags = var.tags
 }
 
-module "kms" {
-  count = var.encryption_type == "kms" ? 1 : 0
-  source = "../kms-key"
+# module "kms" {
+#   count = var.encryption_type == "kms" ? 1 : 0
+#   source = "../kms-key"
 
-  account_id              = var.account_id
-  description             = var.description
-  deletion_window_in_days = var.deletion_window_in_days
-  kms_policy              = var.kms_policy
-  region                  = var.region
-  tags = var.tags
-}
+#   account_id              = var.account_id
+#   description             = var.description
+#   deletion_window_in_days = var.deletion_window_in_days
+#   kms_policy              = var.kms_policy
+#   region                  = var.region
+#   tags = var.tags
+# }
 
 data "aws_iam_policy_document" "main" {
   count = var.create && var.create_queue_policy ? 1 : 0
