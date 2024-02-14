@@ -44,7 +44,7 @@ No modules.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.20.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
 
 ## Modules
 
@@ -54,13 +54,14 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_ssm_patch_baseline.ssm-patch-baseline](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_patch_baseline) | resource |
+| [aws_ssm_patch_baseline.linux_pb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_patch_baseline) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_approval_days"></a> [approval\_days](#input\_approval\_days) | n/a | `number` | `7` | no |
+| <a name="input_approve_after_days"></a> [approve\_after\_days](#input\_approve\_after\_days) | n/a | `number` | `7` | no |
+| <a name="input_approve_until_date"></a> [approve\_until\_date](#input\_approve\_until\_date) | n/a | `any` | `null` | no |
 | <a name="input_approved_patches"></a> [approved\_patches](#input\_approved\_patches) | n/a | `any` | `null` | no |
 | <a name="input_compliance_levels"></a> [compliance\_levels](#input\_compliance\_levels) | n/a | <pre>list(object({<br>    <br>    compliance_level = string<br>    severity = list(string)<br>  }))</pre> | <pre>[<br>  {<br>    "compliance_level": "CRITICAL",<br>    "severity": [<br>      "Critical",<br>      "Important"<br>    ]<br>  },<br>  {<br>    "compliance_level": "MEDIUM",<br>    "severity": [<br>      "Moderate"<br>    ]<br>  },<br>  {<br>    "compliance_level": "LOW",<br>    "severity": [<br>      "Low"<br>    ]<br>  }<br>]</pre> | no |
 | <a name="input_description"></a> [description](#input\_description) | n/a | `string` | `"null"` | no |
@@ -75,6 +76,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_pb-linux-arn"></a> [pb-linux-arn](#output\_pb-linux-arn) | n/a |
-| <a name="output_pb-linux-id"></a> [pb-linux-id](#output\_pb-linux-id) | n/a |
+| <a name="output_arn"></a> [arn](#output\_arn) | n/a |
+| <a name="output_id"></a> [id](#output\_id) | n/a |
 <!-- END_TF_DOCS -->
