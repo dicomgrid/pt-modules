@@ -10,8 +10,8 @@ variable "delay_seconds" { default = 0 }
 variable "encryption_type" {
   default = "sse"
   validation {
-    condition     = contains(["sse", "kms"], var.encryption_type)
-    error_message = "Expected encryption_type values: \"sse\", \"kms\"." #│ The validation error message must be at least one full sentence starting with an uppercase letter and ending with a period or question mark.
+    condition     = contains(["none", "sse", "kms"], var.encryption_type)
+    error_message = "Expected encryption_type values: \"none\", \"sse\", \"kms\"." #│ The validation error message must be at least one full sentence starting with an uppercase letter and ending with a period or question mark.
   }
 }
 variable "fifo_queue" { default = false }
