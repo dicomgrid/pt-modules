@@ -1,7 +1,13 @@
-variable "association_attachments" { default = [] }
+variable "association_attachments" {
+  type = set(string)
+  default = [] 
+}
+
 variable "create_route_table" { default = true }
-variable "propagation_attachments" { default = [] }
-variable "transit_gateway_id" { default = null }
+variable "propagation_attachments" { 
+  type = set(string)
+  default = [] 
+}
 variable "transit_gateway_id" { default = null }
 variable "transit_gateway_route_table_id" { default = null }
 

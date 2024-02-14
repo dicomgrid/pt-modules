@@ -5,6 +5,7 @@ variable "default_route_table_propagation" { default = "enable" }
 variable "description" { default = "" }
 variable "dns_support" { default = "enable" }
 variable "multicast_support" { default = "disable" }
+variable "route_tables" { default = {} }
 variable "transit_gateway_cidr_blocks" { default = null }
 variable "vpn_ecmp_support" { default = "enable" }
 
