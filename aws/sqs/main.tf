@@ -7,7 +7,7 @@ resource "aws_sqs_queue" "main" {
   fifo_queue                        = var.fifo_queue
   fifo_throughput_limit             = var.fifo_queue ? var.fifo_throughput_limit : null
   kms_data_key_reuse_period_seconds = var.encryption_type == "kms" ? var.kms_data_key_reuse_period_seconds : null
-  kms_master_key_id                 = var.encryption_type == "kms" ? var.kms_master_key_id : null
+  kms_master_key_id                 = var.encryption_type == "kms" ? module.kms.id : null
   max_message_size                  = var.max_message_size
   message_retention_seconds         = var.message_retention_seconds
   name                              = var.use_name_prefix ? null : (var.fifo_queue ? "${local.name}.fifo" : local.name)
@@ -18,7 +18,7 @@ resource "aws_sqs_queue" "main" {
   tags = var.tags
 }
 
-module "kms_key_use1" {
+module "kms" {
   count = var.encryption_type == "kms" ? 1 : 0
   source = "../kms-key"
 
