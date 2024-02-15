@@ -7,7 +7,7 @@ resource "aws_sqs_queue" "main" {
   fifo_queue                        = var.fifo_queue
   fifo_throughput_limit             = var.fifo_queue ? var.fifo_throughput_limit : null
   kms_data_key_reuse_period_seconds = var.encryption_type == "kms" ? var.kms_data_key_reuse_period_seconds : null
-  kms_master_key_id                 = var.encryption_type == "kms" ? resource.aws_kms_key.main[0].id : null
+  kms_master_key_id                 = var.encryption_type == "kms" ? var.kms_master_key_id : null
   max_message_size                  = var.max_message_size
   message_retention_seconds         = var.message_retention_seconds
   name                              = var.use_name_prefix ? null : (var.fifo_queue ? "${local.name}.fifo" : local.name)
@@ -16,12 +16,6 @@ resource "aws_sqs_queue" "main" {
   visibility_timeout_seconds        = var.visibility_timeout_seconds
 
   tags = var.tags
-}
-
-#TODO: Adapt to use kms module
-resource "aws_kms_key" "main" {
-  count = var.encryption_type == "kms" ? 1 : 0
-  description = var.use_name_prefix ? null : (var.fifo_queue ? "${local.name}.fifo.sqs-key" : "${local.name}-sqs-key")
 }
 
 data "aws_iam_policy_document" "main" {
