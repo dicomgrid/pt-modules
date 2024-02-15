@@ -1,8 +1,6 @@
 locals {
   name = try(trimsuffix(var.name, ".fifo"), "")
 }
-variable "account_id" { default = null}
-variable "description" { default = {} }
 variable "create" { default = true }
 variable "create_queue_policy" { default = true }
 variable "content_based_deduplication" { default = false }
@@ -26,7 +24,6 @@ variable "message_retention_seconds" { default = 345600 }
 variable "name" { default = null }
 variable "queue_policy_statements" { default = {} }
 variable "receive_wait_time_seconds" { default = 0 }
-variable "region" { default = {} }
 variable "source_queue_policy_documents" { default = [] }
 variable "override_queue_policy_documents" { default = [] }
 variable "sqs_managed_sse_enabled" { default = true }
