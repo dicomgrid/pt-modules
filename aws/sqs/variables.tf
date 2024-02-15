@@ -18,7 +18,6 @@ variable "fifo_queue" { default = false }
 variable "fifo_throughput_limit" { default = null } #allowed values: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue#fifo_throughput_limit
 variable "kms_data_key_reuse_period_seconds" { default = 300 }
 variable "kms_master_key_id" { default = null }
-variable "kms_policy" { default = null }
 variable "max_message_size" { default = 262144 }
 variable "message_retention_seconds" { default = 345600 }
 variable "name" { default = null }
