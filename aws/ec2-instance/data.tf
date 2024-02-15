@@ -123,12 +123,30 @@ data "aws_ami" "rocky_8" {
 
 data "aws_ami" "rocky_8_custom" {
   most_recent = true
-  owners      = ["273055129372"]
+  owners      = ["601722232065"]
   filter {
     name   = "name"
     values = ["rocky8*"]
   }
 }
+
+data "aws_ami" "windows_2019_custom" {
+  most_recent = true
+  owners      = ["601722232065"]
+  filter {
+    name   = "name"
+    values = ["windows2019*"]
+  }
+}
+
+# data "aws_ami" "windows_2022_custom" {
+#   most_recent = true
+#   owners      = ["601722232065"]
+#   filter {
+#     name   = "name"
+#     values = ["windows2022*"]
+#   }
+# }
 
 data "aws_ami" "windows_server_2016" {
   most_recent = true
