@@ -1,8 +1,9 @@
+variable "create_route_table" { default = true }
 variable "vpc_id" {}
 variable "propagating_vgws" { default = [] }
 variable "routes" { default = {} }
 variable "route_table_associations" { default = {} }
-
+variable "route_table_id" { default = null }
 
 # Tags
 locals {
