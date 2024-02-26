@@ -37,5 +37,12 @@ then
     fi
 fi
 
-echo "Rebooting now..."
-exit 194
+export REBOOT=$(needs-restarting -r | grep required)
+if [[ $REBOOT ]]
+then
+    echo "Rebooting now..."
+    exit 194
+else
+    echo "Exiting..."
+    exit 0
+fi
