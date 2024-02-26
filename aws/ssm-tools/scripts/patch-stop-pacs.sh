@@ -68,26 +68,47 @@ if [[ ! -z $(cat /etc/os-release | grep ID= | grep rocky) ]]
 then
     echo "Rocky Instance Found..."
     export REPOS="--disablerepo=* --enablerepo=epel --enablerepo=appstream --enablerepo=baseos --enablerepo=extras"
-    sudo yum ${DISABLED_PLUGINS} ${REPOS} ${SKIP} update -y --nobest || true
-    sudo package-cleanup --cleandupes || true
+    if [[ -f /etc/yum/pluginconf.d/rhnplugin.conf ]]
+    then
+        echo "Has rhnplugin."
+        sudo yum ${DISABLED_PLUGINS} ${REPOS} ${SKIP} update -y --nobest || true
+        sudo package-cleanup --cleandupes || true
+    else
+        sudo yum ${REPOS} ${SKIP} update -y --nobest || true
+        sudo package-cleanup --cleandupes || true
+    fi
 fi
+
 
 if [[ ! -z $(cat /etc/os-release | grep ID= | grep centos) ]]
 then
     echo "CentOS Instance Found..."
     export REPOS="--disablerepo=* --enablerepo=epel --enablerepo=base --enablerepo=updates"
-    sudo yum ${DISABLED_PLUGINS} update ca-certificates -y
-    sudo yum ${DISABLED_PLUGINS} install yum-utils -y
-    sudo yum ${DISABLED_PLUGINS} ${REPOS} ${SKIP} update -y
-    sudo yum-complete-transaction ${DISABLED_PLUGINS} --cleanup-only
+    if [[ -f /etc/yum/pluginconf.d/rhnplugin.conf ]]
+    then
+        echo "Has rhnplugin."
+        sudo yum ${DISABLED_PLUGINS} update ca-certificates -y
+        sudo yum ${DISABLED_PLUGINS} install yum-utils -y
+        sudo yum ${DISABLED_PLUGINS} ${REPOS} ${SKIP} update -y
+        sudo yum-complete-transaction ${DISABLED_PLUGINS} --cleanup-only
+    else
+        sudo yum update ca-certificates -y
+        sudo yum install yum-utils -y
+        sudo yum ${REPOS} ${SKIP} update -y
+        sudo yum-complete-transaction --cleanup-only
+    fi
 fi
 
 export REBOOT=$(needs-restarting -r | grep required)
 if [[ $REBOOT ]]
 then
     echo "Rebooting now..."
-    export -f stopPacs
-    su admin -c "bash -c stopPacs" || true
+    if [[ $(grep -c "^admin:" /etc/passwd) -ne 0 ]]
+    then
+      echo "admin user found."
+      export -f stopPacs
+      su admin -c "bash -c stopPacs" || true
+    fi
     exit 194
 else
     echo "Exiting..."
