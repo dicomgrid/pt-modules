@@ -18,7 +18,18 @@ variable "destination_cidr_blocks" {
   default = []
 }
 
-variable "subnets_filter" { default = "*" }
+variable "routes_subnet_name_values" {
+  description = "List of tag:Name values to filter subnets' route tables the routes should be added to. Default [] is all subnets for VPC"
+  type        = set(string)
+  default     = []
+}
+
+variable "tgwa_subnet_name_values" {
+  description = "List of tag:Name values to filter subnets the TGW should be attached to. Default [] is any subnets for VPC"
+  type        = set(string)
+  default     = []
+
+}
 
 # Tags
 locals {
