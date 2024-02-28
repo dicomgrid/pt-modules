@@ -5,4 +5,3 @@ resource "aws_route" "main" {
   destination_cidr_block = each.key
   transit_gateway_id     = var.tgw_id
 }
-
