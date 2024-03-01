@@ -7,9 +7,7 @@ resource "aws_cloudwatch_event_rule" "eventbridge_rule" {
 }
 
 resource "aws_cloudwatch_event_target" "eventbridge_target" {
-  target_id = "lambda"
+  target_id = var.target_id
   rule      = aws_cloudwatch_event_rule.eventbridge_rule.name
   arn       = var.lambda_arn
-  
-  tags = var.tags
 }
