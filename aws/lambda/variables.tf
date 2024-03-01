@@ -1,5 +1,5 @@
 variable "architectures" {}
-variable "archive_file" {}
+variable "archive_file" { default = "" }
 variable "function_code" {}
 variable "function_name" {}
 variable "handler" {}
