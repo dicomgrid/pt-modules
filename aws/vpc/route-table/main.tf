@@ -1,5 +1,5 @@
 resource "aws_route_table" "main" {
-  count = var.create_route_table ? 1 : 0
+  count            = var.create_route_table ? 1 : 0
   vpc_id           = var.vpc_id
   propagating_vgws = var.propagating_vgws
   tags             = local.tags
@@ -15,7 +15,7 @@ module "route" {
   destination_prefix_list_id  = try(each.value.destination_prefix_list_id, null)
   gateway_id                  = each.value.gateway_id
   route_table_id              = var.create_route_table ? aws_route_table.main[0].id : var.route_table_id
-  
+
 }
 
 module "route_table_association" {
@@ -23,7 +23,7 @@ module "route_table_association" {
 
   for_each = var.route_table_associations
 
-  gateway_id = try(each.value.gateway_id, null)
+  gateway_id     = try(each.value.gateway_id, null)
   route_table_id = var.create_route_table ? aws_route_table.main[0].id : var.route_table_id
-  subnet_id = try(each.value.subnet_id, null)
+  subnet_id      = try(each.value.subnet_id, null)
 }
