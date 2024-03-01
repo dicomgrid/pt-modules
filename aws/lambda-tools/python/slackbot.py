@@ -50,7 +50,6 @@ def slackbot(event, context):
                 resource_group_member_list.append(id)
             except (KeyError, IndexError, TypeError) as e:
                 logging.error('Error processing resource group member: %s', member)
-    
 
     #extract instance names from ids and format
     instance_id_list = []
@@ -107,14 +106,15 @@ def slackbot(event, context):
     #event messaging
     slack_webhook_url = os.environ.get('SLACK_WEBHOOK_URL')
     slack_channel = os.environ.get('SLACK_CHANNEL')
-    slack_username = f'PLT SlackBot {event_time}'
-    window_execution_url = f'https://{region}.console.aws.amazon.com/systems-manager/maintenance-windows/{window_id}/history/{window_execution_id}?region={region}'
-    window_url = f'https://{region}.console.aws.amazon.com/systems-manager/maintenance-windows/{window_id}/history/?region={region}'
+    slack_username = f'Platform SlackBot'
+    base_url = f'https://{region}.console.aws.amazon.com/systems-manager/maintenance-windows/{window_id}/history'
+    window_execution_url = f'{base_url}/{window_execution_id}?region={region}'
+    window_url = f'{base_url}/?region={region}'
 
     #construct alert payload
     slack_text = textwrap.dedent(
         f'''
-    {region}  {account_name}  {account_id}
+    Account/Region: {account_name} {account_id} {region}
     Patch Status: <{window_execution_url}|{status}>
     Patch Window: {ssm_mw_name}
     Patch Group: {ssm_mw_target}
