@@ -61,6 +61,7 @@ No modules.
 | <a name="input_duration"></a> [duration](#input\_duration) | n/a | `number` | `2` | no |
 | <a name="input_schedule"></a> [schedule](#input\_schedule) | n/a | `string` | `""` | no |
 | <a name="input_schedule_timezone"></a> [schedule\_timezone](#input\_schedule\_timezone) | n/a | `string` | `"America/New_York"` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Maintenance Window Tags | `map(string)` | <pre>{<br>  "client_code": ""<br>}</pre> | no |
 | <a name="input_window_enabled"></a> [window\_enabled](#input\_window\_enabled) | n/a | `bool` | `false` | no |
 | <a name="input_window_name"></a> [window\_name](#input\_window\_name) | n/a | `string` | `""` | no |
 

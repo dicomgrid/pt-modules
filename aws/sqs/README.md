@@ -69,7 +69,6 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_kms_key.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_sqs_queue.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue) | resource |
 | [aws_sqs_queue_policy.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue_policy) | resource |
 | [aws_iam_policy_document.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -83,6 +82,7 @@ No modules.
 | <a name="input_create_queue_policy"></a> [create\_queue\_policy](#input\_create\_queue\_policy) | n/a | `bool` | `true` | no |
 | <a name="input_deduplication_scope"></a> [deduplication\_scope](#input\_deduplication\_scope) | n/a | `any` | `null` | no |
 | <a name="input_delay_seconds"></a> [delay\_seconds](#input\_delay\_seconds) | n/a | `number` | `0` | no |
+| <a name="input_deletion_window_in_days"></a> [deletion\_window\_in\_days](#input\_deletion\_window\_in\_days) | n/a | `number` | `7` | no |
 | <a name="input_encryption_type"></a> [encryption\_type](#input\_encryption\_type) | n/a | `string` | `"sse"` | no |
 | <a name="input_fifo_queue"></a> [fifo\_queue](#input\_fifo\_queue) | n/a | `bool` | `false` | no |
 | <a name="input_fifo_throughput_limit"></a> [fifo\_throughput\_limit](#input\_fifo\_throughput\_limit) | n/a | `any` | `null` | no |
