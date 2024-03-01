@@ -26,9 +26,6 @@ resource "aws_cloudwatch_log_group" "lambda_log_group" {
   count = var.create_log_group == null ? 0 : 1
   name              = "/aws/lambda/${var.function_name}"
   retention_in_days = var.log_retention_in_days
-  lifecycle {
-    prevent_destroy = var.prevent_destroy_logs
-  }
 
   tags = var.tags
 }
