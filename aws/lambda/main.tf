@@ -18,6 +18,8 @@ resource "aws_lambda_function" "lambda_function" {
   environment {
     variables = var.environment_variables
   }
+
+  tags = var.tags
 }
 
 resource "aws_cloudwatch_log_group" "lambda_log_group" {
@@ -27,4 +29,6 @@ resource "aws_cloudwatch_log_group" "lambda_log_group" {
   lifecycle {
     prevent_destroy = var.prevent_destroy_logs
   }
+
+  tags = var.tags
 }
