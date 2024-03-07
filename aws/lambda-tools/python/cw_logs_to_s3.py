@@ -1,5 +1,5 @@
 import boto3, json, csv, time, os
-import pandas as pd
+# import pandas as pd
 from datetime import datetime, timedelta
 
 #TODO: Convert prints to logging paths
@@ -13,7 +13,7 @@ logs = session.client('logs', region_name=region)
 s3 = session.resource('s3', region_name=region)
 ssm = session.client('ssm', region_name=region)
 
-def lambda_handler(event, context):
+def cw_logs_to_s3(event, context):
     # global default vars
     bucket_name='plt-test-cw-log-export'
     export_to_time = int(round(time.time() * 1000))
