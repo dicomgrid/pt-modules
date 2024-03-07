@@ -13,105 +13,107 @@ logs = session.client('logs', region_name=region)
 s3 = session.resource('s3', region_name=region)
 ssm = session.client('ssm', region_name=region)
 
-# global default vars
-bucket_name='plt-test-cw-log-export'
-export_to_time = int(round(time.time() * 1000))
-extra_args = {}
-log_groups = []
-log_groups_to_export = []
-log_timestamp = '%Y-%m-%d %H:%M:%S'
-ssm_parameter_base='/cw_logs_to_s3_last_export/'
-ssm_value = 0
+def lambda_handler(event, context):
+    # global default vars
+    bucket_name='plt-test-cw-log-export'
+    export_to_time = int(round(time.time() * 1000))
+    extra_args = {}
+    log_groups = []
+    log_groups_to_export = []
+    log_timestamp = '%Y-%m-%d %H:%M:%S'
+    ssm_parameter_base='/cw_logs_to_s3_last_export/'
+    ssm_value = 0
 
-# Gather log groups with ExportToS3 tags set to true
-while True:
-    describe_log_groups = logs.describe_log_groups(**extra_args)
-    log_groups = log_groups + describe_log_groups['logGroups']
-    
-    if not 'nextToken' in describe_log_groups:
-        break
-    extra_args['nextToken'] = describe_log_groups['nextToken']
-
-for log_group in log_groups:
-
-    log_group_name = log_group['logGroupName']
-
-
-    list_tags_log_group = logs.list_tags_log_group(logGroupName=log_group_name)
-    log_group_tags = list_tags_log_group['tags']
-
-    if 'ExportToS3' in log_group_tags and log_group_tags['ExportToS3'] == 'true':
-        timestamp = datetime.now().strftime(log_timestamp)
-        print(f'[{timestamp}] Identified log group {log_group_name} with ExportToS3 tag status: {log_group_tags["ExportToS3"]}')
-        log_groups_to_export.append(log_group_name)
-        timestamp = datetime.now().strftime(log_timestamp)
-        print(f'[{timestamp}] --> Log group {log_group_name} added to export list.')
-
-# Get last export timestamp
-for log_group_name in log_groups_to_export:
-    account_id = log_group_arn.split(":")[4]
-    log_group_arn = logs.describe_log_groups(logGroupNamePrefix=log_group_name)['logGroups'][0]['logGroupArn']
-    ssm_parameter_name = ("%s%s" % (ssm_parameter_base, log_group_name)).replace("//", "/") 
-
-    destination_prefix = f"{account_id}{log_group_name}"
-
-    try:
-        get_timestamp = ssm.get_parameter(Name=ssm_parameter_name)
-        ssm_value = get_timestamp['Parameter']['Value']
-
-        timestamp = datetime.now().strftime(log_timestamp)
-        print(f'[{timestamp}] Log group {log_group_name} existing timestamp found: {ssm_value}.')
-    except ssm.exceptions.ParameterNotFound:
-        timestamp = datetime.now().strftime(log_timestamp)
-        print(f'[{timestamp}] Log group {log_group_name} timestamp does not exist, using default value.')
-
-    if export_to_time - int(ssm_value) < (24 * 60 * 60 * 1000):
-        # Haven't been 24hrs from the last export of this log group
-        print(f'[{timestamp}] Skipped until 24hrs from last export is completed')
-        continue
-    
-# Execute log export
-    create_export_task = logs.create_export_task(
-        logGroupName=log_group_name,
-        fromTime=ssm_value,
-        to=export_to_time,
-        destination=bucket_name,
-        destinationPrefix=destination_prefix
-    )
-
-    export_task_id = create_export_task['taskId']
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print(f'[{timestamp}] --> Export task {export_task_id} created.')
-
+    # Gather log groups with ExportToS3 tags set to true
     while True:
+        describe_log_groups = logs.describe_log_groups(**extra_args)
+        log_groups = log_groups + describe_log_groups['logGroups']
+        
+        if not 'nextToken' in describe_log_groups:
+            break
+        extra_args['nextToken'] = describe_log_groups['nextToken']
+
+    for log_group in log_groups:
+
+        log_group_name = log_group['logGroupName']
+
+
+        list_tags_log_group = logs.list_tags_log_group(logGroupName=log_group_name)
+        log_group_tags = list_tags_log_group['tags']
+
+        if 'ExportToS3' in log_group_tags and log_group_tags['ExportToS3'] == 'true':
+            timestamp = datetime.now().strftime(log_timestamp)
+            print(f'[{timestamp}] Identified log group {log_group_name} with ExportToS3 tag status: {log_group_tags["ExportToS3"]}')
+            log_groups_to_export.append(log_group_name)
+            timestamp = datetime.now().strftime(log_timestamp)
+            print(f'[{timestamp}] --> Log group {log_group_name} added to export list.')
+
+    # Get last export timestamp
+    for log_group_name in log_groups_to_export:
+        account_id = log_group_arn.split(":")[4]
+        log_group_arn = logs.describe_log_groups(logGroupNamePrefix=log_group_name)['logGroups'][0]['logGroupArn']
+        ssm_parameter_name = ("%s%s" % (ssm_parameter_base, log_group_name)).replace("//", "/") 
+        
+        #https://stackoverflow.com/a/71307116
+        destination_prefix = f"{account_id}{log_group_name}"
+
+        try:
+            get_timestamp = ssm.get_parameter(Name=ssm_parameter_name)
+            ssm_value = get_timestamp['Parameter']['Value']
+
+            timestamp = datetime.now().strftime(log_timestamp)
+            print(f'[{timestamp}] Log group {log_group_name} existing timestamp found: {ssm_value}.')
+        except ssm.exceptions.ParameterNotFound:
+            timestamp = datetime.now().strftime(log_timestamp)
+            print(f'[{timestamp}] Log group {log_group_name} timestamp does not exist, using default value.')
+
+        if export_to_time - int(ssm_value) < (24 * 60 * 60 * 1000):
+            # Haven't been 24hrs from the last export of this log group
+            print(f'[{timestamp}] Skipped until 24hrs from last export is completed')
+            continue
+        
+    # Execute log export
+        create_export_task = logs.create_export_task(
+            logGroupName=log_group_name,
+            fromTime=ssm_value,
+            to=export_to_time,
+            destination=bucket_name,
+            destinationPrefix=destination_prefix
+        )
+
+        export_task_id = create_export_task['taskId']
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        describe_export_task = logs.describe_export_tasks(taskId=export_task_id)
-        status = describe_export_task['exportTasks'][0]['status']['code']
+        print(f'[{timestamp}] --> Export task {export_task_id} created.')
 
-        if status == 'PENDING':
-            print(f'[{timestamp}] Export task {export_task_id} for {log_group_name} still waiting to run...')
-            time.sleep(5)
-            continue
-        elif status == 'RUNNING':
-            print(f'[{timestamp}] Export task {export_task_id} for {log_group_name} running...')
-            time.sleep(5)
-            continue
-        elif status == 'COMPLETED':
-            print(f'[{timestamp}] --> Export task {export_task_id} completed successfully')
-            break
-        elif status == 'FAILED' or status == 'CANCELLED':
-            print(f'[{timestamp}] Export task {export_task_id} failed or was cancelled.')
-            break
+        while True:
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            describe_export_task = logs.describe_export_tasks(taskId=export_task_id)
+            status = describe_export_task['exportTasks'][0]['status']['code']
 
-# Update export timestamp
-    update_timestamp = ssm.put_parameter(
-        Name=ssm_parameter_name,
-        Type="String",
-        Value=str(export_to_time),
-        Overwrite=True
-    )
-    timestamp = datetime.now().strftime(log_timestamp)
-    print(f'[{timestamp}] --> Log group timestamp updated to {export_to_time}: {update_timestamp["ResponseMetadata"]["HTTPStatusCode"]} {update_timestamp["ResponseMetadata"]["RequestId"]}')
+            if status == 'PENDING':
+                print(f'[{timestamp}] Export task {export_task_id} for {log_group_name} still waiting to run...')
+                time.sleep(5)
+                continue
+            elif status == 'RUNNING':
+                print(f'[{timestamp}] Export task {export_task_id} for {log_group_name} running...')
+                time.sleep(5)
+                continue
+            elif status == 'COMPLETED':
+                print(f'[{timestamp}] --> Export task {export_task_id} completed successfully')
+                break
+            elif status == 'FAILED' or status == 'CANCELLED':
+                print(f'[{timestamp}] Export task {export_task_id} failed or was cancelled.')
+                break
+
+    # Update export timestamp
+        update_timestamp = ssm.put_parameter(
+            Name=ssm_parameter_name,
+            Type="String",
+            Value=str(export_to_time),
+            Overwrite=True
+        )
+        timestamp = datetime.now().strftime(log_timestamp)
+        print(f'[{timestamp}] --> Log group timestamp updated to {export_to_time}: {update_timestamp["ResponseMetadata"]["HTTPStatusCode"]} {update_timestamp["ResponseMetadata"]["RequestId"]}')
 
 
 
