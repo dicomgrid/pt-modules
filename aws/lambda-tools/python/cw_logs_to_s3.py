@@ -13,9 +13,9 @@ from datetime import datetime, timedelta
 # s3 = session.resource('s3', region_name=region)
 # ssm = session.client('ssm', region_name=region)
 
-logs = boto3.client('logs', region_name=region)
-s3 = boto3.resource('s3', region_name=region)
-ssm = boto3.client('ssm', region_name=region)
+logs = boto3.client('logs')
+s3 = boto3.resource('s3')
+ssm = boto3.client('ssm')
 
 def cw_logs_to_s3(event, context):
     # global default vars
