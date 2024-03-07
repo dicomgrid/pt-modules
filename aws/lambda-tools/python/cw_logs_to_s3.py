@@ -54,7 +54,8 @@ def cw_logs_to_s3(event, context):
 
     # Get last export timestamp
     for log_group_name in log_groups_to_export:
-        log_group_arn = logs.describe_log_groups(logGroupNamePrefix=log_group_name)['logGroups'][0]['logGroupArn']
+        log_group_arn_raw = logs.describe_log_groups(logGroupNamePrefix=log_group_name)['logGroups'][0]['logGroupArn']
+        log_group_arn_raw = log_group_arn_raw['logGroups'][0]['logGroupArn']
         account_id = log_group_arn.split(":")[4]
         ssm_parameter_name = ("%s%s" % (ssm_parameter_base, log_group_name)).replace("//", "/") 
         
