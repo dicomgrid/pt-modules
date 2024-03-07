@@ -5,13 +5,17 @@ from datetime import datetime, timedelta
 #TODO: Convert prints to logging paths
 
 # initialize clients
-aws_profile_name = 'ims-platform-dev'
-region = 'us-east-2'
-session = boto3.Session(profile_name=aws_profile_name)
+# aws_profile_name = 'ims-platform-dev'
+# region = 'us-east-2'
+# session = boto3.Session(profile_name=aws_profile_name)
 
-logs = session.client('logs', region_name=region)
-s3 = session.resource('s3', region_name=region)
-ssm = session.client('ssm', region_name=region)
+# logs = session.client('logs', region_name=region)
+# s3 = session.resource('s3', region_name=region)
+# ssm = session.client('ssm', region_name=region)
+
+logs = boto3.client('logs', region_name=region)
+s3 = boto3.resource('s3', region_name=region)
+ssm = boto3.client('ssm', region_name=region)
 
 def cw_logs_to_s3(event, context):
     # global default vars
