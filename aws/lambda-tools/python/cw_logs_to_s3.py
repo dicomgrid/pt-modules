@@ -11,7 +11,7 @@ ssm = boto3.client('ssm')
 
 def cw_logs_to_s3(event, context):
     # global default vars
-    bucket_name = 'plt-test-cw-log-export'
+    bucket_name = os.environ.get('BUCKET_NAME')
     export_to_time = int(round(time.time() * 1000))
     extra_args = {}
     log_groups = []
@@ -78,7 +78,7 @@ def cw_logs_to_s3(event, context):
             print(f'[{timestamp}] Skipped until 24hrs from last export is completed')
             continue
 
-    # Execute log export
+    # Execute log export. limited to 1 active export per account
         create_export_task = logs.create_export_task(
             logGroupName=log_group_name,
             fromTime=ssm_value,
@@ -109,7 +109,7 @@ def cw_logs_to_s3(event, context):
 ### can customize the path. Also prevents duplicate logs current method allows
 
 #     # Gets objects from cloud watch
-#     response = logs.get_log_events(
+#     get_log_events = logs.get_log_events(
 #         logGroupName=LOG_GROUP_NAME,
 #         logStreamName=LOG_STREAM_NAME,
 #         startTime=unix_start_time,
@@ -117,7 +117,7 @@ def cw_logs_to_s3(event, context):
 #     )
 
 #     # Convert events to json object
-#     json_string = json.dumps(log_events)
+#     json_string = json.dumps(get_log_events)
 #     json_object = json.loads(json_string)
 
 #     df = pd.DataFrame(json_object['events'])
