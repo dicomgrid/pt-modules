@@ -69,6 +69,7 @@ def cw_logs_to_s3(event, context):
                 f'[{timestamp}] Log group {log_group_name} existing timestamp found: {ssm_value}.'
             )
         except ssm.exceptions.ParameterNotFound:
+            ssm_value = 0
             timestamp = datetime.now().strftime(log_timestamp)
             print(
                 f'[{timestamp}] Log group {log_group_name} timestamp does not exist, using default value.'
