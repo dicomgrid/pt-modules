@@ -53,11 +53,9 @@ def cw_logs_to_s3(event, context):
         ssm_parameter_name = ("%s%s" %
                               (ssm_parameter_base, log_group_name)).replace("//", "/")
 
-        '''
-        taskId hardcoded in export path, see https://stackoverflow.com/a/71307116
-        technique to export to temporary path, then export to finalized formatted path
-        Would align with the pd method provided by Azure Sentinel
-        '''
+        # taskId hardcoded in export path, see https://stackoverflow.com/a/71307116
+        # technique to export to temporary path, then export to finalized formatted path
+        # Would align with the pd method provided by Azure Sentinel
         destination_prefix = f"{account_id}{log_group_name}"
 
         try:
@@ -93,28 +91,6 @@ def cw_logs_to_s3(event, context):
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f'[{timestamp}] --> Export task {export_task_id} created.')
 
-        # Removing this loop, the export task is a very serial async operation and cannot kick off subsequent jobs until the prior completes
-        # Best to reinvoke the lambda for additional log groups than waiting for completetion, max 900 second timeout
-        # while True:
-        #     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        #     describe_export_task = logs.describe_export_tasks(taskId=export_task_id)
-        #     status = describe_export_task['exportTasks'][0]['status']['code']
-
-        #     if status == 'PENDING':
-        #         print(f'[{timestamp}] Export task {export_task_id} for {log_group_name} still waiting to run...')
-        #         time.sleep(5)
-        #         continue
-        #     elif status == 'RUNNING':
-        #         print(f'[{timestamp}] Export task {export_task_id} for {log_group_name} running...')
-        #         time.sleep(5)
-        #         continue
-        #     elif status == 'COMPLETED':
-        #         print(f'[{timestamp}] --> Export task {export_task_id} completed successfully')
-        #         break
-        #     elif status == 'FAILED' or status == 'CANCELLED':
-        #         print(f'[{timestamp}] Export task {export_task_id} failed or was cancelled.')
-        #         break
-
         # Update export timestamp
         update_timestamp = ssm.put_parameter(
             Name=ssm_parameter_name,
@@ -127,48 +103,56 @@ def cw_logs_to_s3(event, context):
             f'[{timestamp}] --> Log group timestamp updated to {export_to_time}: {update_timestamp["ResponseMetadata"]["HTTPStatusCode"]} {update_timestamp["ResponseMetadata"]["RequestId"]}'
         )
 
-
 ###
 ### Left for historical knowledge, found from https://github.com/Azure/Azure-Sentinel/blob/master/DataConnectors/AWS-S3/CloudWatchLambdaFunction.py
-###
+### Pair this with the move tmp path, can remove uneeded 'ingestionTime' column as is below in the pd operations, and
+### can customize the path. Also prevents duplicate logs current method allows
 
-#         # Convert events to json object
-#         json_string = json.dumps(log_events)
-#         json_object = json.loads(json_string)
+#     # Gets objects from cloud watch
+#     response = logs.get_log_events(
+#         logGroupName=LOG_GROUP_NAME,
+#         logStreamName=LOG_STREAM_NAME,
+#         startTime=unix_start_time,
+#         endTime=unix_end_time,
+#     )
 
-#         df = pd.DataFrame(json_object['events'])
+#     # Convert events to json object
+#     json_string = json.dumps(log_events)
+#     json_object = json.loads(json_string)
 
-#         # if df.empty:
-#         #     print('No events for specified time')
+#     df = pd.DataFrame(json_object['events'])
 
-#         # Convert unix time to zulu time for example from 1671086934783 to 2022-12-15T06:48:54.783Z
-#         if not df.empty:
-#             df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
-#             df['timestamp'] = df['timestamp'].dt.strftime('%Y-%m-%dT%H:%M:%S.%f'
-#                                                             ).str[:-3] + 'Z'
+#     # if df.empty:
+#     #     print('No events for specified time')
 
-#                 # Remove unnecessary column
-#         fileToS3 = df.drop(columns=["ingestionTime"])
+#     # Convert unix time to zulu time for example from 1671086934783 to 2022-12-15T06:48:54.783Z
+#     if not df.empty:
+#         df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+#         df['timestamp'] = df['timestamp'].dt.strftime('%Y-%m-%dT%H:%M:%S.%f'
+#                                                         ).str[:-3] + 'Z'
 
-#                 # Export data to temporary file in the right format, which will be deleted as soon as the session ends
-#         fileToS3.to_csv(
-#             f'/tmp/{OUTPUT_FILE_NAME}.gz',
-#             index=False,
-#             header=False,
-#             compression='gzip',
-#             sep=' ',
-#             escapechar=' ',
-#             doublequote=False,
-#             quoting=csv.QUOTE_NONE
-#         )
+#             # Remove unnecessary column
+#     fileToS3 = df.drop(columns=["ingestionTime"])
 
-#                 # Upload data to desired folder in bucket
-#         s3.Bucket(bucket_name).upload_file(
-#             f'/tmp/{OUTPUT_FILE_NAME}.gz', f'{BUCKET_PREFIX}{OUTPUT_FILE_NAME}{current_time_log}.gz'
-#         )
+#             # Export data to temporary file in the right format, which will be deleted as soon as the session ends
+#     fileToS3.to_csv(
+#         f'/tmp/{OUTPUT_FILE_NAME}.gz',
+#         index=False,
+#         header=False,
+#         compression='gzip',
+#         sep=' ',
+#         escapechar=' ',
+#         doublequote=False,
+#         quoting=csv.QUOTE_NONE
+#     )
 
-#     except Exception as e:
-#         print(
-#             "    Error exporting %s: %s" %
-#             (LOG_GROUP_NAME, getattr(e, 'message', repr(e)))
-#         )
+#             # Upload data to desired folder in bucket
+#     s3.Bucket(bucket_name).upload_file(
+#         f'/tmp/{OUTPUT_FILE_NAME}.gz', f'{BUCKET_PREFIX}{OUTPUT_FILE_NAME}{current_time_log}.gz'
+#     )
+
+# except Exception as e:
+#     print(
+#         "    Error exporting %s: %s" %
+#         (LOG_GROUP_NAME, getattr(e, 'message', repr(e)))
+#     )
