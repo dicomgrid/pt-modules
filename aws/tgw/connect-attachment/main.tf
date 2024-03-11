@@ -20,8 +20,8 @@ resource "aws_ec2_transit_gateway_connect_peer" "main" {
 module "attachment_route_table" {
   source = "../attachment-route-table"
 
-  association_route_table_id = !var.transit_gateway_default_route_table_association ? var.association_route_table_id : null
-  propagation_route_table_ids = var.propagation_route_table_ids
+  association_route_table_id    = !var.transit_gateway_default_route_table_association ? var.association_route_table_id : null
+  propagation_route_table_ids   = var.propagation_route_table_ids
   transit_gateway_attachment_id = aws_ec2_transit_gateway_connect.main.id
 }
 

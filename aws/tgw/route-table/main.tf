@@ -1,7 +1,7 @@
 resource "aws_ec2_transit_gateway_route_table" "main" {
   count              = var.create_route_table ? 1 : 0
   transit_gateway_id = var.transit_gateway_id
-  tags = merge(local.tags, { Name = "${local.tags.Name}-rtb" })
+  tags               = merge(local.tags, { Name = "${local.tags.Name}-rtb" })
 }
 
 resource "aws_ec2_transit_gateway_route_table_association" "main" {
