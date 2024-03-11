@@ -6,6 +6,8 @@ resource "aws_instance" "main" {
     rhel_8                       = data.aws_ami.rhel_8.id
     rocky_8                      = data.aws_ami.rocky_8.id
     rocky_8_custom               = data.aws_ami.rocky_8_custom.id
+    windows_2019_custom          = data.aws_ami.windows_2019_custom.id
+    # windows_2022_custom          = data.aws_ami.windows_2022_custom.id
     windows_server_2019          = data.aws_ami.windows_server_2019.id
     windows_server_2016_sql_2017 = data.aws_ami.windows_server_2016_sql_2017.id
   }, var.ami, var.ami)
@@ -50,6 +52,7 @@ resource "aws_instance" "main" {
     user     = startswith(var.ami, "win") ? "administrator" : "root"
     password = var.local_password
     host     = var.private_ip
+    timeout  = "10m"
   }
 
   provisioner "remote-exec" {

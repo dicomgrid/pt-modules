@@ -64,10 +64,11 @@ No modules.
 |------|------|
 | [aws_iam_instance_profile.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
 | [aws_iam_policy.assume_s3_bucket_manager_in_sub_account](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.s3objectmanager](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.iam_for_s3_bucket_provisioning](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role_policy.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy_attachment.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.s3_bucket_provisioning_assume_sub_account](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.s3objectmanager](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_lambda_alias.lambda_alias](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_alias) | resource |
@@ -94,13 +95,18 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_access_logging"></a> [access\_logging](#input\_access\_logging) | n/a | `bool` | `true` | no |
 | <a name="input_ambra_storage1_account"></a> [ambra\_storage1\_account](#input\_ambra\_storage1\_account) | AWS account ID for PHR/Orphan storage | `string` | `""` | no |
 | <a name="input_ambra_storage_accounts"></a> [ambra\_storage\_accounts](#input\_ambra\_storage\_accounts) | A list of Ambra/Intelerad storage accounts for imaging data | `set(string)` | `[]` | no |
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS region | `string` | `""` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Ambra code environment | `string` | `""` | no |
 | <a name="input_instance_role"></a> [instance\_role](#input\_instance\_role) | n/a | `string` | `""` | no |
+| <a name="input_lambda_execution_role_name"></a> [lambda\_execution\_role\_name](#input\_lambda\_execution\_role\_name) | n/a | `string` | `"s3-bucket-provisioning-lambda-execution-role"` | no |
 | <a name="input_max_buckets_per_account"></a> [max\_buckets\_per\_account](#input\_max\_buckets\_per\_account) | The maximum number of S3 buckets in a given AWS account | `number` | `750` | no |
+| <a name="input_object_expiration"></a> [object\_expiration](#input\_object\_expiration) | n/a | `number` | `14` | no |
 | <a name="input_primary_account"></a> [primary\_account](#input\_primary\_account) | n/a | `string` | `""` | no |
+| <a name="input_s3objectmanager_policy_name"></a> [s3objectmanager\_policy\_name](#input\_s3objectmanager\_policy\_name) | adding follow 3 variables the rare occasion where the lambda will exist on the same acct(different regions). this will allow for the creation of different policies that will limit scope of allowed roles to assume | `string` | `"s3ObjectManager"` | no |
+| <a name="input_services_instance_profile_name"></a> [services\_instance\_profile\_name](#input\_services\_instance\_profile\_name) | n/a | `string` | `"s3-bucket-provisioning-instance-profile"` | no |
 | <a name="input_timeout"></a> [timeout](#input\_timeout) | n/a | `string` | `"60"` | no |
 
 ## Outputs

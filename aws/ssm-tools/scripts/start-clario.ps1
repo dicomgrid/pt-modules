@@ -5,7 +5,6 @@ try {
         $mirth = get-service -name "mirth*" | select -expandproperty starttype | get-unique
         if ($mirth -ne $null) {
             get-service -name $mirth | start-service
-            get-service -name $mirth | set-service -startuptype automatic
             Write-Host "Finished attempting to start Mirth services"
         }
     }
@@ -16,7 +15,6 @@ try {
         $CLSVCVer = $CLSVC -replace '^([^-]*- )','' | get-unique
         if ($CLSVCVer -like "3.*"){
             get-service -displayname "zvision*" | start-service
-            get-service -displayname "zvision*" | set-service -startuptype automatic
             Write-Host "Finished attempting to start Clario services"
         }
     }
@@ -26,7 +24,6 @@ try {
         $CorePoint = get-service -name "corepoint*" | select -expandproperty Description
         if ($CorePoint -ne $null) {
             get-service -displayname $CorePoint | start-service
-            get-service -displayname $CorePoint | set-service -startuptype automatic
             Write-Host "Finished attempting to start CorePoint services"
         }
     }
@@ -36,13 +33,9 @@ try {
         $mmodal = get-service -displayname "Connexion*" | start-service
         if ($mmodal -ne $null) {
             get-service -displayname "Connexion*" | start-service
-            get-service -displayname "Connexion*" | set-service -startuptype automatic
             get-service -displayname "CdsProxyCleanupServices" | start-service
-            get-service -displayname "CdsProxyCleanupServices" | set-service -startuptype automatic
-            get-service -displayname "FDSupport" | start-service #M*Modal
-            get-service -displayname "FDSupport" | set-service -startuptype automatic
+            get-service -displayname "FDSupport" | start-service
             get-service -displayname "ISCAgent" | start-service
-            get-service -displayname "ISCAgent" | set-service -startuptype automatic
             Write-Host "Finished attempting to start MModal services"
         }
     }
