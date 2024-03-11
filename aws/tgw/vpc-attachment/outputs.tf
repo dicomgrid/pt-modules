@@ -11,3 +11,7 @@ output "vpc_owner_id" {
 output "vpc_routes" {
   value = module.vpc_routes
 }
+
+output "connect_attachments" {
+  value = try(module.connect_attachments, null)
+}
