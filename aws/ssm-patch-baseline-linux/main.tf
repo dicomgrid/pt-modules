@@ -4,6 +4,8 @@ resource "aws_ssm_patch_baseline" "linux_pb" {
   operating_system = var.operating_system
   rejected_patches = try(var.rejected_patches, false)
   approved_patches = try(var.approved_patches, false)
+  approved_patches_enable_non_security = try(var.approved_patches_enable_non_security, true)
+
 
   global_filter {
     key = "CLASSIFICATION"

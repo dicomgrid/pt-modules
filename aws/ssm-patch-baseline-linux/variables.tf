@@ -1,5 +1,6 @@
 variable "approve_after_days" { default = 7 }
 variable "approved_patches" { default = null }
+variable "approved_patches_enable_non_security" { default = true }
 variable "approve_until_date" { default = null }
 variable "description" { default = "null" }
 variable "enable_non_security" { default = true }
