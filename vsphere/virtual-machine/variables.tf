@@ -24,6 +24,8 @@ variable "role" {
   default = ""
 }
 
+variable "resource_group" {}
+
 variable "guest_template_codes" {
   type = map(any)
   default = {
@@ -88,8 +90,8 @@ variable "run_once" {
 variable "guest_disks" {
   type = list(any)
   default = [
-    { size = 16 },  # boot and /
-    { size = 15 },  # swap
+    { size = 16 }, # boot and /
+    { size = 15 }, # swap
     { size = 16 }, # /var
   ]
 }
