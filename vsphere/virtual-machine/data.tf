@@ -14,7 +14,6 @@ data "vsphere_datastore_cluster" "datastore_cluster" {
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
-
 data "vsphere_compute_cluster" "cluster" {
   name          = var.compute_cluster
   datacenter_id = data.vsphere_datacenter.datacenter.id
@@ -46,6 +45,10 @@ data "vsphere_tag_category" "category_creator" {
   name = "creator"
 }
 
+data "vsphere_tag_category" "category_resource_group" {
+  name = "resource_group"
+}
+
 data "vsphere_tag" "tag_client_code" {
   name        = var.client_code
   category_id = data.vsphere_tag_category.category_client_code.id
@@ -64,4 +67,9 @@ data "vsphere_tag" "tag_type" {
 data "vsphere_tag" "tag_creator" {
   name        = "terraform"
   category_id = data.vsphere_tag_category.category_creator.id
+}
+
+data "vsphere_tag" "tag_resource_group" {
+  name        = var.resource_group
+  category_id = data.vsphere_tag_category.category_resource_group.id
 }
