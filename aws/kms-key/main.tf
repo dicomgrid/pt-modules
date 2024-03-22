@@ -16,7 +16,7 @@ resource "aws_kms_key_policy" "main" {
 }
 
 resource "aws_kms_key_policy" "custom" {
-  count  = var.custom_kms_policy ? 1 : 0
+  count  = var.custom_kms_policy == null ? 0 : 1
   key_id = aws_kms_key.main.id
   policy = var.custom_kms_policy
 }
