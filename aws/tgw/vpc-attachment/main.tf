@@ -26,7 +26,7 @@ module "connect_attachments" {
   peers                                           = try(each.value.peers, {})
   protocol                                        = try(each.value.protocol, "gre")
   name                                            = try(each.value.name, null)
-  tags                                            = merge(local.tags, { Name = try(each.value.name, each.key) })
+  tags                                            = merge(local.tags, { Name = try(each.value.name, "${local.tags.Name}-to-${each.key}", each.key) })
   transit_gateway_id                              = var.tgw_id
   transit_gateway_default_route_table_association = try(each.value.transit_gateway_default_route_table_association, true)
   transit_gateway_default_route_table_propagation = try(each.value.transit_gateway_default_route_table_propagation, true)
