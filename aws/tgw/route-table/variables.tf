@@ -8,6 +8,10 @@ variable "propagation_attachments" {
   type    = set(string)
   default = []
 }
+variable "routes" {
+  type    = set(string)
+  default = []
+}
 variable "transit_gateway_id" { default = null }
 variable "transit_gateway_route_table_id" { default = null }
 
