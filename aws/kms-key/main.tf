@@ -15,7 +15,7 @@ resource "aws_kms_key_policy" "main" {
   policy = local.kms_policy
 }
 
-resource "aws_kms_key_policy" "main" {
+resource "aws_kms_key_policy" "custom" {
   count  = var.custom_kms_policy ? 1 : 0
   key_id = aws_kms_key.main.id
   policy = var.custom_kms_policy
