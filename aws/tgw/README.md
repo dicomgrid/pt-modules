@@ -1,4 +1,3 @@
-<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -6,9 +5,17 @@
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.64.0 |
 
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.64.0 |
+
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_route_table"></a> [route\_table](#module\_route\_table) | ./route-table | n/a |
 
 ## Resources
 
@@ -20,7 +27,6 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_tags"></a> [tags](#input\_tags) | n/a | `any` | n/a | yes |
 | <a name="input_amazon_side_asn"></a> [amazon\_side\_asn](#input\_amazon\_side\_asn) | n/a | `string` | `"64512"` | no |
 | <a name="input_auto_accept_shared_attachments"></a> [auto\_accept\_shared\_attachments](#input\_auto\_accept\_shared\_attachments) | n/a | `string` | `"disable"` | no |
 | <a name="input_aws_project_id"></a> [aws\_project\_id](#input\_aws\_project\_id) | n/a | `string` | `"null"` | no |
@@ -33,6 +39,8 @@ No modules.
 | <a name="input_map_migrated"></a> [map\_migrated](#input\_map\_migrated) | n/a | `string` | `"null"` | no |
 | <a name="input_multicast_support"></a> [multicast\_support](#input\_multicast\_support) | n/a | `string` | `"disable"` | no |
 | <a name="input_onetime"></a> [onetime](#input\_onetime) | n/a | `string` | `"null"` | no |
+| <a name="input_route_tables"></a> [route\_tables](#input\_route\_tables) | n/a | `map` | `{}` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | n/a | `any` | n/a | yes |
 | <a name="input_transit_gateway_cidr_blocks"></a> [transit\_gateway\_cidr\_blocks](#input\_transit\_gateway\_cidr\_blocks) | n/a | `any` | `null` | no |
 | <a name="input_vpn_ecmp_support"></a> [vpn\_ecmp\_support](#input\_vpn\_ecmp\_support) | n/a | `string` | `"enable"` | no |
 
@@ -45,5 +53,5 @@ No modules.
 | <a name="output_id"></a> [id](#output\_id) | n/a |
 | <a name="output_owner_id"></a> [owner\_id](#output\_owner\_id) | n/a |
 | <a name="output_propagation_default_route_table_id"></a> [propagation\_default\_route\_table\_id](#output\_propagation\_default\_route\_table\_id) | n/a |
+| <a name="output_route_table_id_map"></a> [route\_table\_id\_map](#output\_route\_table\_id\_map) | n/a |
 | <a name="output_tags"></a> [tags](#output\_tags) | n/a |
-<!-- END_TF_DOCS -->

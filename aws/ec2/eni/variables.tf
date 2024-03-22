@@ -1,19 +1,12 @@
-variable "association_attachments" {
-  type    = set(string)
-  default = []
-}
-
-variable "create_route_table" { default = true }
-variable "propagation_attachments" {
-  type    = set(string)
-  default = []
-}
-variable "routes" {
-  type    = set(string)
-  default = []
-}
-variable "transit_gateway_id" { default = null }
-variable "transit_gateway_route_table_id" { default = null }
+variable "subnet_id" {}
+variable "private_ips" { default = [] }
+variable "security_groups" { default = [] }
+variable "description" { default = null }
+variable "source_dest_check" { default = true }
+variable "instance_id" { default = null }
+variable "device_index" { default = null }
+variable "eips" { default = [] }
+variable "eip" { default = { enabled = false } }
 
 # Tags
 locals {
