@@ -8,6 +8,7 @@ locals {
   kms_policy = var.kms_policy == null ? null : local.kms_policies[var.kms_policy]
 }
 variable "account_id" { default = null }
+variable "custom_kms_policy" { default = null }
 variable "description" {}
 variable "deletion_window_in_days" {}
 variable "ebs_kms_shared_account_roles" { default = null }
