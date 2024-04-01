@@ -47,6 +47,10 @@ resource "aws_instance" "main" {
     }
   }
 
+  metadata_options {
+    http_tokens = "required"
+  }
+
   connection {
     type     = startswith(var.ami, "win") ? "winrm" : "ssh"
     user     = startswith(var.ami, "win") ? "administrator" : "root"
