@@ -1,4 +1,4 @@
-variable "account_id" {}
+variable "account_id" { default = "" }
 variable "enable-subnet-logs" { default = false }
 variable "enable-vpc-logs" { default = false }
 variable "enable-eni-logs" { default = false }
