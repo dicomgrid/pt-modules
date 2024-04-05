@@ -10,5 +10,5 @@ value       = var.log_destination_type == "cloud-watch-logs" ? aws_cloudwatch_lo
 
 output "log_stream_name" {
 description = "The name of the CloudWatch log stream."
-value       = var.log_destination_type == "cloud-watch-logs" ? aws_cloudwatch_log_group.log_stream[0].name : null
+value       = var.log_destination_type == "cloud-watch-logs" ? aws_cloudwatch_log_stream.log_name[0].name : null
 }
