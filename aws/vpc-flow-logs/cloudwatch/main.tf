@@ -6,13 +6,11 @@ locals {
 }
 
 resource "aws_cloudwatch_log_group" "log_group" {
-  count = var.log_destination_type == "cloud-watch-logs" ? 1 : 0
   name              = local.log_destination
   retention_in_days = local.retention_in_days
   tags              = local.tags
 }
 resource "aws_cloudwatch_log_stream" "log_name" {
-  count = var.log_destination_type == "cloud-watch-logs" ? 1 : 0
   name           = aws_cloudwatch_log_group.log_group.name
   log_group_name = aws_cloudwatch_log_group.log_group.name
 }
