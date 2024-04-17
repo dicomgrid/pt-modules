@@ -5,6 +5,7 @@ resource "aws_instance" "main" {
     ubuntu_22_04                 = data.aws_ami.ubuntu_22_04.id
     rhel_8                       = data.aws_ami.rhel_8.id
     rocky_8                      = data.aws_ami.rocky_8.id
+    rocky_9                      = data.aws_ami.rocky_9.id
     rocky_8_custom               = data.aws_ami.rocky_8_custom.id
     windows_2019_custom          = data.aws_ami.windows_2019_custom.id
     # windows_2022_custom          = data.aws_ami.windows_2022_custom.id

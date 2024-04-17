@@ -130,6 +130,31 @@ data "aws_ami" "rocky_8_custom" {
   }
 }
 
+data "aws_ami" "rocky_9" {
+  most_recent = true
+  owners      = ["792107900819"]
+
+  filter {
+    name   = "name"
+    values = ["Rocky-9-EC2-Base-9*"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
 data "aws_ami" "windows_2019_custom" {
   most_recent = true
   owners      = ["601722232065"]
