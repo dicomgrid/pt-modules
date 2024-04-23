@@ -66,7 +66,7 @@ resource "vsphere_virtual_machine" "vm" {
         content {
           host_name = var.guest_name
           domain    = var.client_code == "inf" ? "radiustoday.com" : var.client_code
-          time_zone = lookup(var.linux_time_zones, var.client_time_zone)
+          time_zone = lookup(var.linux_time_zones, var.client_time_zone, var.client_time_zone)
         }
       }
 
