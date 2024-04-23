@@ -115,6 +115,7 @@ variable "linux_time_zones" {
     "pst" = "America/Los_Angeles"
   }
 }
+
 variable "win_time_zones" {
   type = map(any)
   default = {
