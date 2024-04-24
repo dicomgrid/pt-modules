@@ -40,7 +40,6 @@ variable "root_block_device" {
     }
   ]
 }
-variable "run_svt_on_launch" { default = true }
 variable "security_groups" { default = [] }
 variable "server_code" { default = null }
 variable "server_name" {}
