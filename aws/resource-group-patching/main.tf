@@ -11,7 +11,7 @@ resource "aws_resourcegroups_group" "resource_group" {
       ],
       "TagFilters": [
         {
-          "Key": "client_code",
+          "Key": "${startswith(var.tags["client_code"], "default") ? "maintenance_window" : "client_code"}",
           "Values": ["${var.tags["client_code"]}"]
         },
         {
