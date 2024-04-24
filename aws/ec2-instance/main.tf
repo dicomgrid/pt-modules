@@ -70,8 +70,8 @@ resource "aws_instance" "main" {
   # }
 
   lifecycle {
-    ignore_changes = [ami, associate_public_ip_address, key_name, user_data, ebs_block_device]
-    # prevent_destroy = true
+    ignore_changes  = [ami, associate_public_ip_address, key_name, user_data, ebs_block_device]
+    prevent_destroy = true
   }
 }
 
