@@ -180,11 +180,11 @@ resource "panos_bgp_export_rule_group" "main" {
     for_each = each.value.rules
 
     content {
-      action          = try(rule.value.action, null)
-      as_path_limit   = try(rule.value.as_path_limit, null)
-      as_path_type    = try(rule.value.as_path_type, null)
-      community_type  = try(rule.value.community_type, null)
-      community_value = try(rule.value.community_value, null)
+      action                         = try(rule.value.action, null)
+      as_path_limit                  = try(rule.value.as_path_limit, null)
+      as_path_type                   = try(rule.value.as_path_type, null)
+      community_type                 = try(rule.value.community_type, null)
+      community_value                = try(rule.value.community_value, null)
       enable                         = try(rule.value.enable, true)
       extended_community_type        = try(rule.value.extended_community_type, null)
       extended_community_value       = try(rule.value.extended_community_value, null)

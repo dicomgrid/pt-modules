@@ -20,7 +20,6 @@ No modules.
 | Name | Type |
 |------|------|
 | [panos_gre_tunnel.main](https://registry.terraform.io/providers/PaloAltoNetworks/panos/latest/docs/resources/gre_tunnel) | resource |
-| [panos_tunnel_interface.main](https://registry.terraform.io/providers/PaloAltoNetworks/panos/latest/docs/resources/tunnel_interface) | resource |
 
 ## Inputs
 
