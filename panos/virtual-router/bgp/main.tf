@@ -30,6 +30,18 @@ resource "panos_bgp" "main" {
 
 ### BGP Components
 
+resource "panos_bgp_auth_profile" "main" {
+  for_each = var.auth_profiles
+
+  virtual_router = panos_bgp.main.virtual_router
+  name           = try(each.value.name, each.key)
+  secret         = each.value.secret
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 resource "panos_bgp_peer_group" "main" {
   for_each = var.peer_groups
 
@@ -40,8 +52,8 @@ resource "panos_bgp_peer_group" "main" {
   name                        = try(each.value.name, each.key)
   remove_private_as           = try(each.value.remove_private_as, null)
   soft_reset_with_stored_info = try(each.value.soft_reset_with_stored_info, null)
-  type                        = each.value.type
-  virtual_router              = var.virtual_router
+  type                        = try(each.value.type, null)
+  virtual_router              = panos_bgp.main.virtual_router
 
 
   lifecycle {
@@ -52,33 +64,33 @@ resource "panos_bgp_peer_group" "main" {
 resource "panos_bgp_peer" "main" {
   for_each = var.peers
 
-  address_family_type                 = try(each.vaule.address_family_type, null)
-  allow_incoming_connections          = try(each.vaule.allow_incoming_connections, null)
-  allow_outgoing_connections          = try(each.vaule.allow_outgoing_connections, null)
-  auth_profile                        = try(each.vaule.auth_profile, null)
-  bfd_profile                         = try(each.vaule.bfd_profile, null)
-  bgp_peer_group                      = panos_bgp_peer_group.main[each.value.bgp_peer_group].name
-  enable_mp_bgp                       = try(each.vaule.enable_mp_bgp, null)
-  enable_sender_side_loop_detection   = try(each.vaule.enable_sender_side_loop_detection, null)
-  hold_time                           = try(each.vaule.hold_time, null)
-  idle_hold_time                      = try(each.vaule.idle_hold_time, null)
-  incoming_connections_remote_port    = try(each.vaule.incoming_connections_remote_port, null)
-  keep_alive_interval                 = try(each.vaule.keep_alive_interval, null)
+  address_family_type                 = try(each.value.address_family_type, null)
+  allow_incoming_connections          = try(each.value.allow_incoming_connections, null)
+  allow_outgoing_connections          = try(each.value.allow_outgoing_connections, null)
+  auth_profile                        = try(each.value.auth_profile, null)
+  bfd_profile                         = try(each.value.bfd_profile, null)
+  bgp_peer_group                      = panos_bgp_peer_group.main[each.value.peer_group].name
+  enable_mp_bgp                       = try(each.value.enable_mp_bgp, null)
+  enable_sender_side_loop_detection   = try(each.value.enable_sender_side_loop_detection, null)
+  hold_time                           = try(each.value.hold_time, null)
+  idle_hold_time                      = try(each.value.idle_hold_time, null)
+  incoming_connections_remote_port    = try(each.value.incoming_connections_remote_port, null)
+  keep_alive_interval                 = try(each.value.keep_alive_interval, null)
   local_address_interface             = each.value.local_address_interface
   local_address_ip                    = try(each.value.local_address_ip, null)
   max_prefixes                        = try(each.value.max_prefixes, "unlimited")
-  min_route_advertisement_interval    = try(each.vaule.min_route_advertisement_interval, null)
-  multi_hop                           = try(each.vaule.multi_hop, null)
+  min_route_advertisement_interval    = try(each.value.min_route_advertisement_interval, null)
+  multi_hop                           = try(each.value.multi_hop, null)
   name                                = try(each.value.name, each.key)
-  open_delay_time                     = try(each.vaule.open_delay_time, null)
-  outgoing_connections_local_port     = try(each.vaule.outgoing_connections_local_port, null)
+  open_delay_time                     = try(each.value.open_delay_time, null)
+  outgoing_connections_local_port     = try(each.value.outgoing_connections_local_port, null)
   peer_address_ip                     = each.value.peer_address_ip
-  peer_as                             = contains(["ibgp", "ibgp-confed"], panos_bgp_peer_group.main[each.value.bgp_peer_group].type) ? each.value.peer_as : var.as_number
-  peering_type                        = try(each.vaule.peering_type, null)
-  reflector_client                    = try(each.vaule.reflector_client, null)
-  subsequent_address_family_multicast = try(each.vaule.subsequent_address_family_multicast, null)
-  subsequent_address_family_unicast   = try(each.vaule.subsequent_address_family_unicast, null)
-  virtual_router                      = var.virtual_router
+  peer_as                             = contains(["ibgp", "ibgp-confed"], panos_bgp_peer_group.main[each.value.peer_group].type) ? var.as_number : try(each.value.peer_as, null)
+  peering_type                        = try(each.value.peering_type, null)
+  reflector_client                    = try(each.value.reflector_client, null)
+  subsequent_address_family_multicast = try(each.value.subsequent_address_family_multicast, null)
+  subsequent_address_family_unicast   = try(each.value.subsequent_address_family_unicast, null)
+  virtual_router                      = panos_bgp.main.virtual_router
 
   lifecycle {
     create_before_destroy = true
@@ -99,7 +111,7 @@ resource "panos_bgp_redist_rule" "main" {
   set_local_preference     = try(each.value.set_local_preference, null)
   set_med                  = try(each.value.set_med, null)
   set_origin               = try(each.value.set_origin, null)
-  virtual_router           = var.virtual_router
+  virtual_router           = panos_bgp.main.virtual_router
 
   lifecycle {
     create_before_destroy = true
@@ -111,7 +123,7 @@ resource "panos_bgp_import_rule_group" "main" {
 
   position_keyword   = try(each.value.position_keyword, null)
   position_reference = try(each.value.referencing, null)
-  virtual_router     = var.virtual_router
+  virtual_router     = panos_bgp.main.virtual_router
 
   dynamic "rule" {
     for_each = each.value.rules
@@ -162,7 +174,7 @@ resource "panos_bgp_export_rule_group" "main" {
 
   position_keyword   = try(each.value.position_keyword, null)
   position_reference = try(each.value.referencing, null)
-  virtual_router     = var.virtual_router
+  virtual_router     = panos_bgp.main.virtual_router
 
   dynamic "rule" {
     for_each = each.value.rules
@@ -173,7 +185,6 @@ resource "panos_bgp_export_rule_group" "main" {
       as_path_type                   = try(rule.value.as_path_type, null)
       community_type                 = try(rule.value.community_type, null)
       community_value                = try(rule.value.community_value, null)
-      dampening                      = try(rule.value.dampening, null)
       enable                         = try(rule.value.enable, true)
       extended_community_type        = try(rule.value.extended_community_type, null)
       extended_community_value       = try(rule.value.extended_community_value, null)
@@ -190,7 +201,6 @@ resource "panos_bgp_export_rule_group" "main" {
       next_hop                       = try(rule.value.next_hop, null)
       origin                         = try(rule.value.origin, null)
       used_by                        = try(rule.value.used_by, null)
-      weight                         = try(rule.value.weight, null)
 
       dynamic "match_address_prefix" {
         for_each = try(rule.value.match_address_prefix, {})

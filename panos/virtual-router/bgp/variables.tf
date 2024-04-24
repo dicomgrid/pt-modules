@@ -22,8 +22,9 @@ variable "virtual_router" { default = null }
 
 
 ### BGP Component Variables
+variable "auth_profiles" { default = {} }
+variable "export_rule_groups" { default = {} }
+variable "import_rule_groups" { default = {} }
 variable "peer_groups" { default = {} }
 variable "peers" { default = {} }
 variable "redist_rules" { default = {} }
-variable "import_rule_groups" { default = {} }
-variable "export_rule_groups" { default = {} }
