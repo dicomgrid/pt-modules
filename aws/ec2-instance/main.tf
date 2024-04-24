@@ -52,26 +52,26 @@ resource "aws_instance" "main" {
     http_tokens = "required"
   }
 
-  connection {
-    type     = startswith(var.ami, "win") ? "winrm" : "ssh"
-    user     = startswith(var.ami, "win") ? "administrator" : "root"
-    password = var.local_password
-    host     = self.private_ip
-    timeout  = "10m"
-  }
+  # connection {
+  #   type     = startswith(var.ami, "win") ? "winrm" : "ssh"
+  #   user     = startswith(var.ami, "win") ? "administrator" : "root"
+  #   password = var.local_password
+  #   host     = self.private_ip
+  #   timeout  = "10m"
+  # }
 
-  provisioner "remote-exec" {
-    inline = startswith(var.ami, "win") ? ["PowerShell Out-File -FilePath c:\\temp\\servercode.txt -InputObject ${var.server_code} -NoNewline -Encoding utf8"] : [
-      "mkdir /root/svt",
-      "wget http://d11kvek2bj8anh.cloudfront.net/svt.tar.gz -P /root/svt/",
-      "tar -xvzf /root/svt/svt.tar.gz --directory /root/svt/",
-      "echo '${var.server_code}' >> /root/svt/servercode"
-    ]
-  }
+  # provisioner "remote-exec" {
+  #   inline = startswith(var.ami, "win") ? ["PowerShell Out-File -FilePath c:\\temp\\servercode.txt -InputObject ${var.server_code} -NoNewline -Encoding utf8"] : [
+  #     "mkdir /root/svt",
+  #     "wget http://d11kvek2bj8anh.cloudfront.net/svt.tar.gz -P /root/svt/",
+  #     "tar -xvzf /root/svt/svt.tar.gz --directory /root/svt/",
+  #     "echo '${var.server_code}' >> /root/svt/servercode"
+  #   ]
+  # }
 
   lifecycle {
-    ignore_changes  = [ami, associate_public_ip_address, key_name, user_data, ebs_block_device]
-    prevent_destroy = true
+    ignore_changes = [ami, associate_public_ip_address, key_name, user_data, ebs_block_device]
+    # prevent_destroy = true
   }
 }
 
