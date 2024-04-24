@@ -42,7 +42,7 @@ variable "root_block_device" {
   ]
 }
 variable "security_groups" { default = [] }
-variable "server_code" { default = null }
+variable "server_code" { default = "na" }
 variable "server_name" {}
 variable "subnet" {}
 variable "user_data" { default = null }
