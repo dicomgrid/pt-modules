@@ -17,6 +17,7 @@ variable "instance_types" {
     powerscribe360          = "m4.xlarge"
     c5_12xlarge_accelerator = "c5.12xlarge"
     c5_xlarge               = "c5.xlarge"
+    c6a.xlarge              = "c6a.xlarge"
     m5_4xlarge              = "m5.4xlarge"
     r5_xlarge               = "r5.xlarge"
     r5_8xlarge_accelerator  = "r5.8xlarge"
