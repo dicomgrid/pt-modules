@@ -8,8 +8,8 @@ resource "aws_instance" "main" {
     rocky_9                      = data.aws_ami.rocky_9.id
     rocky_8_custom               = data.aws_ami.rocky_8_custom.id
     windows_2019_custom          = data.aws_ami.windows_2019_custom.id
-    # windows_2022_custom          = data.aws_ami.windows_2022_custom.id
     windows_server_2019          = data.aws_ami.windows_server_2019.id
+    # windows_2022_custom          = data.aws_ami.windows_2022_custom.id
     windows_server_2016_sql_2017 = data.aws_ami.windows_server_2016_sql_2017.id
   }, var.ami, var.ami)
   iam_instance_profile        = var.iam_instance_profile
@@ -49,7 +49,8 @@ resource "aws_instance" "main" {
   }
 
   metadata_options {
-    http_tokens = "required"
+    http_tokens   = var.enable_metadata_options ? "required" : null
+    http_endpoint = var.enable_metadata_options ? "enabled" : null
   }
 
   connection {

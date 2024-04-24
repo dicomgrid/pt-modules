@@ -1,28 +1,11 @@
-variable "ami" {
-  default = "rocky_8_custom"
-}
-
-variable "associate_public_ip_address" {
-  default = "false"
-}
-
+variable "ami" { default = "rocky_8_custom" }
+variable "associate_public_ip_address" { default = "false" }
 variable "default_tags" {}
-
-variable "ebs_block_devices" {
-}
-
-variable "ebs_block_devices_extra" {
-  default = null
-}
-
-variable "iam_instance_profile" {
-  default = ""
-}
-
-variable "instance_type" {
-  default = "t2.micro"
-}
-
+variable "ebs_block_devices" {}
+variable "ebs_block_devices_extra" { default = null }
+variable "enable_metadata_options" { default = true }
+variable "iam_instance_profile" { default = "" }
+variable "instance_type" { default = "t2.micro" }
 variable "instance_types" {
   default = {
     small_accelerator       = "c5.2xlarge"
@@ -34,6 +17,7 @@ variable "instance_types" {
     powerscribe360          = "m4.xlarge"
     c5_12xlarge_accelerator = "c5.12xlarge"
     c5_xlarge               = "c5.xlarge"
+    c6a.xlarge              = "c6a.xlarge"
     m5_4xlarge              = "m5.4xlarge"
     r5_xlarge               = "r5.xlarge"
     r5_8xlarge_accelerator  = "r5.8xlarge"
@@ -42,19 +26,9 @@ variable "instance_types" {
     m6a_2xlarge             = "m6a.2xlarge"
   }
 }
-
-variable "key_name" {
-  default = "ansible-rsa"
-}
-
-variable "local_password" {
-  default = null
-}
-
-variable "private_ip" {
-  default = null
-}
-
+variable "key_name" { default = "ansible-rsa" }
+variable "local_password" { default = null }
+variable "private_ip" { default = null }
 variable "root_block_device" {
   default = [
     {
@@ -67,19 +41,8 @@ variable "root_block_device" {
     }
   ]
 }
-
-variable "security_groups" {
-  default = []
-}
-
-variable "server_code" {
-  default = null
-}
-
+variable "security_groups" { default = [] }
+variable "server_code" { default = null }
 variable "server_name" {}
-
 variable "subnet" {}
-
-variable "user_data" {
-  default = null
-}
+variable "user_data" { default = null }
