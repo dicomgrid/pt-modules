@@ -62,12 +62,14 @@ resource "aws_instance" "main" {
   }
 
   provisioner "remote-exec" {
-    inline = startswith(var.ami, "win") ? ["PowerShell Out-File -FilePath c:\\temp\\servercode.txt -InputObject ${var.server_code} -NoNewline -Encoding utf8"] : [
+    inline = var.run_svt_on_launch ? (
+      startswith(var.ami, "win") ? ["PowerShell Out-File -FilePath c:\\temp\\servercode.txt -InputObject ${var.server_code} -NoNewline -Encoding utf8"] : [
       "mkdir /root/svt",
       "wget http://d11kvek2bj8anh.cloudfront.net/svt.tar.gz -P /root/svt/",
       "tar -xvzf /root/svt/svt.tar.gz --directory /root/svt/",
       "echo '${var.server_code}' >> /root/svt/servercode"
     ]
+    ) : []
   }
 
   lifecycle {
