@@ -1,16 +1,16 @@
 resource "aws_instance" "main" {
   ami = lookup({
-    centos7                      = data.aws_ami.centos7.id
-    amazon_linux_2               = data.aws_ami.amazon_linux_2.id
-    ubuntu_22_04                 = data.aws_ami.ubuntu_22_04.id
-    rhel_8                       = data.aws_ami.rhel_8.id
-    rocky_8                      = data.aws_ami.rocky_8.id
-    rocky_9                      = data.aws_ami.rocky_9.id
-    rocky_8_custom               = data.aws_ami.rocky_8_custom.id
-    windows_2019_custom          = data.aws_ami.windows_2019_custom.id
+    centos7                      = var.ami == "centos7" ? data.aws_ami.centos7.id : null
+    amazon_linux_2               = var.ami == "amazon_linux_2" ? data.aws_ami.amazon_linux_2.id : null
+    ubuntu_22_04                 = var.ami == "ubuntu_22_04" ? data.aws_ami.ubuntu_22_04.id : null
+    rhel_8                       = var.ami == "rhel_8" ? data.aws_ami.rhel_8.id : null
+    rocky_8                      = var.ami == "rocky_8" ? data.aws_ami.rocky_8.id : null
+    rocky_9                      = var.ami == "rocky_9" ? data.aws_ami.rocky_9.id : null
+    rocky_8_custom               = var.ami == "rocky_8_custom" ? data.aws_ami.rocky_8_custom.id : null
+    windows_2019_custom          = var.ami == "windows_2019_custom" ? data.aws_ami.windows_2019_custom.id : null
+    windows_server_2019          = var.ami == "windows_server_2019" ? data.aws_ami.windows_server_2019.id : null
     # windows_2022_custom          = data.aws_ami.windows_2022_custom.id
-    windows_server_2019          = data.aws_ami.windows_server_2019.id
-    windows_server_2016_sql_2017 = data.aws_ami.windows_server_2016_sql_2017.id
+    windows_server_2016_sql_2017 = var.ami == "windows_server_2016_sql_2017" ? data.aws_ami.windows_server_2016_sql_2017.id : null
   }, var.ami, var.ami)
   iam_instance_profile        = var.iam_instance_profile
   instance_type               = lookup(var.instance_types, var.instance_type, var.instance_type)
@@ -49,7 +49,9 @@ resource "aws_instance" "main" {
   }
 
   metadata_options {
-    http_tokens = "required"
+    count         = var.enable_metadata_options ? 1 : 0
+    http_tokens   = var.enable_metadata_options ? "required" : null
+    http_endpoint = var.enable_metadata_options ? "enabled" : null
   }
 
   connection {

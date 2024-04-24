@@ -15,6 +15,8 @@ variable "ebs_block_devices_extra" {
   default = null
 }
 
+variable "enable_metadata_options" { default = true }
+
 variable "iam_instance_profile" {
   default = ""
 }
