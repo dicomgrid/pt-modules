@@ -69,7 +69,7 @@ resource "aws_instance" "main" {
       "tar -xvzf /root/svt/svt.tar.gz --directory /root/svt/",
       "echo '${var.server_code}' >> /root/svt/servercode"
     ]
-    ) : []
+    ) : startswith(var.ami, "win") ? ["PowerShell Write-Output "] : ["bash echo "]
   }
 
   lifecycle {
