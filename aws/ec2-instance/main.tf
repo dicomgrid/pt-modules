@@ -1,14 +1,14 @@
 resource "aws_instance" "main" {
   ami = lookup({
-    centos7                      = data.aws_ami.centos7.id
-    amazon_linux_2               = data.aws_ami.amazon_linux_2.id
-    ubuntu_22_04                 = data.aws_ami.ubuntu_22_04.id
-    rhel_8                       = data.aws_ami.rhel_8.id
-    rocky_8                      = data.aws_ami.rocky_8.id
-    rocky_9                      = data.aws_ami.rocky_9.id
-    rocky_8_custom               = data.aws_ami.rocky_8_custom.id
-    windows_2019_custom          = data.aws_ami.windows_2019_custom.id
-    windows_server_2019          = data.aws_ami.windows_server_2019.id
+    centos7             = data.aws_ami.centos7.id
+    amazon_linux_2      = data.aws_ami.amazon_linux_2.id
+    ubuntu_22_04        = data.aws_ami.ubuntu_22_04.id
+    rhel_8              = data.aws_ami.rhel_8.id
+    rocky_8             = data.aws_ami.rocky_8.id
+    rocky_9             = data.aws_ami.rocky_9.id
+    rocky_8_custom      = data.aws_ami.rocky_8_custom.id
+    windows_2019_custom = data.aws_ami.windows_2019_custom.id
+    windows_server_2019 = data.aws_ami.windows_server_2019.id
     # windows_2022_custom          = data.aws_ami.windows_2022_custom.id
     windows_server_2016_sql_2017 = data.aws_ami.windows_server_2016_sql_2017.id
   }, var.ami, var.ami)
@@ -49,15 +49,14 @@ resource "aws_instance" "main" {
   }
 
   metadata_options {
-    http_tokens   = var.enable_metadata_options ? "required" : null
-    http_endpoint = var.enable_metadata_options ? "enabled" : null
+    http_tokens = "required"
   }
 
   connection {
     type     = startswith(var.ami, "win") ? "winrm" : "ssh"
     user     = startswith(var.ami, "win") ? "administrator" : "root"
     password = var.local_password
-    host     = var.private_ip
+    host     = self.private_ip
     timeout  = "10m"
   }
 
