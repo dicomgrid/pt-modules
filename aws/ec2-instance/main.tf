@@ -49,7 +49,6 @@ resource "aws_instance" "main" {
   }
 
   metadata_options {
-    count         = var.enable_metadata_options ? 1 : 0
     http_tokens   = var.enable_metadata_options ? "required" : null
     http_endpoint = var.enable_metadata_options ? "enabled" : null
   }
