@@ -183,6 +183,7 @@ resource "panos_bgp_export_rule_group" "main" {
       action                         = try(rule.value.action, null)
       as_path_limit                  = try(rule.value.as_path_limit, null)
       as_path_type                   = try(rule.value.as_path_type, null)
+      as_path_value                  = try(rule.value.as_path_value, null)
       community_type                 = try(rule.value.community_type, null)
       community_value                = try(rule.value.community_value, null)
       enable                         = try(rule.value.enable, true)
