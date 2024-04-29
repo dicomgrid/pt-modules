@@ -4,12 +4,12 @@ resource "aws_eip" "main" {
   network_border_group = var.network_border_group
 
   tags = merge({
-    Application = var.application
-    Billing     = var.billing
-    Creator     = var.creator
-    Environment = var.environment
-    Name        = var.name
-    Owner       = var.owner
+    Application = var.Application
+    Billing     = var.Billing
+    Creator     = var.Creator
+    Environment = var.Environment
+    Name        = var.Name
+    Owner       = var.Owner
     aws-migration-project-id = var.aws_project_id
     map-migrated             = var.map_migrated
   }, var.tags)
