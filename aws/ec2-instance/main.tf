@@ -33,7 +33,7 @@ resource "aws_instance" "main" {
   }
 
   dynamic "ebs_block_device" {
-    for_each = var.ebs_block_devices != null ? var.ebs_block_devices : {}
+    for_each = var.ebs_block_devices != null ? var.ebs_block_devices : null
     content {
       delete_on_termination = lookup(ebs_block_device.value, "delete_on_termination", false)
       device_name           = ebs_block_device.value["device_name"]
@@ -107,4 +107,3 @@ resource "aws_volume_attachment" "main" {
     prevent_destroy = true
   }
 }
-
