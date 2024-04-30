@@ -1,6 +1,5 @@
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
-
 No requirements.
 
 ## Modules
@@ -19,3 +18,4 @@ No inputs.
 
 No outputs.
 <!-- END_TF_DOCS -->
+.
