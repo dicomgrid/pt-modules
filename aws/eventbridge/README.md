@@ -62,6 +62,7 @@ No modules.
 | <a name="input_rule_name"></a> [rule\_name](#input\_rule\_name) | n/a | `string` | n/a | yes |
 | <a name="input_event_pattern"></a> [event\_pattern](#input\_event\_pattern) | n/a | `string` | `""` | no |
 | <a name="input_eventbus_name"></a> [eventbus\_name](#input\_eventbus\_name) | n/a | `any` | `null` | no |
+| <a name="input_schedule_expression"></a> [schedule\_expression](#input\_schedule\_expression) | n/a | `any` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | n/a | `any` | `null` | no |
 | <a name="input_target_id"></a> [target\_id](#input\_target\_id) | n/a | `any` | `null` | no |
 

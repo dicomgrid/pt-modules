@@ -26,5 +26,10 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_arn"></a> [arn](#output\_arn) | n/a |
+| <a name="output_key_name"></a> [key\_name](#output\_key\_name) | n/a |
+| <a name="output_key_type"></a> [key\_type](#output\_key\_type) | n/a |
+| <a name="output_public"></a> [public](#output\_public) | n/a |
 <!-- END_TF_DOCS -->
