@@ -9,7 +9,7 @@ resource "aws_ssm_maintenance_window_task" "ssm-patch-task" {
   max_errors       = var.max_errors
   targets {
     key    = "WindowTargetIds"
-    values = [var.patch_window_target_id]
+    values = var.patch_window_target_id
   }
   task_invocation_parameters {
     run_command_parameters {
