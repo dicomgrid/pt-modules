@@ -85,7 +85,7 @@ resource "panos_bgp_peer" "main" {
   open_delay_time                     = try(each.value.open_delay_time, null)
   outgoing_connections_local_port     = try(each.value.outgoing_connections_local_port, null)
   peer_address_ip                     = each.value.peer_address_ip
-  peer_as                             = contains(["ibgp", "ibgp-confed"], panos_bgp_peer_group.main[each.value.peer_group].type) ? var.as_number : try(each.value.peer_as, null)
+  peer_as                             = contains(["ebgp"], panos_bgp_peer_group.main[each.value.peer_group].type) ? var.as_number : try(each.value.peer_as, null)
   peering_type                        = try(each.value.peering_type, null)
   reflector_client                    = try(each.value.reflector_client, null)
   subsequent_address_family_multicast = try(each.value.subsequent_address_family_multicast, null)
