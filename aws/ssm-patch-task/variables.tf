@@ -4,7 +4,7 @@ variable "patch_task_priority" {default = "null"}
 variable "service_role_arn" {default = "null"}
 variable "max_concurrency" {default = "null"}
 variable "max_errors" {default = "null"}
-variable "patch_window_target_id" {default = "null"}
+variable "patch_window_target_id" {default = []}
 variable "timeout_seconds" {default = 600}
 
 variable "patch_tasks" {

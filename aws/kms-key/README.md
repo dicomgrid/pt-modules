@@ -16,6 +16,7 @@ No modules.
 |------|------|
 | [aws_kms_alias.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
 | [aws_kms_key.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
+| [aws_kms_key_policy.custom](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key_policy) | resource |
 | [aws_kms_key_policy.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key_policy) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.ebs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -33,6 +34,7 @@ No modules.
 | <a name="input_aws_project_id"></a> [aws\_project\_id](#input\_aws\_project\_id) | n/a | `string` | `"null"` | no |
 | <a name="input_code_managed"></a> [code\_managed](#input\_code\_managed) | n/a | `string` | `"true"` | no |
 | <a name="input_compliance"></a> [compliance](#input\_compliance) | n/a | `string` | `"null"` | no |
+| <a name="input_custom_kms_policy"></a> [custom\_kms\_policy](#input\_custom\_kms\_policy) | n/a | `any` | `null` | no |
 | <a name="input_ebs_kms_shared_account_roles"></a> [ebs\_kms\_shared\_account\_roles](#input\_ebs\_kms\_shared\_account\_roles) | n/a | `any` | `null` | no |
 | <a name="input_kms_alias"></a> [kms\_alias](#input\_kms\_alias) | n/a | `any` | `null` | no |
 | <a name="input_kms_policy"></a> [kms\_policy](#input\_kms\_policy) | n/a | `any` | `null` | no |

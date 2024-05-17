@@ -177,7 +177,7 @@ resource "panos_bgp_export_rule_group" "main" {
       match_from_peers               = try(rule.value.match_from_peers, null)
       match_med                      = try(rule.value.match_med, null)
       match_next_hops                = try(rule.value.match_next_hops, null)
-      match_route_table              = try(rule.value.match_route_table, null)
+      match_route_table              = try(rule.value.match_route_table, "unicast")
       med                            = try(rule.value.med, null)
       name                           = try(rule.value.name, "${each.key}-rg-${rule.key}")
       next_hop                       = try(rule.value.next_hop, null)

@@ -22,6 +22,7 @@ No modules.
 | [aws_ami.rhel_8](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
 | [aws_ami.rocky_8](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
 | [aws_ami.rocky_8_custom](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
+| [aws_ami.rocky_9](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
 | [aws_ami.ubuntu_22_04](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
 | [aws_ami.windows_2019_custom](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
 | [aws_ami.windows_server_2016](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
@@ -41,15 +42,16 @@ No modules.
 | <a name="input_ami"></a> [ami](#input\_ami) | n/a | `string` | `"rocky_8_custom"` | no |
 | <a name="input_associate_public_ip_address"></a> [associate\_public\_ip\_address](#input\_associate\_public\_ip\_address) | n/a | `string` | `"false"` | no |
 | <a name="input_ebs_block_devices_extra"></a> [ebs\_block\_devices\_extra](#input\_ebs\_block\_devices\_extra) | n/a | `any` | `null` | no |
+| <a name="input_enable_metadata_options"></a> [enable\_metadata\_options](#input\_enable\_metadata\_options) | n/a | `bool` | `true` | no |
 | <a name="input_iam_instance_profile"></a> [iam\_instance\_profile](#input\_iam\_instance\_profile) | n/a | `string` | `""` | no |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | n/a | `string` | `"t2.micro"` | no |
-| <a name="input_instance_types"></a> [instance\_types](#input\_instance\_types) | n/a | `map` | <pre>{<br>  "c5_12xlarge_accelerator": "c5.12xlarge",<br>  "c5_xlarge": "c5.xlarge",<br>  "fullstack_privatecloud": "r5.4xlarge",<br>  "m5_2xlarge": "m5.2xlarge",<br>  "m5_4xlarge": "m5.4xlarge",<br>  "m6a_2xlarge": "m6a.2xlarge",<br>  "medium_accelerator": "c5.4xlarge",<br>  "medium_gateway": "c5.9xlarge",<br>  "powerscribe360": "m4.xlarge",<br>  "r5_8xlarge_accelerator": "r5.8xlarge",<br>  "r5_xlarge": "r5.xlarge",<br>  "small_accelerator": "c5.2xlarge",<br>  "small_gateway": "c5.2xlarge",<br>  "small_privatecloud": "c5.2xlarge",<br>  "t3_large": "t3.large"<br>}</pre> | no |
+| <a name="input_instance_types"></a> [instance\_types](#input\_instance\_types) | n/a | `map` | <pre>{<br>  "c5_12xlarge_accelerator": "c5.12xlarge",<br>  "c5_xlarge": "c5.xlarge",<br>  "c6a_xlarge": "c6a.xlarge",<br>  "fullstack_privatecloud": "r5.4xlarge",<br>  "m5_2xlarge": "m5.2xlarge",<br>  "m5_4xlarge": "m5.4xlarge",<br>  "m6a_2xlarge": "m6a.2xlarge",<br>  "medium_accelerator": "c5.4xlarge",<br>  "medium_gateway": "c5.9xlarge",<br>  "powerscribe360": "m4.xlarge",<br>  "r5_8xlarge_accelerator": "r5.8xlarge",<br>  "r5_xlarge": "r5.xlarge",<br>  "small_accelerator": "c5.2xlarge",<br>  "small_gateway": "c5.2xlarge",<br>  "small_privatecloud": "c5.2xlarge",<br>  "t3_large": "t3.large"<br>}</pre> | no |
 | <a name="input_key_name"></a> [key\_name](#input\_key\_name) | n/a | `string` | `"ansible-rsa"` | no |
 | <a name="input_local_password"></a> [local\_password](#input\_local\_password) | n/a | `any` | `null` | no |
 | <a name="input_private_ip"></a> [private\_ip](#input\_private\_ip) | n/a | `any` | `null` | no |
 | <a name="input_root_block_device"></a> [root\_block\_device](#input\_root\_block\_device) | n/a | `list` | <pre>[<br>  {<br>    "delete_on_termination": null,<br>    "encrypted": null,<br>    "iops": null,<br>    "throughput": null,<br>    "volume_size": null,<br>    "volume_type": null<br>  }<br>]</pre> | no |
 | <a name="input_security_groups"></a> [security\_groups](#input\_security\_groups) | n/a | `list` | `[]` | no |
-| <a name="input_server_code"></a> [server\_code](#input\_server\_code) | n/a | `any` | `null` | no |
+| <a name="input_server_code"></a> [server\_code](#input\_server\_code) | n/a | `string` | `"na"` | no |
 | <a name="input_user_data"></a> [user\_data](#input\_user\_data) | n/a | `any` | `null` | no |
 
 ## Outputs

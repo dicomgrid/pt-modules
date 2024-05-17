@@ -63,6 +63,7 @@ No modules.
 | <a name="input_approve_after_days"></a> [approve\_after\_days](#input\_approve\_after\_days) | n/a | `number` | `7` | no |
 | <a name="input_approve_until_date"></a> [approve\_until\_date](#input\_approve\_until\_date) | n/a | `any` | `null` | no |
 | <a name="input_approved_patches"></a> [approved\_patches](#input\_approved\_patches) | n/a | `any` | `null` | no |
+| <a name="input_approved_patches_enable_non_security"></a> [approved\_patches\_enable\_non\_security](#input\_approved\_patches\_enable\_non\_security) | n/a | `bool` | `true` | no |
 | <a name="input_compliance_levels"></a> [compliance\_levels](#input\_compliance\_levels) | n/a | <pre>list(object({<br>    <br>    compliance_level = string<br>    severity = list(string)<br>  }))</pre> | <pre>[<br>  {<br>    "compliance_level": "CRITICAL",<br>    "severity": [<br>      "Critical",<br>      "Important"<br>    ]<br>  },<br>  {<br>    "compliance_level": "MEDIUM",<br>    "severity": [<br>      "Moderate"<br>    ]<br>  },<br>  {<br>    "compliance_level": "LOW",<br>    "severity": [<br>      "Low"<br>    ]<br>  }<br>]</pre> | no |
 | <a name="input_description"></a> [description](#input\_description) | n/a | `string` | `"null"` | no |
 | <a name="input_enable_non_security"></a> [enable\_non\_security](#input\_enable\_non\_security) | n/a | `bool` | `true` | no |
