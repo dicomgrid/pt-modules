@@ -22,9 +22,6 @@ resource "panos_bgp" "main" {
   stale_route_time                 = var.stale_route_time
   virtual_router                   = var.virtual_router
 
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 
@@ -37,9 +34,6 @@ resource "panos_bgp_auth_profile" "main" {
   name           = try(each.value.name, each.key)
   secret         = each.value.secret
 
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "panos_bgp_peer_group" "main" {
@@ -55,10 +49,6 @@ resource "panos_bgp_peer_group" "main" {
   type                        = try(each.value.type, null)
   virtual_router              = panos_bgp.main.virtual_router
 
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "panos_bgp_peer" "main" {
@@ -92,9 +82,6 @@ resource "panos_bgp_peer" "main" {
   subsequent_address_family_unicast   = try(each.value.subsequent_address_family_unicast, null)
   virtual_router                      = panos_bgp.main.virtual_router
 
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "panos_bgp_redist_rule" "main" {
@@ -113,9 +100,6 @@ resource "panos_bgp_redist_rule" "main" {
   set_origin               = try(each.value.set_origin, null)
   virtual_router           = panos_bgp.main.virtual_router
 
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "panos_bgp_import_rule_group" "main" {
@@ -147,7 +131,7 @@ resource "panos_bgp_import_rule_group" "main" {
       match_next_hops                = try(rule.value.match_next_hops, null)
       match_route_table              = try(rule.value.match_route_table, null)
       med                            = try(rule.value.med, null)
-      name                           = try(rule.value.name, rule.key)
+      name                           = try(rule.value.name, "${each.key}-rg-${rule.key}")
       next_hop                       = try(rule.value.next_hop, null)
       origin                         = try(rule.value.origin, null)
       used_by                        = try(rule.value.used_by, null)
@@ -164,9 +148,6 @@ resource "panos_bgp_import_rule_group" "main" {
     }
   }
 
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "panos_bgp_export_rule_group" "main" {
@@ -198,7 +179,7 @@ resource "panos_bgp_export_rule_group" "main" {
       match_next_hops                = try(rule.value.match_next_hops, null)
       match_route_table              = try(rule.value.match_route_table, "unicast")
       med                            = try(rule.value.med, null)
-      name                           = try(rule.value.name, rule.key)
+      name                           = try(rule.value.name, "${each.key}-rg-${rule.key}")
       next_hop                       = try(rule.value.next_hop, null)
       origin                         = try(rule.value.origin, null)
       used_by                        = try(rule.value.used_by, null)
@@ -214,7 +195,4 @@ resource "panos_bgp_export_rule_group" "main" {
     }
   }
 
-  lifecycle {
-    create_before_destroy = true
-  }
 }
