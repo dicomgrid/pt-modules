@@ -25,12 +25,12 @@ output "config" {
     }
     tunnel2 = {
       phase1 = {
-        local_peer_ip   = aws_vpn_connection.main[k].tunnel1_address
+        local_peer_ip   = aws_vpn_connection.main[k].tunnel2_address
         remote_peer_ip  = aws_customer_gateway.main[v.customer_gateway].ip_address
-        encryption      = aws_vpn_connection.main[k].tunnel1_phase1_encryption_algorithms
-        integrity       = aws_vpn_connection.main[k].tunnel1_phase1_integrity_algorithms
-        dg_groups       = aws_vpn_connection.main[k].tunnel1_phase1_dh_group_numbers
-        keylife_seconds = aws_vpn_connection.main[k].tunnel1_phase1_lifetime_seconds
+        encryption      = aws_vpn_connection.main[k].tunnel2_phase1_encryption_algorithms
+        integrity       = aws_vpn_connection.main[k].tunnel2_phase1_integrity_algorithms
+        dg_groups       = aws_vpn_connection.main[k].tunnel2_phase1_dh_group_numbers
+        keylife_seconds = aws_vpn_connection.main[k].tunnel2_phase1_lifetime_seconds
       }
       phase2 = {
         encryption      = aws_vpn_connection.main[k].tunnel2_phase2_encryption_algorithms
