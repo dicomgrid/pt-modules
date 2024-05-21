@@ -2,6 +2,7 @@ resource "google_filestore_instance" "main" {
   name     = var.name
   location = var.location
   tier     = var.tier
+  labels   = var.labels
 
   file_shares {
     capacity_gb = var.capacity_gb
