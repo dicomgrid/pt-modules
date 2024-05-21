@@ -9,5 +9,4 @@ variable "location" {}
 variable "modes" { default = [] }
 variable "name" {}
 variable "network" {}
-variable "share_name" {}
 variable "tier" { default = "BASIC_SSD" }

@@ -6,7 +6,7 @@ resource "google_filestore_instance" "main" {
 
   file_shares {
     capacity_gb = var.capacity_gb
-    name        = var.share_name
+    name        = var.name
 
     nfs_export_options {
       ip_ranges   = var.ip_ranges
