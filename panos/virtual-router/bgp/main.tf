@@ -44,7 +44,7 @@ resource "panos_bgp_peer_group" "main" {
   export_next_hop             = try(each.value.export_next_hop, null)
   import_next_hop             = try(each.value.import_next_hop, null)
   name                        = try(each.value.name, each.key)
-  remove_private_as           = try(each.value.remove_private_as, null)
+  remove_private_as           = try(each.value.remove_private_as, each.value.type == "ebgp" ? true : null, null)
   soft_reset_with_stored_info = try(each.value.soft_reset_with_stored_info, null)
   type                        = try(each.value.type, null)
   virtual_router              = panos_bgp.main.virtual_router
@@ -54,11 +54,11 @@ resource "panos_bgp_peer_group" "main" {
 resource "panos_bgp_peer" "main" {
   for_each = var.peers
 
-  address_family_type                 = try(each.value.address_family_type, null)
+  address_family_type                 = try(each.value.address_family_type, "ipv4")
   allow_incoming_connections          = try(each.value.allow_incoming_connections, null)
   allow_outgoing_connections          = try(each.value.allow_outgoing_connections, null)
   auth_profile                        = try(each.value.auth_profile, null)
-  bfd_profile                         = try(each.value.bfd_profile, null)
+  bfd_profile                         = try(each.value.bfd_profile, "Inherit-vr-global-setting")
   bgp_peer_group                      = panos_bgp_peer_group.main[each.value.peer_group].name
   enable_mp_bgp                       = try(each.value.enable_mp_bgp, null)
   enable_sender_side_loop_detection   = try(each.value.enable_sender_side_loop_detection, null)
@@ -69,7 +69,7 @@ resource "panos_bgp_peer" "main" {
   local_address_interface             = each.value.local_address_interface
   local_address_ip                    = try(each.value.local_address_ip, null)
   max_prefixes                        = try(each.value.max_prefixes, "unlimited")
-  min_route_advertisement_interval    = try(each.value.min_route_advertisement_interval, null)
+  min_route_advertisement_interval    = try(each.value.min_route_advertisement_interval, 30)
   multi_hop                           = try(each.value.multi_hop, null)
   name                                = try(each.value.name, each.key)
   open_delay_time                     = try(each.value.open_delay_time, null)
@@ -77,9 +77,9 @@ resource "panos_bgp_peer" "main" {
   peer_address_ip                     = each.value.peer_address_ip
   peer_as                             = contains(["ibgp", "ibgp-confed"], panos_bgp_peer_group.main[each.value.peer_group].type) ? var.as_number : try(each.value.peer_as, null)
   peering_type                        = try(each.value.peering_type, null)
-  reflector_client                    = try(each.value.reflector_client, null)
+  reflector_client                    = try(each.value.reflector_client, "non-client")
   subsequent_address_family_multicast = try(each.value.subsequent_address_family_multicast, null)
-  subsequent_address_family_unicast   = try(each.value.subsequent_address_family_unicast, null)
+  subsequent_address_family_unicast   = try(each.value.subsequent_address_family_unicast, true)
   virtual_router                      = panos_bgp.main.virtual_router
 
 }
