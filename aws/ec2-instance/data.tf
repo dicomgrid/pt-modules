@@ -102,7 +102,7 @@ data "aws_ami" "rocky_8" {
   owners      = ["679593333241"]
   filter {
     name   = "name"
-    values = ["Rocky-8-ec2-*"]
+    values = ["Rocky-8-EC2-*"]
   }
 
   filter {
