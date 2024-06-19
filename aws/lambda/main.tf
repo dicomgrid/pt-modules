@@ -9,7 +9,7 @@ resource "aws_lambda_function" "lambda_function" {
   architectures    = var.architectures
   function_name    = var.function_name
   handler          = var.handler
-  layers           = [var.layer_name != null ? aws_lambda_layer_version.lambda_layer.arn[1] : null]
+  layers           = [var.layer_name != null ? aws_lambda_layer_version.lambda_layer[0].arn : null]
   role             = var.role
   runtime          = var.runtime
   filename         = var.archive_file
