@@ -7,7 +7,7 @@ def teamsbot(event, context):
     event_time = event['time']
     region = event['region']
     status = event['detail']['status']
-    status_details = event['detail']['status-details']
+    status_details = event.get('detail', {}).get('status-details', None)
     webhook_url = os.environ.get('WEBHOOK_URL')
     window_execution_id = event['detail']['window-execution-id']
     window_id = event['detail']['window-id']
