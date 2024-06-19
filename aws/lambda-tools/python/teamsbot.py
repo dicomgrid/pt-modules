@@ -7,6 +7,7 @@ def teamsbot(event, context):
     event_time = event['time']
     region = event['region']
     status = event['detail']['status']
+    status_details = event['detail']['status-details']
     webhook_url = os.environ.get('WEBHOOK_URL')
     window_execution_id = event['detail']['window-execution-id']
     window_id = event['detail']['window-id']
@@ -117,6 +118,7 @@ def teamsbot(event, context):
     
     teams_payload = pymsteams.cardsection()
     teams_payload.addFact('Status:', status)
+    teams_payload.addFact('Status Details:', status_details)
     teams_payload.addFact('Window:', ssm_mw_name)
     teams_payload.addFact('Group:', ssm_mw_target)
     teams_payload.addFact('Instances:', instance_id_string)
