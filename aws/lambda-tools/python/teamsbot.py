@@ -1,6 +1,6 @@
 import boto3, json, logging, os, pymsteams
 
-def lambda_handler(event, context):
+def teamsbot(event, context):
     #transform event vars
     account_id = event['account']
     detail_type = event['detail-type']
