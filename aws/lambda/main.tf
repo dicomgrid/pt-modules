@@ -27,7 +27,7 @@ resource "aws_lambda_layer_version" "lambda_layer" {
   filename   = "${path.module}/../lambda-tools/layers/${var.layer_name}.zip"
   layer_name = var.layer_name
 
-  compatible_runtimes = local.runtime_map[var.runtime]
+  compatible_runtimes = local.runtime_map[var.layer_runtime]
 }
 
 resource "aws_cloudwatch_log_group" "lambda_log_group" {
