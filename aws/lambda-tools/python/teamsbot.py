@@ -8,6 +8,7 @@ def teamsbot(event, context):
     region = event['region']
     status = event['detail']['status']
     status_details = event.get('detail', {}).get('status-details', None)
+    title = os.environ.get('BOT_NAME')
     webhook_url = os.environ.get('WEBHOOK_URL')
     window_execution_id = event['detail']['window-execution-id']
     window_id = event['detail']['window-id']
@@ -112,7 +113,7 @@ def teamsbot(event, context):
 
     # #construct alert payload
     teams_handler.color(color)
-    teams_handler.title('PLT MW TeamsBot')
+    teams_handler.title(title)
     teams_handler.text(location)
     teams_handler.addLinkButton('Execution URL', window_execution_url)
     
