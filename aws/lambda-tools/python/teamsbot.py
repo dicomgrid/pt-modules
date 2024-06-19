@@ -1,5 +1,4 @@
-import urllib3, json, os, boto3, textwrap, logging
-#test comment
+import boto3, json, logging, os, pymsteams
 
 def slackbot(event, context):
     #transform event vars
@@ -8,6 +7,7 @@ def slackbot(event, context):
     event_time = event['time']
     region = event['region']
     status = event['detail']['status']
+    webhook_url = os.environ.get('WEBHOOK_URL')
     window_execution_id = event['detail']['window-execution-id']
     window_id = event['detail']['window-id']
 
@@ -16,11 +16,11 @@ def slackbot(event, context):
     logger = logging.getLogger()
     logger.setLevel(log_level)
 
-    http = urllib3.PoolManager()
-
     iam_client = boto3.client('iam')
     ssm_client = boto3.client('ssm')
     resource_group_client = boto3.client('resource-groups')
+    
+    teams_handler = pymsteams.connectorcard(webhook_url)
 
     #alert data harvest
     account_name_query = iam_client.list_account_aliases()
@@ -104,119 +104,39 @@ def slackbot(event, context):
     color = status_mapping.get(status, default_color)
 
     #event messaging
-    slack_webhook_url = os.environ.get('SLACK_WEBHOOK_URL')
-    slack_channel = os.environ.get('SLACK_CHANNEL')
-    slack_username = f'Platform SlackBot'
     base_url = f'https://{region}.console.aws.amazon.com/systems-manager/maintenance-windows/{window_id}/history'
     window_execution_url = f'{base_url}/{window_execution_id}?region={region}'
     window_url = f'{base_url}/?region={region}'
+    location = f'{account_name}/{region} ({account_id})'
 
-    #construct alert payload
-    # slack_text = textwrap.dedent(
-    #     f'''
-    # Account/Region: {account_name} {account_id} {region}
-    # Patch Status: <{window_execution_url}|{status}>
-    # Patch Window: {ssm_mw_name}
-    # Patch Group: {ssm_mw_target}
-    # Patch Targets: {instance_id_string}
-    # '''
-    # )
-
-    # slack_payload = {
-    #     'channel': slack_channel,
-    #     'username': slack_username,
-    #     'attachments': [{
-    #         'color': color,
-    #         'text': slack_text,
-    #     }]
-    # }
+    # #construct alert payload
+    teams_handler.color(color)
+    teams_handler.title('PLT MW TeamsBot')
+    teams_handler.text(location)
+    teams_handler.addLinkButton('Execution URL', window_execution_url)
     
-    slack_payload = {
-    'type': 'message',
-    'attachments': [
-        {
-            'contentType': 'application/vnd.microsoft.card.adaptive',
-            'contentUrl': 'null',
-            'content': {
-                '$schema': 'http://adaptivecards.io/schemas/adaptive-card.json',
-                'type': 'AdaptiveCard',
-                'version': '1.2',
-                'themeColor': color,  # Set background color for the container
-                'body': [
-                    {
-                        'type': 'Container',
-                        'items': [
-                            {
-                                'type': 'TextBlock',
-                                'text': 'Account: ' + account_name + ' ' + account_id,
-                                'weight': 'Bolder',
-                                'wrap': True
-                            },
-                            {
-                                'type': 'TextBlock',
-                                'text': ' ',
-                                'spacing': 'Small'  # Added spacing to the empty TextBlock
-                            },
-                            {
-                                'type': 'TextBlock',
-                                'text': 'Region: ' + region,
-                                'weight': 'Bolder',
-                                'wrap': True
-                            },
-                            {
-                                'type': 'TextBlock',
-                                'text': 'Status: ' + status,
-                                'weight': 'Bolder',
-                                'color': color,
-                                'wrap': True
-                            },
-                            {
-                                'type': 'TextBlock',
-                                'text': 'Window: ' + ssm_mw_name,
-                                'weight': 'Bolder',
-                                'color': 'Default',
-                                'wrap': True
-                            },
-                            {
-                                'type': 'TextBlock',
-                                'text': 'Group: ' + ssm_mw_target,
-                                'weight': 'Bolder',
-                                'color': 'Default',
-                                'wrap': True
-                            },
-                            {
-                                'type': 'TextBlock',
-                                'text': 'Instances: ' + instance_id_string,
-                                'weight': 'Bolder',
-                                'color': 'Default',
-                                'wrap': True
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-    ]
-}
+    teams_payload = pymsteams.cardsection()
+    teams_payload.addFact('Status:', status)
+    teams_payload.addFact('Window:', ssm_mw_name)
+    teams_payload.addFact('Group:', ssm_mw_target)
+    teams_payload.addFact('Instances:', instance_id_string)
+    teams_handler.addSection(teams_payload)
 
     #deliver alert payload
     try:
-        slack_encoded_payload = json.dumps(slack_payload).encode('utf-8')
-        slack_post_payload = http.request(
-            'POST', slack_webhook_url, body=slack_encoded_payload
-        )
-
-        if 200 <= slack_post_payload.status < 300:
+        teams_payload_post = teams_handler.send()
+        
+        if teams_payload_post:
             logging.info(
-                'Post successful. status code: %s, message: %s, response: %s',
-                slack_post_payload.status, slack_payload, slack_post_payload.data
+                'Post successful. output: %s',
+                teams_payload_post
             )
-
         else:
             logging.error(
-                'Post unsuccessful. status code: %s, message: %s, response: %s',
-                slack_post_payload.status, slack_payload, slack_post_payload.data
+                'Post unsuccessful. output: %s',
+                teams_payload_post
             )
 
     except Exception as e:
-        logging.error('error deliverying payload occurred. message %s', slack_payload)
+        logging.error('general exception found. message: %s. exception: %s', 
+        teams_payload_post, e)
