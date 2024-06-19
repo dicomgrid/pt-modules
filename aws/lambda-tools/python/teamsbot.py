@@ -118,7 +118,8 @@ def teamsbot(event, context):
     
     teams_payload = pymsteams.cardsection()
     teams_payload.addFact('Status:', status)
-    teams_payload.addFact('Status Details:', status_details)
+    if status_details:
+        teams_payload.addFact('Status Details:', status_details)
     teams_payload.addFact('Window:', ssm_mw_name)
     teams_payload.addFact('Group:', ssm_mw_target)
     teams_payload.addFact('Instances:', instance_id_string)
