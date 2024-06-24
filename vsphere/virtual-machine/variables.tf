@@ -119,9 +119,13 @@ variable "linux_time_zones" {
 variable "win_time_zones" {
   type = map(any)
   default = {
-    "est" = "035"
-    "cst" = "020"
-    "mst" = "010"
-    "pst" = "004"
+    "est"                 = "035"
+    "cst"                 = "020"
+    "mst"                 = "010"
+    "pst"                 = "004"
+    "America/New_York"    = "035"
+    "America/Chicago"     = "020"
+    "America/Denver"      = "010"
+    "America/Los_Angeles" = "004"
   }
 }
