@@ -4,11 +4,19 @@ resource "aws_iam_role" "main" {
   tags               = local.tags
 }
 
+# Inline Only
 resource "aws_iam_role_policy" "main" {
-  count  = var.policy == null ? 0 : 1
-  name   = local.tags.Name
-  role   = aws_iam_role.main.id
-  policy = var.policy
+  for_each = var.policies
+  name     = each.key
+  role     = aws_iam_role.main.id
+  policy   = each.value
+}
+
+# AWs/Custmoer Managed
+resource "aws_iam_role_policy_attachment" "managed" {
+  for_each   = toset(var.managed_policies)
+  role       = aws_iam_role.main.name
+  policy_arn = each.key
 }
 
 resource "aws_iam_instance_profile" "main" {

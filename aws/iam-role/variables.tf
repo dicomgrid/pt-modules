@@ -1,7 +1,8 @@
 # variable "name" {}
 variable "assume_role_policy" {}
 variable "instance_profile" { default = false }
-variable "policy" {}
+variable "managed_policies" {}
+variable "policies" {}
 
 # Tags
 locals {
