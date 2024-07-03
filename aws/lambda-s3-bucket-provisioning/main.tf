@@ -251,7 +251,7 @@ resource "aws_s3_bucket_policy" "ambra_orphan_bucket_policy" {
 }
 
 
-### INSTANCE Profile for servie nodes to use to invoke lambda
+### INSTANCE Profile for service nodes to use to invoke lambda
 resource "aws_iam_role" "main" {
   provider           = aws.primary
   description        = "Allows EC2 instances to call AWS services on your behalf."
@@ -261,11 +261,12 @@ resource "aws_iam_role" "main" {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Action": "sts:AssumeRole",
+            "Action": ["sts:AssumeRole","sts:TagSession"],
             "Principal": {
                "Service": [
                     "ec2.amazonaws.com",
-                    "ssm.amazonaws.com"
+                    "ssm.amazonaws.com",
+                    "pods.eks.amazonaws.com"
                 ]
             },
             "Effect": "Allow",
@@ -299,7 +300,7 @@ resource "aws_iam_role_policy_attachment" "main" {
 resource "aws_iam_policy" "s3objectmanager" {
   provider    = aws.primary
   name        = var.s3objectmanager_policy_name
-  description = "Allows ec2 to assume ss3objectmanager role on storage accounts"
+  description = "Allows ec2 to assume s3objectmanager role on storage accounts"
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
