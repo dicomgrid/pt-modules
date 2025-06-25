@@ -1,13 +1,13 @@
 name: Terraform Module Releaser
 on:
   pull_request:
-    types: [opened, reopened, synchronize, closed] # Closed required
+    types: [opened, reopened, synchronize, closed] 
     branches:
       - master
 
 permissions:
-  contents: write # Required for to push tags, create release, and push changes to the wiki
-  pull-requests: write # Required to comment on pull request
+  contents: write
+  pull-requests: write
 
 concurrency:
   group: terraform-release-${{ github.ref }}
@@ -17,11 +17,12 @@ jobs:
   release:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true || github.event.action != 'closed'
-    # Uncomment to wait for terraform validation to pass first
-   # needs: [terraform-validation]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Validate Commit Messages
         run: |
@@ -31,8 +32,20 @@ jobs:
           # Get PR commits if this is a PR, otherwise recent commits
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "Analyzing PR commits..."
-            # Get commits in this PR
-            commits=$(git log --oneline origin/${{ github.base_ref }}..HEAD)
+
+            # Fetch the base branch to ensure we have the reference
+            git fetch origin ${{ github.base_ref }}:${{ github.base_ref }} || true
+
+            # Try different approaches to get PR commits
+            if git rev-parse --verify origin/${{ github.base_ref }} >/dev/null 2>&1; then
+              commits=$(git log --oneline origin/${{ github.base_ref }}..HEAD)
+            elif git rev-parse --verify ${{ github.base_ref }} >/dev/null 2>&1; then
+              commits=$(git log --oneline ${{ github.base_ref }}..HEAD)
+            else
+              echo "Could not find base branch, using recent commits instead"
+              commits=$(git log --oneline -10)
+            fi
+
             echo "PR Commits:"
             echo "$commits"
           else
@@ -41,7 +54,6 @@ jobs:
             echo "Recent commits:"
             echo "$commits"
           fi
-
 
           echo ""
           echo "=== Checking for versioning keywords ==="
@@ -65,40 +77,38 @@ jobs:
           echo "Patch version keywords found:"
           [[ -n "$patch_matches" ]] && echo "$patch_matches" || echo "  None"
 
-
           if [[ -n "$major_matches" ]] || [[ -n "$minor_matches" ]] || [[ -n "$patch_matches" ]]; then
             echo ""
-            echo "Versioning keywords found - release will be triggered"
+            echo "✅ Versioning keywords found - release will be triggered"
           else
             echo ""
-            echo "WARNING: No versioning keywords found in commits"
+            echo "⚠️ WARNING: No versioning keywords found in commits"
             echo "Add keywords to commit messages for automatic versioning:"
             echo "  - major, breaking, BREAKING -> Major version bump"
             echo "  - feat, feature, add, new -> Minor version bump"
             echo "  - fix, bug, patch, update, chore, docs, refactor -> Patch version bump"
           fi
 
-
       - name: Terraform Module Releaser
         uses: techpivot/terraform-module-releaser@v1
         with:
-          # Enhanced commit message keywords for better versioning
+
           major-keywords: "major,breaking change,BREAKING"
           minor-keywords: "feat,feature,add,new"
           patch-keywords: "fix,bug,patch,update,chore,docs,refactor"
 
-          # Documentation and versioning settings
+
           default-first-tag: "v1.0.0"
           terraform-docs-version: "v0.20.0"
 
-          # Cleanup and maintenance
+
           delete-legacy-tags: false
 
-          # Wiki configuration - disable since wiki repo doesn't exist
+
           disable-wiki: false
           wiki-sidebar-changelog-max: 10
 
-          # File patterns for better module management
+
           module-path-ignore: ".github/**"
           module-change-exclude-patterns: ".gitignore,*.md"
           module-asset-exclude-patterns: ".gitignore,*.md"
@@ -115,4 +125,10 @@ jobs:
               repo: context.repo.repo,
               body: `❌ **Terraform module release failed**
 
-              Please check the [workflow logs](${runUrl}) for details.
+            Please check the [workflow logs](${runUrl}) for details.
+
+            Common fixes:
+            - Ensure commit messages contain versioning keywords (feat, fix, etc.)
+            - Check that Terraform files are properly formatted
+            - Verify all required files are present in the module`
+            });
