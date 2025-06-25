@@ -3,20 +3,20 @@ name: Terraform Validation
 on:
 
   pull_request:
-    branches: [master]
+    branches: [main]
     paths:
       - '**/*.tf'
       - '**/*.tfvars'
       - '**/*.tfvars.json'
   push:
-    branches: [master]
+    branches: [main]
     paths:
       - '**/*.tf'
       - '**/*.tfvars'
       - '**/*.tfvars.json'
 
 jobs:
-  terraform-validation:
+  terraform-validation: # The job name is already terraform-validation
     runs-on: ubuntu-latest
     name: Terraform Validation
 

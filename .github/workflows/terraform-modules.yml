@@ -3,18 +3,28 @@ on:
   pull_request:
     types: [opened, reopened, synchronize, closed] # Closed required
     branches:
-      - main
+      - master
 
 permissions:
   contents: write # Required for to push tags, create release, and push changes to the wiki
   pull-requests: write # Required to comment on pull request
 
+concurrency:
+  group: terraform-release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true || github.event.action != 'closed'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Validate Commit Messages
+        run: |
+          # Validate that commit messages follow expected patterns
+          git log --oneline -10 | grep -E "(major|breaking|feat|fix|chore)" || echo "Warning: No versioning keywords found in recent commits"
 
       - name: Terraform Module Releaser
         uses: techpivot/terraform-module-releaser@v1
@@ -23,19 +33,31 @@ jobs:
           major-keywords: "major,breaking change,BREAKING"
           minor-keywords: "feat,feature,add,new"
           patch-keywords: "fix,bug,patch,update,chore,docs,refactor"
-          
+
           # Documentation and versioning settings
           default-first-tag: "v1.0.0"
           terraform-docs-version: "v0.20.0"
-          
+
           # Cleanup and maintenance
           delete-legacy-tags: true
-          
+
           # Wiki configuration
           disable-wiki: false
           wiki-sidebar-changelog-max: 10
-          
+
           # File patterns for better module management
           module-path-ignore: "**/examples/**,**/test/**,**/tests/**,.github/**"
           module-change-exclude-patterns: ".gitignore,*.md,*.tftest.hcl,tests/**,examples/**,docs/**"
           module-asset-exclude-patterns: ".gitignore,*.md,*.tftest.hcl,tests/**,examples/**,docs/**,*.tfvars.example"
+
+      - name: Notify on Failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ Terraform module release failed. Please check the workflow logs.'
+            })
