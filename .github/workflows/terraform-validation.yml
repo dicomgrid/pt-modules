@@ -1,0 +1,78 @@
+name: Terraform Validation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/*.tf'
+      - '**/*.tfvars'
+      - '**/*.tfvars.json'
+  push:
+    branches: [main]
+    paths:
+      - '**/*.tf'
+      - '**/*.tfvars'
+      - '**/*.tfvars.json'
+
+jobs:
+  terraform-validation:
+    runs-on: ubuntu-latest
+    name: Terraform Validation
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ~1.7.0
+
+      - name: Find Terraform modules
+        id: find-modules
+        run: |
+          # Find all directories containing .tf files
+          modules=$(find . -name "*.tf" -type f | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform" | head -20)
+          echo "Found modules:"
+          echo "$modules"
+          echo "modules<<EOF" >> $GITHUB_OUTPUT
+          echo "$modules" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Terraform Format Check
+        id: fmt
+        run: |
+          terraform fmt -check -recursive
+
+      - name: Terraform Init and Validate
+        run: |
+          # Validate each module
+          while IFS= read -r module_path; do
+            if [[ -n "$module_path" && -d "$module_path" ]]; then
+              echo "::group::Validating module: $module_path"
+              cd "$module_path"
+
+              # Initialize Terraform
+              terraform init -backend=false
+
+              # Validate Terraform configuration
+              terraform validate
+
+              # Return to root directory
+              cd - > /dev/null
+              echo "::endgroup::"
+            fi
+          done <<< "${{ steps.find-modules.outputs.modules }}"
+
+      - name: TFSec Security Scan
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          additional_args: --exclude-downloaded-modules
+
+      - name: Checkov Security Scan
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: .
+          quiet: true
+          skip_check: CKV_TF_1 # Skip requirement for terraform version constraint
+          framework: terraform
