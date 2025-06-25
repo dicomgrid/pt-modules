@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true || github.event.action != 'closed'
     # Uncomment to wait for terraform validation to pass first
-    needs: [terraform-validation]
+   # needs: [terraform-validation]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
