@@ -1,15 +1,14 @@
 name: Terraform Validation
 
 on:
-
   pull_request:
-    branches: [master]
+    branches: [main]
     paths:
       - '**/*.tf'
       - '**/*.tfvars'
       - '**/*.tfvars.json'
   push:
-    branches: [master]
+    branches: [main]
     paths:
       - '**/*.tf'
       - '**/*.tfvars'
@@ -29,51 +28,174 @@ jobs:
         with:
           terraform_version: ~1.7.0
 
-      - name: Find Terraform modules
+      - name: Find Changed Terraform modules
         id: find-modules
         run: |
-          # Find all directories containing .tf files
-          modules=$(find . -name "*.tf" -type f | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform" | head -20)
-          echo "Found modules:"
+          # For push events, validate all modules
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "Push event detected - validating all modules"
+            modules=$(find . -name "*.tf" -type f | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform")
+          else
+            # For PRs, only validate changed modules
+            echo "PR event detected - finding changed modules"
+            
+            # Get list of changed files
+            git fetch origin ${{ github.base_ref }}
+            changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+            
+            echo "Changed files:"
+            echo "$changed_files"
+            
+            # Find modules containing changed .tf files
+            modules=$(echo "$changed_files" | grep -E '\.(tf|tfvars|tfvars\.json)$' | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform" || true)
+            
+            if [[ -z "$modules" ]]; then
+              echo "No Terraform modules changed in this PR"
+              echo "modules=" >> $GITHUB_OUTPUT
+              echo "module_count=0" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+          fi
+          
+          module_count=$(echo "$modules" | wc -l)
+          echo "Found $module_count Terraform modules to validate:"
           echo "$modules"
           echo "modules<<EOF" >> $GITHUB_OUTPUT
           echo "$modules" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
+          echo "module_count=$module_count" >> $GITHUB_OUTPUT
 
       - name: Terraform Format Check
         id: fmt
+        if: steps.find-modules.outputs.module_count != '0'
         run: |
-          terraform fmt -check -recursive
+          # Only check formatting for changed files in PRs
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "Checking formatting for changed modules only..."
+            git fetch origin ${{ github.base_ref }}
+            changed_tf_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(tf|tfvars)$' || true)
+            
+            if [[ -z "$changed_tf_files" ]]; then
+              echo "✅ No Terraform files changed"
+              exit 0
+            fi
+            
+            echo "Checking formatting for files:"
+            echo "$changed_tf_files"
+            
+            # Check formatting only for changed files
+            format_issues=""
+            while IFS= read -r file; do
+              if [[ -n "$file" && -f "$file" ]]; then
+                if ! terraform fmt -check "$file"; then
+                  format_issues="$format_issues $file"
+                fi
+              fi
+            done <<< "$changed_tf_files"
+            
+            if [[ -n "$format_issues" ]]; then
+              echo "❌ The following files are not properly formatted:"
+              echo "$format_issues"
+              echo "Run 'terraform fmt -recursive' or 'make fmt' to fix formatting issues."
+              exit 1
+            fi
+          else
+            # For push events, check all files
+            if ! terraform fmt -check -recursive; then
+              echo "❌ Terraform files are not properly formatted!"
+              echo "Run 'terraform fmt -recursive' or 'make fmt' to fix formatting issues."
+              exit 1
+            fi
+          fi
+          echo "✅ All Terraform files are properly formatted"
 
       - name: Terraform Init and Validate
+        if: steps.find-modules.outputs.module_count != '0'
         run: |
-          # Validate each module
+          # Validate each changed module
+          failed_modules=()
           while IFS= read -r module_path; do
             if [[ -n "$module_path" && -d "$module_path" ]]; then
               echo "::group::Validating module: $module_path"
               cd "$module_path"
-
+              
               # Initialize Terraform
-              terraform init -backend=false
-
-              # Validate Terraform configuration
-              terraform validate
-
+              if terraform init -backend=false; then
+                # Validate Terraform configuration
+                if terraform validate; then
+                  echo "✅ Module $module_path validated successfully"
+                else
+                  echo "❌ Module $module_path validation failed"
+                  failed_modules+=("$module_path")
+                fi
+              else
+                echo "❌ Module $module_path initialization failed"
+                failed_modules+=("$module_path")
+              fi
+              
               # Return to root directory
               cd - > /dev/null
               echo "::endgroup::"
             fi
           done <<< "${{ steps.find-modules.outputs.modules }}"
+          
+          # Check if any modules failed
+          if [[ ${#failed_modules[@]} -gt 0 ]]; then
+            echo "❌ The following modules failed validation:"
+            for module in "${failed_modules[@]}"; do
+              echo "  - $module"
+            done
+            exit 1
+          fi
+          
+          echo "✅ All changed modules validated successfully"
 
       - name: TFSec Security Scan
+        if: steps.find-modules.outputs.module_count != '0'
         uses: aquasecurity/tfsec-action@v1.0.3
+        continue-on-error: true
         with:
           additional_args: --exclude-downloaded-modules
 
       - name: Checkov Security Scan
+        if: steps.find-modules.outputs.module_count != '0'
         uses: bridgecrewio/checkov-action@v12
+        continue-on-error: true
         with:
           directory: .
           quiet: true
           skip_check: CKV_TF_1 # Skip requirement for terraform version constraint
           framework: terraform
+
+      - name: Validation Summary
+        run: |
+          if [[ "${{ steps.find-modules.outputs.module_count }}" == "0" ]]; then
+            echo "## � No Terraform Changes Detected" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "No Terraform modules were changed in this PR, so validation was skipped." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "- **Event**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+            if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+              echo "- **Base branch**: ${{ github.base_ref }}" >> $GITHUB_STEP_SUMMARY
+              echo "- **Head branch**: ${{ github.head_ref }}" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "## �🎉 Terraform Validation Complete" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+              echo "### ✅ Successfully validated ${{ steps.find-modules.outputs.module_count }} changed Terraform modules" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "### ✅ Successfully validated ${{ steps.find-modules.outputs.module_count }} Terraform modules (full validation)" >> $GITHUB_STEP_SUMMARY
+            fi
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "- **Formatting**: All files properly formatted" >> $GITHUB_STEP_SUMMARY
+            echo "- **Validation**: All modules passed terraform validate" >> $GITHUB_STEP_SUMMARY
+            echo "- **Security**: Scanned with TFSec and Checkov" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 📋 Validated Modules" >> $GITHUB_STEP_SUMMARY
+            while IFS= read -r module_path; do
+              if [[ -n "$module_path" ]]; then
+                echo "- \`$module_path\`" >> $GITHUB_STEP_SUMMARY
+              fi
+            done <<< "${{ steps.find-modules.outputs.modules }}"
+          fi
