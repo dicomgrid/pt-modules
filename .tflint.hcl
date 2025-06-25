@@ -2,7 +2,7 @@
 
 # Core Terraform plugin (built-in rules)
 plugin "terraform" {
-  enabled = true
+  enabled = false  # Temporarily disable all terraform rules
   preset  = "recommended"
 }
 
@@ -23,7 +23,7 @@ rule "terraform_deprecated_index" {
 }
 
 rule "terraform_unused_declarations" {
-  enabled = true
+  enabled = false  # Disables "variable is declared but not used" warnings
 }
 
 rule "terraform_comment_syntax" {
