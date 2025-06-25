@@ -70,6 +70,4 @@ output "public_ipv4_pool" {
   value = aws_eip.main.public_ipv4_pool
 }
 
-output "vpc" {
-  value = aws_eip.main.vpc
-}
+
