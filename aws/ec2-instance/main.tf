@@ -31,7 +31,7 @@ resource "aws_instance" "main" {
     throughput            = lookup(var.root_block_device[0], "throughput", null)
     tags                  = merge(var.default_tags, { "Name" = "${var.server_name}-0" })
   }
-
+####
   dynamic "ebs_block_device" {
     for_each = var.ebs_block_devices != null ? var.ebs_block_devices : null
     content {
