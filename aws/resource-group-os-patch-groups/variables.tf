@@ -17,6 +17,6 @@ variable "tags" {
   default = {
     "Customer" = "",
     "Group"    = "",
-    "Product"       = ""
+    "Product"  = ""
   }
 }

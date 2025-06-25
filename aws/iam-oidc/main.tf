@@ -10,7 +10,7 @@ locals {
 
 
 data "aws_iam_policy_document" "this" {
- 
+
 
   statement {
     sid    = "GithubOidcAuth"
@@ -56,7 +56,7 @@ resource "aws_iam_role" "this" {
 }
 
 resource "aws_iam_role_policy_attachment" "this" {
-  for_each = { for k, v in var.policies : k => v  }
+  for_each = { for k, v in var.policies : k => v }
 
   role       = aws_iam_role.this.name
   policy_arn = each.value

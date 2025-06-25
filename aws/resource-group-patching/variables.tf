@@ -2,8 +2,8 @@ variable "tags" {
   type        = map(string)
   description = "Resource Group Tags"
   default = {
-    "client_code" = "",
-    "Platform Type"    = ""
+    "client_code"   = "",
+    "Platform Type" = ""
   }
 }
 

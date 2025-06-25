@@ -1,8 +1,8 @@
 # TODO: Added features for replication and lifecycle rules etc.
 resource "aws_s3_bucket" "main" {
-  bucket = local.tags.Name
+  bucket              = local.tags.Name
   object_lock_enabled = var.object_lock_enabled
-  tags   = local.tags
+  tags                = local.tags
 }
 
 resource "aws_s3_bucket_ownership_controls" "main" {
@@ -13,27 +13,27 @@ resource "aws_s3_bucket_ownership_controls" "main" {
 }
 
 resource "aws_s3_bucket_acl" "main" {
-  bucket = aws_s3_bucket_ownership_controls.main.id
-  expected_bucket_owner = try (var.expected_bucket_owner, "BucketOwnerPreferred")
-  acl    = local.acl
+  bucket                = aws_s3_bucket_ownership_controls.main.id
+  expected_bucket_owner = try(var.expected_bucket_owner, "BucketOwnerPreferred")
+  acl                   = local.acl
 
-  dynamic access_control_policy {
+  dynamic "access_control_policy" {
     for_each = var.access_control_policy == null ? [] : [var.access_control_policy]
     content {
       dynamic "grant" {
         for_each = access_control_policy.value.grants
         content {
-            grantee {
-              email_address = try(grant.value.email_address, null)
-              id   = try(grant.value.id, null)
-              type = grant.value.type
-              uri = try(grant.value.uri, null)
-            }
-            permission = grant.value.permission
+          grantee {
+            email_address = try(grant.value.email_address, null)
+            id            = try(grant.value.id, null)
+            type          = grant.value.type
+            uri           = try(grant.value.uri, null)
+          }
+          permission = grant.value.permission
         }
       }
       owner {
-        id = try(access_control_policy.value.owner_id, data.aws_canonical_user_id.main.id)
+        id           = try(access_control_policy.value.owner_id, data.aws_canonical_user_id.main.id)
         display_name = try(access_control_policy.value.owner_display_name, null)
       }
     }
@@ -174,7 +174,7 @@ resource "aws_s3_bucket_logging" "main" {
 
 #Object Lock
 resource "aws_s3_bucket_object_lock_configuration" "main" {
-  count = var.object_lock_enabled ? 1 : 0
+  count  = var.object_lock_enabled ? 1 : 0
   bucket = aws_s3_bucket.main.id
   dynamic "rule" {
     for_each = var.object_lock_period

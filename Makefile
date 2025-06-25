@@ -79,6 +79,13 @@ install-tools:
 dev-check: fmt validate lint security ## Run all development checks
 	@echo "✓ All development checks passed"
 
+# Quick development checks
+dev-check-changed: fmt validate-changed ## Quick check for changed modules only (fast)
+	@echo "✅ Changed modules validated successfully"
+
+pr-check: fmt validate-changed ## Simulate PR validation locally
+	@echo "✅ PR validation complete"
+
 # Cleanup
 clean: ## Clean up temporary files
 	@echo "==> Cleaning up temporary files..."
@@ -109,3 +116,14 @@ endif
 		echo '# $(MODULE) Module\n\nDescription of the module.\n\n## Usage\n\n```hcl\nmodule "example" {\n  source = "./$(MODULE)"\n}\n```' > "$(MODULE)/README.md"; \
 	fi
 	@echo "✓ Module $(MODULE) created successfully"
+
+# Local validation script
+validate-local: ## Run local validation script (same as CI)
+	@echo "==> Running local Terraform validation..."
+	@chmod +x scripts/validate.sh
+	@./scripts/validate.sh
+
+validate-changed: ## Run validation only on changed modules
+	@echo "==> Running validation on changed modules only..."
+	@chmod +x scripts/validate.sh
+	@./scripts/validate.sh --changed-only

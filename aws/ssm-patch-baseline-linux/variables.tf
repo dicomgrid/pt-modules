@@ -10,31 +10,31 @@ variable "patch_classifications" { default = ["Security", "Bugfix", "Recommended
 variable "rejected_patches" { default = null }
 variable "compliance_levels" {
   type = list(object({
-    
+
     compliance_level = string
-    severity = list(string)
+    severity         = list(string)
   }))
 
   default = [
-      {
+    {
       compliance_level = "CRITICAL"
-      severity = ["Critical", "Important"]
-      },
-      {
+      severity         = ["Critical", "Important"]
+    },
+    {
       compliance_level = "MEDIUM"
-      severity = ["Moderate"]
-      },
-      {
+      severity         = ["Moderate"]
+    },
+    {
       compliance_level = "LOW"
-      severity = ["Low"]
-      },
+      severity         = ["Low"]
+    },
   ]
 }
 
 variable "source_repos" {
   type = list(object({
-    name = string
-    products = list(string)
+    name          = string
+    products      = list(string)
     configuration = string
   }))
   default = [
@@ -51,7 +51,7 @@ variable "source_repos" {
         "CentOS7.7",
         "CentOS7.8",
         "CentOS7.9"
-        ]
+      ]
       configuration = <<EOF
 [base]
 name=CentOS-$releasever - Base

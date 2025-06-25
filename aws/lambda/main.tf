@@ -31,9 +31,9 @@ resource "aws_lambda_permission" "allow_eventbridge" {
 resource "aws_lambda_layer_version" "lambda_layer" {
   count      = var.layer_name == null ? 0 : 1
   layer_name = var.layer_name
-  filename      = (var.layer_s3_bucket != null && var.layer_s3_key != null) ? null : "${path.module}/../lambda-tools/layers/${var.layer_name}.zip"
-  s3_bucket     = var.layer_s3_bucket
-  s3_key        = var.layer_s3_key
+  filename   = (var.layer_s3_bucket != null && var.layer_s3_key != null) ? null : "${path.module}/../lambda-tools/layers/${var.layer_name}.zip"
+  s3_bucket  = var.layer_s3_bucket
+  s3_key     = var.layer_s3_key
 
   compatible_runtimes = local.runtime_map[var.layer_runtime]
 }

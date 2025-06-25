@@ -13,19 +13,19 @@ resource "aws_iam_user_policy" "main" {
 }
 
 resource "aws_iam_user_policy_attachment" "main" {
-  for_each = data.aws_iam_policy.aws
-  user   = aws_iam_user.main.name
+  for_each   = data.aws_iam_policy.aws
+  user       = aws_iam_user.main.name
   policy_arn = each.value.arn
 }
 
 resource "aws_iam_user_group_membership" "main" {
-  count = var.groups != [] ? 1 : 0
+  count  = var.groups != [] ? 1 : 0
   user   = aws_iam_user.main.name
   groups = var.groups
 }
 
 resource "aws_iam_access_key" "main" {
-  count = var.create_access_key && var.pgp_public_key != null ? 1 : 0
+  count   = var.create_access_key && var.pgp_public_key != null ? 1 : 0
   user    = aws_iam_user.main.name
   pgp_key = var.pgp_public_key
 }

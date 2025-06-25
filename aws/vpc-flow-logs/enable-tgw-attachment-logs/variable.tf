@@ -21,3 +21,4 @@ variable "tags" {
 }
 variable "max_aggregation_interval" {}
 variable "vpc_id" {}
+variable "transit_gateway_id" { type = string }

@@ -1,1 +1,1 @@
-variable "namespace_path" {default = "null"}
+variable "namespace_path" { default = "null" }

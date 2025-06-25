@@ -13,6 +13,6 @@ variable "transit_gateways" {
   description = "List of transit gateway identifiers for registration"
 }
 variable "region" {
-  type        = string
+  type = string
 }
 

@@ -13,13 +13,13 @@ resource "aws_ssm_maintenance_window_task" "ssm-patch-task" {
   }
   task_invocation_parameters {
     run_command_parameters {
-      service_role_arn     = var.service_role_arn
-      timeout_seconds      = var.timeout_seconds
+      service_role_arn = var.service_role_arn
+      timeout_seconds  = var.timeout_seconds
       dynamic "parameter" {
         for_each = var.patch_tasks
         content {
-            name = parameter.value.name
-            values = parameter.value.values
+          name   = parameter.value.name
+          values = parameter.value.values
         }
       }
     }

@@ -8,7 +8,7 @@ locals {
   }
 }
 resource "aws_flow_log" "enable-tgw-attachment-logs" {
-  for_each                      = local.transit_gateways_in_vpc
+  for_each = local.transit_gateways_in_vpc
 
   iam_role_arn                  = var.iam_role_arn
   transit_gateway_attachment_id = each.key

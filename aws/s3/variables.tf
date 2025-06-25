@@ -1,7 +1,7 @@
 locals {
-  lifecycle_rules = var.lifecycle_rules
+  lifecycle_rules    = var.lifecycle_rules
   object_lock_period = var.object_lock_period
-  acl = var.access_control_policy == null ? var.acl : null
+  acl                = var.access_control_policy == null ? var.acl : null
 }
 
 variable "acl" { default = "private" }
@@ -14,7 +14,7 @@ variable "expected_bucket_owner" { default = null }
 variable "kms_cmk_alias" { default = null }
 variable "lifecycle_rules" { default = {} }
 variable "object_lock_enabled" { default = false }
-variable "object_lock_period" {default = {} }
+variable "object_lock_period" { default = {} }
 variable "logging_acl" { default = "log-delivery-write" }
 variable "logging_enabled" { default = false }
 variable "logging_expiration" { default = 90 }

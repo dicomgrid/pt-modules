@@ -17,9 +17,9 @@ variable "tags" {
   default = {
     "Customer" = "",
     "Group"    = "",
-    "Product"    = ""
+    "Product"  = ""
   }
 }
 
-variable "resource_query" {default = null}
+variable "resource_query" { default = null }
 

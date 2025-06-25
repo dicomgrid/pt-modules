@@ -1,11 +1,11 @@
 variable "address" { default = null }
 variable "associate_with_private_ip" { default = null }
-variable "customer_owned_ipv4_pool" { default = null}
+variable "customer_owned_ipv4_pool" { default = null }
 variable "domain" { default = "vpc" }
 variable "instance" { default = null }
 variable "network_border_group" {}
 variable "network_interface" { default = null }
-variable "public_ipv4_pool" { default = null}
+variable "public_ipv4_pool" { default = null }
 
 # Tags
 locals {

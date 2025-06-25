@@ -1,6 +1,6 @@
 module "eip" {
   source = "../eip"
-  
+
   address                   = var.address
   associate_with_private_ip = var.associate_with_private_ip
   customer_owned_ipv4_pool  = var.customer_owned_ipv4_pool
@@ -19,6 +19,6 @@ resource "aws_nat_gateway" "main" {
   # secondary_allocation_ids  = var.secondary_allocation_ids
   # secondary_private_ip_address_count = var.secondary_private_ip_address_count
   # secondary_private_ip_addresses = var.secondary_private_ip_addresses
-  subnet_id         = var.subnet_id
-  tags = var.tags
+  subnet_id = var.subnet_id
+  tags      = var.tags
 }

@@ -15,5 +15,5 @@ variable "environment" {
 
 variable "lambda_role" {
   description = "lambda execution role name"
-  default = "s3-bucket-provisioning-lambda-execution-role"
+  default     = "s3-bucket-provisioning-lambda-execution-role"
 }
