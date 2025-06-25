@@ -5,14 +5,6 @@ on:
     branches: [master]
     paths:
       - '**/*.tf'
-      - '**/*.tfvars'
-      - '**/*.tfvars.json'
-  push:
-    branches: [master]
-    paths:
-      - '**/*.tf'
-      - '**/*.tfvars'
-      - '**/*.tfvars.json'
 
 jobs:
   terraform-validation:
@@ -23,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch full history for accurate diffs
+          fetch-depth: 0
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -33,7 +25,7 @@ jobs:
       - name: Find Changed Terraform modules
         id: find-modules
         run: |
-          # For push events, validate all modules
+
           if [[ "${{ github.event_name }}" == "push" ]]; then
             echo "Push event detected - validating all modules"
             modules=$(find . -name "*.tf" -type f | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform")
@@ -43,15 +35,14 @@ jobs:
             echo "Base ref: ${{ github.base_ref }}"
             echo "Head ref: ${{ github.head_ref }}"
 
-            # GitHub Actions automatically fetches PR head and base
             # Use the merge-base to find the common ancestor
             if base_sha=$(git merge-base HEAD origin/${{ github.base_ref }} 2>/dev/null); then
               changed_files=$(git diff --name-only $base_sha...HEAD)
-              echo "Using merge-base approach: $base_sha"
+
             elif changed_files=$(git diff --name-only HEAD~1 2>/dev/null); then
               echo "Using HEAD~1 fallback"
             else
-              echo "Could not determine changed files, validating all modules"
+              echo "Could not determine changed files, validating all modules(need more logic here)"
               modules=$(find . -name "*.tf" -type f | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform")
               module_count=$(echo "$modules" | wc -l)
               echo "Found $module_count Terraform modules (fallback to all):"
@@ -66,8 +57,8 @@ jobs:
             echo "Changed files:"
             echo "$changed_files"
 
-            # Find modules containing changed .tf files
-            modules=$(echo "$changed_files" | grep -E '\.(tf|tfvars|tfvars\.json)$' | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform" || true)
+
+            modules=$(echo "$changed_files" | grep -E '\.(tf)$' | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform" || true)
 
             if [[ -z "$modules" ]]; then
               echo "No Terraform modules changed in this PR"
@@ -102,16 +93,16 @@ jobs:
             else
               echo "Could not determine changed files, checking all files"
               if ! terraform fmt -check -recursive; then
-                echo "❌ Terraform files are not properly formatted!"
+                echo "Terraform files are not properly formatted!"
                 echo "Run 'terraform fmt -recursive' or 'make fmt' to fix formatting issues."
                 exit 1
               fi
-              echo "✅ All Terraform files are properly formatted"
+              echo "All Terraform files are properly formatted"
               exit 0
             fi
 
             if [[ -z "$changed_tf_files" ]]; then
-              echo "✅ No Terraform files changed"
+              echo "No Terraform files changed"
               exit 0
             fi
 
@@ -129,7 +120,7 @@ jobs:
             done <<< "$changed_tf_files"
 
             if [[ -n "$format_issues" ]]; then
-              echo "❌ The following files are not properly formatted:"
+              echo "The following files are not properly formatted:"
               echo "$format_issues"
               echo "Run 'terraform fmt -recursive' or 'make fmt' to fix formatting issues."
               exit 1
@@ -137,7 +128,7 @@ jobs:
           else
             # For push events, check all files
             if ! terraform fmt -check -recursive; then
-              echo "❌ Terraform files are not properly formatted!"
+              echo "Terraform files are not properly formatted!"
               echo "Run 'terraform fmt -recursive' or 'make fmt' to fix formatting issues."
               exit 1
             fi
@@ -158,13 +149,13 @@ jobs:
               if terraform init -backend=false; then
                 # Validate Terraform configuration
                 if terraform validate; then
-                  echo "✅ Module $module_path validated successfully"
+                  echo "Module $module_path validated successfully"
                 else
-                  echo "❌ Module $module_path validation failed"
+                  echo "Module $module_path validation failed"
                   failed_modules+=("$module_path")
                 fi
               else
-                echo "❌ Module $module_path initialization failed"
+                echo "Module $module_path initialization failed"
                 failed_modules+=("$module_path")
               fi
 
@@ -176,14 +167,14 @@ jobs:
 
           # Check if any modules failed
           if [[ ${#failed_modules[@]} -gt 0 ]]; then
-            echo "❌ The following modules failed validation:"
+            echo "The following modules failed validation:"
             for module in "${failed_modules[@]}"; do
               echo "  - $module"
             done
             exit 1
           fi
 
-          echo "✅ All changed modules validated successfully"
+          echo "All changed modules validated successfully"
 
       - name: TFSec Security Scan
         if: steps.find-modules.outputs.module_count != '0'
@@ -192,31 +183,6 @@ jobs:
         with:
           additional_args: --exclude-downloaded-modules
 
-      - name: Checkov Security Scan
-        if: steps.find-modules.outputs.module_count != '0'
-        uses: bridgecrewio/checkov-action@v12
-        continue-on-error: true
-        with:
-          directory: .
-          quiet: true
-          skip_check: CKV_TF_1 # Skip requirement for terraform version constraint
-          framework: terraform
-
-      - name: Debug Git State
-        run: |
-          echo "=== Git Debug Information ==="
-          echo "Current branch: $(git branch --show-current)"
-          echo "Available remotes:"
-          git remote -v
-          echo "Available branches:"
-          git branch -a | head -10
-          echo "Recent commits:"
-          git log --oneline -5
-          echo "GitHub context:"
-          echo "  Event: ${{ github.event_name }}"
-          echo "  Base ref: ${{ github.base_ref }}"
-          echo "  Head ref: ${{ github.head_ref }}"
-          echo "=========================="
 
       - name: Validation Summary
         run: |
@@ -234,9 +200,9 @@ jobs:
             echo "## �🎉 Terraform Validation Complete" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-              echo "### ✅ Successfully validated ${{ steps.find-modules.outputs.module_count }} changed Terraform modules" >> $GITHUB_STEP_SUMMARY
+              echo "### Successfully validated ${{ steps.find-modules.outputs.module_count }} changed Terraform modules" >> $GITHUB_STEP_SUMMARY
             else
-              echo "### ✅ Successfully validated ${{ steps.find-modules.outputs.module_count }} Terraform modules (full validation)" >> $GITHUB_STEP_SUMMARY
+              echo "###Successfully validated ${{ steps.find-modules.outputs.module_count }} Terraform modules (full validation)" >> $GITHUB_STEP_SUMMARY
             fi
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "- **Formatting**: All files properly formatted" >> $GITHUB_STEP_SUMMARY

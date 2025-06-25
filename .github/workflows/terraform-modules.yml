@@ -17,14 +17,66 @@ jobs:
   release:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true || github.event.action != 'closed'
+    # Uncomment to wait for terraform validation to pass first
+    needs: [terraform-validation]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Validate Commit Messages
         run: |
-          # Validate that commit messages follow expected patterns
-          git log --oneline -10 | grep -E "(major|breaking|feat|fix|chore)" || echo "Warning: No versioning keywords found in recent commits"
+          echo "=== Commit Message Validation ==="
+          echo "Checking recent commits for versioning keywords..."
+
+          # Get PR commits if this is a PR, otherwise recent commits
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "Analyzing PR commits..."
+            # Get commits in this PR
+            commits=$(git log --oneline origin/${{ github.base_ref }}..HEAD)
+            echo "PR Commits:"
+            echo "$commits"
+          else
+            echo "Analyzing recent commits..."
+            commits=$(git log --oneline -10)
+            echo "Recent commits:"
+            echo "$commits"
+          fi
+
+
+          echo ""
+          echo "=== Checking for versioning keywords ==="
+
+          # Define keyword patterns
+          major_pattern="(major|breaking|BREAKING)"
+          minor_pattern="(feat|feature|add|new)"
+          patch_pattern="(fix|bug|patch|update|chore|docs|refactor)"
+
+          # Check each category
+          major_matches=$(echo "$commits" | grep -iE "$major_pattern" || true)
+          minor_matches=$(echo "$commits" | grep -iE "$minor_pattern" || true)
+          patch_matches=$(echo "$commits" | grep -iE "$patch_pattern" || true)
+
+          echo "Major version keywords found:"
+          [[ -n "$major_matches" ]] && echo "$major_matches" || echo "  None"
+
+          echo "Minor version keywords found:"
+          [[ -n "$minor_matches" ]] && echo "$minor_matches" || echo "  None"
+
+          echo "Patch version keywords found:"
+          [[ -n "$patch_matches" ]] && echo "$patch_matches" || echo "  None"
+
+
+          if [[ -n "$major_matches" ]] || [[ -n "$minor_matches" ]] || [[ -n "$patch_matches" ]]; then
+            echo ""
+            echo "Versioning keywords found - release will be triggered"
+          else
+            echo ""
+            echo "WARNING: No versioning keywords found in commits"
+            echo "Add keywords to commit messages for automatic versioning:"
+            echo "  - major, breaking, BREAKING -> Major version bump"
+            echo "  - feat, feature, add, new -> Minor version bump"
+            echo "  - fix, bug, patch, update, chore, docs, refactor -> Patch version bump"
+          fi
 
 
       - name: Terraform Module Releaser
@@ -40,16 +92,16 @@ jobs:
           terraform-docs-version: "v0.20.0"
 
           # Cleanup and maintenance
-          delete-legacy-tags: true
+          delete-legacy-tags: false
 
           # Wiki configuration - disable since wiki repo doesn't exist
           disable-wiki: false
           wiki-sidebar-changelog-max: 10
 
           # File patterns for better module management
-          module-path-ignore: "**/examples/**,**/test/**,**/tests/**,.github/**"
-          module-change-exclude-patterns: ".gitignore,*.md,*.tftest.hcl,tests/**,examples/**,docs/**"
-          module-asset-exclude-patterns: ".gitignore,*.md,*.tftest.hcl,tests/**,examples/**,docs/**,*.tfvars.example"
+          module-path-ignore: ".github/**"
+          module-change-exclude-patterns: ".gitignore,*.md"
+          module-asset-exclude-patterns: ".gitignore,*.md"
 
       - name: Notify on Failure
         if: failure()
