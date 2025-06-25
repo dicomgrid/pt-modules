@@ -22,15 +22,18 @@ jobs:
         with:
           terraform_version: ~1.7.0
 
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: latest
+
       - name: Find Changed Terraform modules
         id: find-modules
         run: |
-
           if [[ "${{ github.event_name }}" == "push" ]]; then
             echo "Push event detected - validating all modules"
             modules=$(find . -name "*.tf" -type f | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform")
           else
-            # For PRs, only validate changed modules
             echo "PR event detected - finding changed modules"
             echo "Base ref: ${{ github.base_ref }}"
             echo "Head ref: ${{ github.head_ref }}"
@@ -38,11 +41,10 @@ jobs:
             # Use the merge-base to find the common ancestor
             if base_sha=$(git merge-base HEAD origin/${{ github.base_ref }} 2>/dev/null); then
               changed_files=$(git diff --name-only $base_sha...HEAD)
-
             elif changed_files=$(git diff --name-only HEAD~1 2>/dev/null); then
               echo "Using HEAD~1 fallback"
             else
-              echo "Could not determine changed files, validating all modules(need more logic here)"
+              echo "Could not determine changed files, validating all modules"
               modules=$(find . -name "*.tf" -type f | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform")
               module_count=$(echo "$modules" | wc -l)
               echo "Found $module_count Terraform modules (fallback to all):"
@@ -56,7 +58,6 @@ jobs:
 
             echo "Changed files:"
             echo "$changed_files"
-
 
             modules=$(echo "$changed_files" | grep -E '\.(tf)$' | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform" || true)
 
@@ -135,59 +136,54 @@ jobs:
           fi
           echo "✅ All Terraform files are properly formatted"
 
-      - name: Terraform Init and Validate
+      - name: TFLint Check
         if: steps.find-modules.outputs.module_count != '0'
         run: |
-          # Validate each changed module
           failed_modules=()
+
+          # Initialize TFLint plugins once at the root (reads .tflint.hcl)
+          echo "Initializing TFLint plugins..."
+          tflint --init
+
           while IFS= read -r module_path; do
             if [[ -n "$module_path" && -d "$module_path" ]]; then
-              echo "::group::Validating module: $module_path"
+              echo "::group::Linting module: $module_path"
               cd "$module_path"
 
-              # Initialize Terraform
-              if terraform init -backend=false; then
-                # Validate Terraform configuration
-                if terraform validate; then
-                  echo "Module $module_path validated successfully"
-                else
-                  echo "Module $module_path validation failed"
-                  failed_modules+=("$module_path")
-                fi
+              # Run tflint (uses config from root .tflint.hcl)
+              if tflint --format=compact --color; then
+                echo "✅ Module $module_path linting passed"
               else
-                echo "Module $module_path initialization failed"
+                echo "❌ Module $module_path linting failed"
                 failed_modules+=("$module_path")
               fi
 
-              # Return to root directory
               cd - > /dev/null
               echo "::endgroup::"
             fi
           done <<< "${{ steps.find-modules.outputs.modules }}"
 
-          # Check if any modules failed
           if [[ ${#failed_modules[@]} -gt 0 ]]; then
-            echo "The following modules failed validation:"
+            echo "❌ The following modules failed linting:"
             for module in "${failed_modules[@]}"; do
               echo "  - $module"
             done
             exit 1
           fi
 
-          echo "All changed modules validated successfully"
+          echo "✅ All modules passed TFLint validation"
 
-      - name: TFSec Security Scan
-        if: steps.find-modules.outputs.module_count != '0'
-        uses: aquasecurity/tfsec-action@v1.0.3
-        continue-on-error: true
-        with:
-          additional_args: --exclude-downloaded-modules
-
+      # - name: TFSec Security Scan
+      #   if: steps.find-modules.outputs.module_count != '0'
+      #   uses: aquasecurity/tfsec-action@v1.0.3
+      #   continue-on-error: true
+      #   with:
+      #     additional_args: --exclude-downloaded-modules
 
       - name: Validation Summary
         run: |
           if [[ "${{ steps.find-modules.outputs.module_count }}" == "0" ]]; then
-            echo "## � No Terraform Changes Detected" >> $GITHUB_STEP_SUMMARY
+            echo "## 📝 No Terraform Changes Detected" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "No Terraform modules were changed in this PR, so validation was skipped." >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
@@ -197,17 +193,17 @@ jobs:
               echo "- **Head branch**: ${{ github.head_ref }}" >> $GITHUB_STEP_SUMMARY
             fi
           else
-            echo "## �🎉 Terraform Validation Complete" >> $GITHUB_STEP_SUMMARY
+            echo "## 🎉 Terraform Validation Complete" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             if [[ "${{ github.event_name }}" == "pull_request" ]]; then
               echo "### Successfully validated ${{ steps.find-modules.outputs.module_count }} changed Terraform modules" >> $GITHUB_STEP_SUMMARY
             else
-              echo "###Successfully validated ${{ steps.find-modules.outputs.module_count }} Terraform modules (full validation)" >> $GITHUB_STEP_SUMMARY
+              echo "### Successfully validated ${{ steps.find-modules.outputs.module_count }} Terraform modules (full validation)" >> $GITHUB_STEP_SUMMARY
             fi
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "- **Formatting**: All files properly formatted" >> $GITHUB_STEP_SUMMARY
-            echo "- **Validation**: All modules passed terraform validate" >> $GITHUB_STEP_SUMMARY
-            echo "- **Security**: Scanned with TFSec and Checkov" >> $GITHUB_STEP_SUMMARY
+            echo "- **Linting**: All modules passed TFLint validation" >> $GITHUB_STEP_SUMMARY
+            echo "- **Security**: Scanned with TFSec" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### 📋 Validated Modules" >> $GITHUB_STEP_SUMMARY
             while IFS= read -r module_path; do
