@@ -38,17 +38,17 @@ jobs:
           else
             # For PRs, only validate changed modules
             echo "PR event detected - finding changed modules"
-            
+
             # Get list of changed files
             git fetch origin ${{ github.base_ref }}
             changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
-            
+
             echo "Changed files:"
             echo "$changed_files"
-            
+
             # Find modules containing changed .tf files
             modules=$(echo "$changed_files" | grep -E '\.(tf|tfvars|tfvars\.json)$' | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform" || true)
-            
+
             if [[ -z "$modules" ]]; then
               echo "No Terraform modules changed in this PR"
               echo "modules=" >> $GITHUB_OUTPUT
@@ -56,7 +56,7 @@ jobs:
               exit 0
             fi
           fi
-          
+
           module_count=$(echo "$modules" | wc -l)
           echo "Found $module_count Terraform modules to validate:"
           echo "$modules"
@@ -74,15 +74,15 @@ jobs:
             echo "Checking formatting for changed modules only..."
             git fetch origin ${{ github.base_ref }}
             changed_tf_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(tf|tfvars)$' || true)
-            
+
             if [[ -z "$changed_tf_files" ]]; then
               echo "✅ No Terraform files changed"
               exit 0
             fi
-            
+
             echo "Checking formatting for files:"
             echo "$changed_tf_files"
-            
+
             # Check formatting only for changed files
             format_issues=""
             while IFS= read -r file; do
@@ -92,7 +92,7 @@ jobs:
                 fi
               fi
             done <<< "$changed_tf_files"
-            
+
             if [[ -n "$format_issues" ]]; then
               echo "❌ The following files are not properly formatted:"
               echo "$format_issues"
@@ -118,7 +118,7 @@ jobs:
             if [[ -n "$module_path" && -d "$module_path" ]]; then
               echo "::group::Validating module: $module_path"
               cd "$module_path"
-              
+
               # Initialize Terraform
               if terraform init -backend=false; then
                 # Validate Terraform configuration
@@ -132,13 +132,13 @@ jobs:
                 echo "❌ Module $module_path initialization failed"
                 failed_modules+=("$module_path")
               fi
-              
+
               # Return to root directory
               cd - > /dev/null
               echo "::endgroup::"
             fi
           done <<< "${{ steps.find-modules.outputs.modules }}"
-          
+
           # Check if any modules failed
           if [[ ${#failed_modules[@]} -gt 0 ]]; then
             echo "❌ The following modules failed validation:"
@@ -147,7 +147,7 @@ jobs:
             done
             exit 1
           fi
-          
+
           echo "✅ All changed modules validated successfully"
 
       - name: TFSec Security Scan
