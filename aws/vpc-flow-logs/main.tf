@@ -64,5 +64,5 @@ module "enable-tgw-attachment-logs" {
   vpc_id                   = var.vpc_id
   max_aggregation_interval = var.max_aggregation_interval
   tags                     = var.tags
+  transit_gateway_id       = data.aws_ec2_transit_gateway_attachments.attachments.transit_gateway_id
 }
-

@@ -52,3 +52,12 @@ variable "amazon_side_asn" {
   description = "The amazon side ASN of the directconnect gateway"
   default     = null
 }
+variable "create_dx_hosted_transit_vif" {
+  description = "Whether to create a directconnect hosted transit virtual interface"
+  type        = bool
+  default     = false
+}
+variable "dx_gateway_id" {
+  description = "The ID of the directconnect gateway"
+  type        = string
+}
