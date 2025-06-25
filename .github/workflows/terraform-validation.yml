@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history for accurate diffs
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -38,10 +40,28 @@ jobs:
           else
             # For PRs, only validate changed modules
             echo "PR event detected - finding changed modules"
+            echo "Base ref: ${{ github.base_ref }}"
+            echo "Head ref: ${{ github.head_ref }}"
 
-            # Get list of changed files
-            git fetch origin ${{ github.base_ref }}
-            changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+            # GitHub Actions automatically fetches PR head and base
+            # Use the merge-base to find the common ancestor
+            if base_sha=$(git merge-base HEAD origin/${{ github.base_ref }} 2>/dev/null); then
+              changed_files=$(git diff --name-only $base_sha...HEAD)
+              echo "Using merge-base approach: $base_sha"
+            elif changed_files=$(git diff --name-only HEAD~1 2>/dev/null); then
+              echo "Using HEAD~1 fallback"
+            else
+              echo "Could not determine changed files, validating all modules"
+              modules=$(find . -name "*.tf" -type f | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform")
+              module_count=$(echo "$modules" | wc -l)
+              echo "Found $module_count Terraform modules (fallback to all):"
+              echo "$modules"
+              echo "modules<<EOF" >> $GITHUB_OUTPUT
+              echo "$modules" >> $GITHUB_OUTPUT
+              echo "EOF" >> $GITHUB_OUTPUT
+              echo "module_count=$module_count" >> $GITHUB_OUTPUT
+              exit 0
+            fi
 
             echo "Changed files:"
             echo "$changed_files"
@@ -72,8 +92,23 @@ jobs:
           # Only check formatting for changed files in PRs
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "Checking formatting for changed modules only..."
-            git fetch origin ${{ github.base_ref }}
-            changed_tf_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(tf|tfvars)$' || true)
+
+            # Use the same logic as the find-modules step
+            if base_sha=$(git merge-base HEAD origin/${{ github.base_ref }} 2>/dev/null); then
+              changed_tf_files=$(git diff --name-only $base_sha...HEAD | grep -E '\.(tf|tfvars)$' || true)
+              echo "Using merge-base approach for formatting check"
+            elif changed_tf_files=$(git diff --name-only HEAD~1 | grep -E '\.(tf|tfvars)$' || true); then
+              echo "Using HEAD~1 fallback for formatting check"
+            else
+              echo "Could not determine changed files, checking all files"
+              if ! terraform fmt -check -recursive; then
+                echo "❌ Terraform files are not properly formatted!"
+                echo "Run 'terraform fmt -recursive' or 'make fmt' to fix formatting issues."
+                exit 1
+              fi
+              echo "✅ All Terraform files are properly formatted"
+              exit 0
+            fi
 
             if [[ -z "$changed_tf_files" ]]; then
               echo "✅ No Terraform files changed"
@@ -166,6 +201,22 @@ jobs:
           quiet: true
           skip_check: CKV_TF_1 # Skip requirement for terraform version constraint
           framework: terraform
+
+      - name: Debug Git State
+        run: |
+          echo "=== Git Debug Information ==="
+          echo "Current branch: $(git branch --show-current)"
+          echo "Available remotes:"
+          git remote -v
+          echo "Available branches:"
+          git branch -a | head -10
+          echo "Recent commits:"
+          git log --oneline -5
+          echo "GitHub context:"
+          echo "  Event: ${{ github.event_name }}"
+          echo "  Base ref: ${{ github.base_ref }}"
+          echo "  Head ref: ${{ github.head_ref }}"
+          echo "=========================="
 
       - name: Validation Summary
         run: |
