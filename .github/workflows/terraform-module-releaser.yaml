@@ -129,7 +129,7 @@ jobs:
           module-change-exclude-patterns: ".gitignore,*.md,*.txt,LICENSE"
           module-asset-exclude-patterns: ".gitignore,*.md,*.txt,LICENSE"
           use-ssh-source-format: false
-       
+
 
       - name: Set dry-run commit status
         if: always()
@@ -137,16 +137,16 @@ jobs:
         with:
           script: |
             const status = "${{ job.status }}" === "success" ? "success" : "failure";
-            const sha = process.env.GITHUB_SHA;
-            await github.repos.createCommitStatus({
+            await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: sha,
+              sha: context.sha,
               state: status,
               context: "terraform-module-releaser/dry-run",
               description: status === "success" ? "Dry-run passed" : "Dry-run failed",
-              target_url: `${context.payload.repository.html_url}/commit/${sha}/checks`
+            target_url: `${context.payload.repository.html_url}/commit/${context.sha}/checks`
             });
+
 
   release:
     if: |
@@ -209,7 +209,7 @@ jobs:
           module-change-exclude-patterns: ".gitignore,*.md,*.txt,LICENSE"
           module-asset-exclude-patterns: ".gitignore,*.md,*.txt,LICENSE"
           use-ssh-source-format: false
-          dry-run: false
+
 
       - name: Notify on Failure
         if: failure()
