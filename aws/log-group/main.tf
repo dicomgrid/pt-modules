@@ -6,5 +6,5 @@ resource "aws_cloudwatch_log_group" "main" {
   lifecycle {
     create_before_destroy = true
   }
-  tags              = local.tags
+  tags = local.tags
 }
