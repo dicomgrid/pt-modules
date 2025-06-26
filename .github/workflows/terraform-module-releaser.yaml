@@ -31,3 +31,4 @@ jobs:
           module-change-exclude-patterns: .gitignore,*.md,*.txt,LICENSE,docs/**,examples/**,*.tftest.hcl,tests/**
           module-asset-exclude-patterns: .gitignore,*.md,*.txt,LICENSE,*.tftest.hcl,tests/**
           use-ssh-source-format: true
+
