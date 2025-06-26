@@ -1,14 +1,14 @@
-name: Bump version
-on:
-  push:
-    branches:
-      - master
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: Bump version and push tag
-      uses: dicomgrid/pt-actions/create-tag-action@master
-      env:
-        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+# name: Bump version
+# on:
+#   push:
+#     branches:
+#       - master
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@master
+#     - name: Bump version and push tag
+#       uses: dicomgrid/pt-actions/create-tag-action@master
+#       env:
+#         COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
