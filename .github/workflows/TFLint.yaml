@@ -1,0 +1,179 @@
+name: TFLint
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main, master] 
+    paths:
+      - '**/*.tf'
+
+permissions:
+  contents: write
+  pull-requests: write 
+
+concurrency:
+  group: terraform-validation-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+jobs:
+  find-changed-modules:
+    runs-on: ubuntu-latest
+    name: Find Changed Terraform Modules
+    outputs:
+      modules: ${{ steps.find-modules.outputs.modules }}
+      module_count: ${{ steps.find-modules.outputs.module_count }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
+      - name: Find changed modules
+        id: find-modules
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "PR event detected - finding changed Terraform files in current PR only"
+            
+            # Fetch the base branch to ensure we have the latest reference
+            if git fetch origin ${{ github.base_ref }}:${{ github.base_ref }} 2>/dev/null; then
+              echo "Successfully fetched base branch"
+            else
+              echo "Could not fetch from remote (this is normal for local testing)"
+            fi
+            
+            changed_files=$(git diff --name-only origin/${{ github.base_ref }}..HEAD | grep -E '\.tf$' | grep -v '\.terraform/' || true)
+            echo "Changed files in this PR:"
+            echo "${changed_files}"
+            
+          else
+            echo "Push or dispatch event detected - validating all Terraform files"
+            changed_files=$(find . -type d -name ".terraform" -prune -o -name "*.tf" -print)
+          fi
+
+          if [[ -z "${changed_files}" ]]; then
+            echo "No Terraform files changed"
+            modules=""
+          else
+            modules=$(echo "${changed_files}" | grep -E '\.tf$' | sed 's|/[^/]*$||' | sort -u | grep -v ".terraform" || true)
+          fi
+          
+          echo "Found modules:"
+          echo "${modules}"
+
+          # Convert to JSON array for the matrix strategy
+          if [[ -z "${modules}" ]]; then
+            # If no modules, create an empty JSON array
+            json_modules="[]"
+            echo "module_count=0" >> $GITHUB_OUTPUT
+          else
+            # Convert modules to JSON array, filtering out empty lines
+            json_modules=$(echo "${modules}" | grep -v '^$' | jq -R . | jq -s .)
+            module_count=$(echo "${modules}" | grep -v '^$' | wc -l | tr -d '[:space:]')
+            echo "module_count=${module_count}" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "JSON modules: ${json_modules}"
+          echo "modules=${json_modules}" >> $GITHUB_OUTPUT
+      - name: Validate Branch References
+        run: |
+          echo "Base branch: ${{ github.base_ref }}"
+          echo "Head branch: ${{ github.head_ref }}"
+          if [[ -z "${{ github.base_ref }}" ]]; then
+            echo "Warning: No base branch detected"
+          fi
+      - name: Validation Summary
+        if: steps.find-modules.outputs.module_count == 0
+        run: |
+          echo "## No Terraform Changes Detected" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "No Terraform modules were changed in this PR, so validation was skipped." >> $GITHUB_STEP_SUMMARY
+
+  validate-modules:
+    needs: [find-changed-modules]
+    if: needs.find-changed-modules.outputs.module_count > 0
+    runs-on: ubuntu-latest
+    name: "Validate ${{ matrix.module }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        module: ${{ fromJson(needs.find-changed-modules.outputs.modules) }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.head_ref || '' }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ~1.7.0
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: latest
+
+      - name: Terraform Init
+        id: init
+        working-directory: ${{ matrix.module }}
+        run: terraform init -backend=false
+
+      - name: Check Terraform Format
+        id: fmt_check
+        working-directory: ${{ matrix.module }}
+        run: terraform fmt -check -recursive
+        continue-on-error: true # Allow subsequent steps to run even if formatting issues exist
+
+      - name: Auto-format Terraform Code
+        if: steps.fmt_check.outcome == 'failure' && github.event_name == 'pull_request'
+        id: fmt_fix
+        working-directory: ${{ matrix.module }}
+        run: |
+          echo "Formatting issues found. Running terraform fmt -recursive..."
+          terraform fmt -recursive
+          # Check if terraform fmt actually made changes
+          if [[ $(git status --porcelain) ]]; then
+            echo "changes_made=true" >> $GITHUB_OUTPUT
+          else
+            echo "changes_made=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit Formatted Files
+        if: steps.fmt_fix.outputs.changes_made == 'true' && github.event_name == 'pull_request'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "style(${{ matrix.module }}): auto-format Terraform code"
+          commit_user_name: github-actions[bot]
+          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          branch: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+
+      - name: TFLint
+        id: lint
+        working-directory: ${{ matrix.module }}
+        run: tflint --format=compact
+
+      - name: Terraform Validate
+        id: validate
+        working-directory: ${{ matrix.module }}
+        run: terraform validate -no-color
+
+  validation-summary:
+    runs-on: ubuntu-latest
+    name: Validation Summary
+    needs: [find-changed-modules, validate-modules]
+    if: always() # This job runs even if previous jobs fail
+
+    steps:
+      - name: Report Status
+        run: |
+          if [[ "${{ needs.find-changed-modules.outputs.module_count }}" == "0" ]]; then
+            echo "No Terraform modules changed. Skipping validation."
+          elif [[ "${{ needs.validate-modules.result }}" == "success" ]]; then
+            echo "All Terraform modules passed validation."
+          else
+            echo "One or more Terraform modules failed validation. See details in the 'Validate' jobs above."
+            exit 1
+          fi
