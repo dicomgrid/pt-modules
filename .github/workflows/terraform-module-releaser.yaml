@@ -2,14 +2,14 @@ name: Terraform Module Releaser
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize, closed] # Closed required for releases
+    types: [opened, reopened, synchronize, closed]
     branches:
       - main
       - master
 
 permissions:
-  contents: write # Required to push tags, create release, and push changes to the wiki
-  pull-requests: write # Required to comment on pull requests
+  contents: write
+  pull-requests: write
 
 jobs:
   release:
@@ -31,4 +31,5 @@ jobs:
           wiki-sidebar-changelog-max: 3
           module-change-exclude-patterns: .gitignore,*.md,*.txt,LICENSE,docs/**,examples/**,*.tftest.hcl,tests/**
           module-asset-exclude-patterns: .gitignore,*.md,*.txt,LICENSE,*.tftest.hcl,tests/**
-          use-ssh-source-format: false
+          use-ssh-source-format: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
