@@ -3,8 +3,8 @@ on:
   push:
   pull_request:
     types: ["opened", "assigned", "synchronize", "closed"]
-    branches:
-      - master
+  #  branches:
+   #   - master
   workflow_dispatch:
     inputs:
       dry_run:
