@@ -185,4 +185,5 @@ resource "aws_s3_bucket_object_lock_configuration" "main" {
       }
     }
   }
-}
+}# Test comment
+# Test comment
