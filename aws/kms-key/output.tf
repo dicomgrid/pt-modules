@@ -1,1 +1,0 @@
-output "id" { value = aws_kms_key.main.id }

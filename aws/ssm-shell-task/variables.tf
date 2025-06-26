@@ -1,9 +1,0 @@
-variable "shell_task_name"  {default = "null"}
-variable "shell_task_window_id"  {default = "null"}
-variable "shell_task_priority" { default = "null"}
-variable "service_role_arn" {default = "null"}
-variable "max_concurrency"  {default = "null"}
-variable "max_errors" {default = "null"}
-variable "shell_task_window_target_id"  {default = "null"}
-variable "timeout_seconds" {default = "null"}
-variable "shell_task" {default = 600}
