@@ -24,7 +24,6 @@ jobs:
           major-keywords: major,breaking change,BREAKING
           minor-keywords: feat,feature,add,new
           patch-keywords: fix,bug,patch,update,chore,docs,refactor
-          default-first-tag: v1.0.0
           terraform-docs-version: v0.20.0
           delete-legacy-tags: false
           disable-wiki: false
