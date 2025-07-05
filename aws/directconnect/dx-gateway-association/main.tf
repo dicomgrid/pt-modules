@@ -3,3 +3,4 @@ resource "aws_dx_gateway_association" "association" {
   associated_gateway_id =var.associated_gateway_id
   allowed_prefixes = var.allowed_prefixes
 }
+####

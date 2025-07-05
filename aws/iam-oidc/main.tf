@@ -38,8 +38,8 @@ data "aws_iam_policy_document" "this" {
       values = [for subject in var.subjects : "repo:${trimprefix(subject, "repo:")}"]
     }
   }
-}
-
+}###
+##
 resource "aws_iam_role" "this" {
 
 

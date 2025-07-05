@@ -36,7 +36,7 @@ data "aws_ami" "ubuntu_22_04" {
     name   = "architecture"
     values = ["x86_64"]
   }
-
+####
   filter {
     name   = "root-device-type"
     values = ["ebs"]

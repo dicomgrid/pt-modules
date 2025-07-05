@@ -12,3 +12,4 @@ resource "aws_ami_copy" "example" {
 
   # Make sure to configure provider aliases if copying across regions.
 }
+###
