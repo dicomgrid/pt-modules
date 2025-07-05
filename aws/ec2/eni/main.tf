@@ -15,3 +15,4 @@ resource "aws_eip" "main" {
   domain            = try(var.eip.domain, null)
   tags              = merge(local.tags, try(var.eip.tags, {}))
 }
+####

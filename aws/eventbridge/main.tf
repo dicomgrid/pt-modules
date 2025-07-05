@@ -12,3 +12,4 @@ resource "aws_cloudwatch_event_target" "eventbridge_target" {
   rule      = aws_cloudwatch_event_rule.eventbridge_rule.name
   arn       = var.lambda_arn
 }
+####
