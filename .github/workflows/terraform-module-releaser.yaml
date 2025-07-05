@@ -1,22 +1,13 @@
-name: Terraform Module Releaser
-
+name: PLT Module Releaser
 on:
-  push:
-    branches:
-      - main
-      - master
   pull_request:
-    types: [opened, reopened, synchronize, closed]
+    types: [opened, reopened, synchronize, closed] # Closed required
     branches:
       - main
-      - master
 
 permissions:
-  contents: write
-  pull-requests: write
-  pages: write  
-  id-token: write
-
+  contents: write # Required for to push tags, create release, and push changes to the wiki
+  pull-requests: write # Required to comment on pull request
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -39,10 +30,29 @@ jobs:
           disable-wiki: false
           wiki-sidebar-changelog-max: 3
           use-ssh-source-format: true
+          disable-branding: true
 
-
-          module-change-exclude-patterns: .gitignore,*.md,*.txt,LICENSE,docs/**,examples/**,*.tftest.hcl,tests/**,.terraform/**,.terraform.lock.hcl
+          module-change-exclude-patterns: .gitignore,*.md,*.txt,LICENSE,docs/**,examples/**,tests/**,.terraform/**,.terraform.lock.hcl
           module-asset-exclude-patterns: .gitignore,*.md,*.txt,LICENSE,*.tftest.hcl,tests/**,.terraform/**,.terraform.lock.hcl,examples/**
           
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Display Changed Modules Summary
+        if: steps.releaser.outputs.changed-module-names != '[]'
+        run: |
+          echo "## 🚀 Module Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Changed Modules:" >> $GITHUB_STEP_SUMMARY
+          echo '${{ steps.releaser.outputs.changed-module-names }}' | jq -r '.[]' | while read module; do
+            echo "- **$module**" >> $GITHUB_STEP_SUMMARY
+          done
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### Version Details:" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo '${{ steps.releaser.outputs.changed-modules-map }}' | jq '.' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          
+          echo "### Release Summary:"
+          echo "Changed modules: $(echo '${{ steps.releaser.outputs.changed-module-names }}' | jq -r '. | length') out of $(echo '${{ steps.releaser.outputs.all-module-names }}' | jq -r '. | length') total modules"
