@@ -16,3 +16,4 @@ resource "aws_dynamodb_table" "main" {
 
   tags = local.tags
 }
+##change

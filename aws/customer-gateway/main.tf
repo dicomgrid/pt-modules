@@ -5,3 +5,4 @@ resource "aws_customer_gateway" "main" {
 
   tags = local.tags
 }
+###change

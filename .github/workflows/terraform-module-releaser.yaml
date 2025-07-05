@@ -1,6 +1,10 @@
 name: Terraform Module Releaser
 
 on:
+  push:
+    branches:
+      - main
+      - master
   pull_request:
     types: [opened, reopened, synchronize, closed]
     branches:
@@ -10,6 +14,8 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  pages: write  
+  id-token: write
 
 jobs:
   release:
@@ -17,18 +23,26 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Terraform Module Releaser
         uses: techpivot/terraform-module-releaser@v1
         with:
-          major-keywords: major,breaking change,BREAKING
-          minor-keywords: feat,feature,add,new
-          patch-keywords: fix,bug,patch,update,chore,docs,refactor
+          default-first-tag: v24.0.0  
+          major-keywords: major,breaking change,BREAKING,BREAKING CHANGE
+          minor-keywords: feat,feature,add,new,enhancement
+          patch-keywords: fix,bug,patch,update,chore,docs,refactor,security
           terraform-docs-version: v0.20.0
           delete-legacy-tags: false
           disable-wiki: false
           wiki-sidebar-changelog-max: 3
-          module-change-exclude-patterns: .gitignore,*.md,*.txt,LICENSE,docs/**,examples/**,*.tftest.hcl,tests/**
-          module-asset-exclude-patterns: .gitignore,*.md,*.txt,LICENSE,*.tftest.hcl,tests/**
           use-ssh-source-format: true
-    
+
+
+          module-change-exclude-patterns: .gitignore,*.md,*.txt,LICENSE,docs/**,examples/**,*.tftest.hcl,tests/**,.terraform/**,.terraform.lock.hcl
+          module-asset-exclude-patterns: .gitignore,*.md,*.txt,LICENSE,*.tftest.hcl,tests/**,.terraform/**,.terraform.lock.hcl,examples/**
+          
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
