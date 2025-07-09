@@ -26,7 +26,6 @@ jobs:
           minor-keywords: feat,feature,add,new,enhancement
           patch-keywords: fix,bug,patch,update,chore,docs,refactor,security
           terraform-docs-version: v0.20.0
-          delete-legacy-tags: false
           disable-wiki: false
           wiki-sidebar-changelog-max: 3
           use-ssh-source-format: true
