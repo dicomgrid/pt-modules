@@ -21,7 +21,6 @@ jobs:
       - name: Terraform Module Releaser
         uses: techpivot/terraform-module-releaser@v1
         with:
-          default-first-tag: v24.0.0  
           major-keywords: major,breaking change,BREAKING,BREAKING CHANGE
           minor-keywords: feat,feature,add,new,enhancement
           patch-keywords: fix,bug,patch,update,chore,docs,refactor,security
